@@ -1,10 +1,10 @@
 import Header from "../components/Header"
 import Navbar from "../components/Navbar"
 
-function Company() {
+function Company(company) {
     return (
         <>
-            <Header title="Company Page" />
+            <Header title={`Your Application @ ${company.name}`} />
             <Navbar />
             <p>Hello, World!</p>
         </>
