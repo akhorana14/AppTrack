@@ -13,7 +13,7 @@ function App() {
     <Router>
         <Routes>
             <Route path="/calendar" element={<Calendar />} />
-            <Route path="/company/*" element={<Company />} />
+            <Route path="/company/:company" element={<Company />} />
         </Routes>
     </Router>
   );
