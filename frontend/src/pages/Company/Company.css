@@ -1,3 +1,33 @@
-.main-content {
-    padding: 25px 25px 25px 25px;
+html, body, #root, .main-content {
+    height: 100%;
+}
+
+.left-half {
+    background-color: white;
+}
+
+.right-half {
+    background-color: #E6F0FF;
+}
+
+.main-row .col {
+    padding: 10px 25px 10px 25px;
+}
+
+.checklist {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.checklist li {
+    margin-bottom: 12px;
+}
+.checklist h6 {
+    display: inline-block;
+    padding-left: 8px;
+}
+
+.levels-btn {
+    background-color: #dbd4d4;
 }
