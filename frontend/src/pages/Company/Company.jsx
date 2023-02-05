@@ -21,24 +21,24 @@ let listOfStages = [
 function StageList(props) {
     return (
         <ul className="checklist mt-3">
-        {
-            props.list.slice(0).reverse().map((stage, index) => {
-                return (
-                <li>
-                    <div className="d-flex align-items-center">
-                        {
-                            index === 0 ?  (<ExclamationCircleFill size={24}/>):(<CheckCircleFill size={24}/>)
-                        }          
-                        <h6 className="m-0">
-                            {stage.type}
-                            <span class="text-muted"> {stage.date}</span>
-                        </h6>
-                    </div>
-                </li>
-                );
-            })
-        }
-    </ul>
+            {
+                props.list.slice(0).reverse().map((stage, index) => {
+                    return (
+                    <li>
+                        <div className="d-flex align-items-center">
+                            {
+                                index === 0 ?  (<ExclamationCircleFill size={24}/>):(<CheckCircleFill size={24}/>)
+                            }          
+                            <h6 className="m-0">
+                                {stage.type}
+                                <span className="text-muted"> {stage.date}</span>
+                            </h6>
+                        </div>
+                    </li>
+                    );
+                })
+            }
+        </ul>
     )
 }
 function LevelsButton() {
@@ -57,14 +57,14 @@ function Company() {
         <>
             <Header title={`Your Application @ ${companyName}`} />
             <Navbar />
-            <div class="main-content">
+            <div className="main-content">
                 <Container fluid className="h-100">
                     <Row className="main-row justify-content-center h-100">
                         <Col className="left left-half">
-                            <h1 class="display-3 font-weight-normal">{`${companyName}`}</h1>
+                            <h1 className="display-3 font-weight-normal">{`${companyName}`}</h1>
                             <h3>Software Engineering Intern
                                 <br />
-                                <h6 class="text-muted">Last update: January 23, 2022</h6>
+                                <h6 className="text-muted">Last update: January 23, 2022</h6>
                             </h3>
                             <LevelsButton />
                            <StageList list={listOfStages} />
