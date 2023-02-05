@@ -1,6 +1,5 @@
 import React from 'react';
-import './App.css';
-//import './componentsHeader';
+import './static/globals.css';
 
 import Calendar from "./pages/Calendar/Calendar"
 import Company from "./pages/Company/Company"
