@@ -1,0 +1,111 @@
+.background {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-flow: column;
+}
+
+.body {
+    height: 100%;
+    display: flex;
+    flex-flow: row;
+}
+
+.left {
+    width: 20%;
+    display: flex;
+    flex-flow: column;
+}
+
+.right {
+    width: 80%;
+    background-color: #E6F0FF;
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+.left-top {
+    height: 50%;
+    background-color: white;
+    color: #001D6E;
+    text-align: center;
+    padding-top: 4%;
+}
+
+.left-bottom {
+    height: 50%;
+    background-color: #6475A3;
+    color: #FEE2C5;
+    text-align: center;
+    padding-top: 4%;
+}
+
+.right-top {
+    height: 10%;
+    background-color: white;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    color: #001D6E;
+    justify-content: center;
+}
+
+.month-name {
+    font-size: 3em;
+}
+
+.right-space {
+    height: 2%;
+}
+
+.right-day-names {
+    display: flex;
+    flex-flow: row;
+    height: 4%;
+    background-color: white;
+}
+
+.right-bottom {
+    height: 84%;
+    background-color: yellow;
+}
+
+.calendar-row {
+    height: calc(100% / 6);
+    display: flex;
+    flex-flow: row;
+}
+
+.day-box {
+    text-align: center;
+    margin-top: 0px;
+    padding-top: 0px;
+}
+
+.calendar-box {
+    background-color: white;
+    width: calc(100% / 6);
+    height: 100%;
+}
+
+.border-left {
+    border-left: 1px solid;
+}
+
+.border-bottom {
+    border-bottom: 1px solid;
+}
+
+.left-title {
+    font-size: 2.5em;
+}
+
+.current-day {
+    
+}
+
+.arrow-margin {
+    margin: 2%;
+}
