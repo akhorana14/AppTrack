@@ -3,9 +3,13 @@ import React from "react";
 import "./Calendar.css"
 import Navbar from "../../components/Navbar/Navbar";
 
-const date = new Date();
 const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-let monthName = months[date.getMonth()];
+const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const date = new Date();
+const month = date.getMonth(); 
+const monthName = months[month];
+const day = date.getDay();
+const year = date.getFullYear();
 
 function Calendar(props) {
     function getCalendar() {

@@ -103,7 +103,11 @@
 }
 
 .current-day {
-    
+
+}
+
+.not-current-month {
+    background-color: lightgray;
 }
 
 .arrow-margin {
