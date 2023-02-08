@@ -1,16 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import "./Calendar.css"
 import Navbar from "../../components/Navbar/Navbar";
 import CalendarUtil from "./CalendarUtil";
 
+// TODO
+// Lists contain bootstrap icons/style
+// Swap through ~3 pages of completed/upcoming lists (transition animations)
+// Display events in calendar days
+// Calendar days must be scrollable
+// Call API to retrieve events
+
 function Calendar(props) {
-    const [month, setMonth] = useState(new Date().getMonth());
-    const [year, setYear] = useState(new Date().getFullYear());
+    const [date, setDate] = useState(new Date());
+    const [month, setMonth] = useState(date.getMonth());    
+    const [year, setYear] = useState(date.getFullYear());
     const [calendar, setCalendar] = useState(CalendarUtil.getCalendar(month, year));
 
     function handleMonthChange(incremented) {
+        var newDate = new Date(year, month);
+        newDate.setMonth(month + (incremented ? 1 : -1));
+        var newMonth = newDate.getMonth();
+        var newYear = newDate.getFullYear();
+        var newCalendar = CalendarUtil.getCalendar(newMonth, newYear);
 
+        setDate(newDate); 
+        setMonth(newMonth);
+        setYear(newYear);
+        setCalendar(newCalendar);
     }
  
     function jsxWeekDays(week) {
@@ -19,8 +36,8 @@ function Calendar(props) {
             var className = "calendar-box";
             if (week !== 5) className += " border-bottom";
             if (day !== 0) className += " border-left";
-            if (calendar[week][day].isToday) className += " current-day"
-            if (!calendar[week][day].isThisMonth) className += " not-current-month"
+            if (calendar[week][day].isToday) className += " current-day";
+            if (!calendar[week][day].isDisplayedMonth) className += " not-current-month";
 
             weekDays.push(
                 <div className={className} key={day}>
@@ -52,21 +69,27 @@ function Calendar(props) {
             <div className="body">
                 <div className="left">
                     <div className="left-top">
-                        <span className="h1">Upcoming</span>
+                        <span className="lead left-headers">Upcoming</span>
+                        <ul className="left-list">
+                            <li>Upcoming Item</li>
+                        </ul>
                     </div>
                     <div className="left-bottom">
-                        <span className="h1">Completed</span>
+                        <span className="lead left-headers">Completed</span>
+                        <ul className="left-list">
+                            <li>Completed Item</li>
+                        </ul>
                     </div>
                 </div>
                 <div className="right">
                     <div className="right-top">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" className="bi bi-arrow-left" viewBox="0 0 16 16" cursor="pointer" onClick={() => handleMonthChange(false)}>
-                            <path fillRule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                        </svg>&nbsp;
-                        <span className="display-4 arrow-margin">{CalendarUtil.getMonthName(month)}, {year}</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" className="bi bi-arrow-right" viewBox="0 0 16 16" cursor="pointer"  onClick={() => handleMonthChange(true)}>
-                            <path fillRule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-arrow-up arrow left-arrow" onClick={() => handleMonthChange(true)} viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
                         </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-arrow-down arrow right-arrow" onClick={() => handleMonthChange(false)} viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+                        </svg>
+                        <span className="display-4 month-year-display">{CalendarUtil.getMonthName(month)}, {year}</span>
                     </div>
                     <div className="right-space">
                     </div>

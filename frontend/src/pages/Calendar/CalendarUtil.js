@@ -17,17 +17,20 @@ class CalendarUtil {
         }
 
         var date = new Date(year, month);
-        date.setDate(-date.getDay());
+        if (date.getDay() !== 0) date.setDate(1-date.getDay());
         for (var week = 0; week < 6; week++) {
             for (var day = 0; day < 7; day++) {
                 calendar[week][day] = {
                     day: date.getDay(),
                     dayName: CalendarUtil.getDayName(date.getDay()),
                     date: date.getDate(),
-                    isToday: date.getDate() === new Date().getDate() && date.getMonth() === new Date().getMonth(),
+                    isToday: date.getDate() === new Date().getDate() 
+                        && date.getMonth() === new Date().getMonth() 
+                        && date.getFullYear() === new Date().getFullYear(),
                     month: date.getMonth(),
                     monthName: CalendarUtil.getMonthName(date.getMonth()),
-                    isThisMonth: date.getMonth() === new Date().getMonth(),
+                    isDisplayedMonth: date.getMonth() === month 
+                        && date.getFullYear() === year,
                     year: date.getFullYear()
                 };
                 date.setDate(date.getDate() + 1);

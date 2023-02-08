@@ -30,25 +30,25 @@
     height: 50%;
     background-color: white;
     color: #001D6E;
-    text-align: center;
     padding-top: 4%;
+    padding-left: 7%;
 }
 
 .left-bottom {
     height: 50%;
     background-color: #6475A3;
     color: #FEE2C5;
-    text-align: center;
     padding-top: 4%;
+    padding-left: 7%;
 }
 
 .right-top {
     height: 10%;
+    width: 100%;
     background-color: white;
     align-items: center;
-    display: flex;
     color: #001D6E;
-    justify-content: center;
+    display: flex;
 }
 
 .right-space {
@@ -107,6 +107,30 @@
     background-color: whitesmoke;
 }
 
-.arrow-margin {
-    margin: 2%;
+.arrow {
+    width: 28px;
+    height: 28px;
+    fill: currentColor;
+    cursor: pointer;
+}
+
+.left-arrow {
+    margin-left: 2%;
+}
+
+.right-arrow {
+    margin-left: 1%;
+}
+
+.month-year-display {
+    margin-left: 2%;  
+    user-select: none;
+}
+
+.left-headers {
+    font-size: 2.5em;
+}
+
+.left-list {
+    font-size: 1.5em;
 }
