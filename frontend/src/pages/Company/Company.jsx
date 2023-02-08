@@ -16,7 +16,8 @@ import {BellFill, CheckCircleFill, EnvelopeFill, ExclamationCircleFill} from 're
 let listOfStages = [
     {date: "01/01/2022", type: "Applied"},
     {date: "01/02/2022", type: "Online Assessment"},
-    {date: "01/03/2022", type: "Interview 1"}
+    {date: "01/03/2022", type: "Interview 1"},
+    {date: "01/04/2022", type: "Interview 2"}
 ];
 
 let emails = [
@@ -111,7 +112,7 @@ function Company() {
                     <Row className="justify-content-center h-100">
                         <Col className="left left-half">
                             <h1 className="display-3 font-weight-normal mb-0">{`${companyName}`}</h1>
-                            <h3>Software Engineering Intern
+                            <h3>Software Engineer Intern
                                 <br />
                                 <h6 className="text-muted">Last update: January 23, 2022</h6>
                             </h3>
