@@ -45,15 +45,10 @@
 .right-top {
     height: 10%;
     background-color: white;
-    text-align: center;
     align-items: center;
     display: flex;
     color: #001D6E;
     justify-content: center;
-}
-
-.month-name {
-    font-size: 3em;
 }
 
 .right-space {
@@ -62,14 +57,12 @@
 
 .right-day-names {
     display: flex;
-    flex-flow: row;
-    height: 4%;
+    height: 3%;
     background-color: white;
 }
 
 .right-bottom {
-    height: 84%;
-    background-color: yellow;
+    height: 85%;
 }
 
 .calendar-row {
@@ -82,12 +75,16 @@
     text-align: center;
     margin-top: 0px;
     padding-top: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .calendar-box {
     background-color: white;
     width: calc(100% / 6);
     height: 100%;
+    text-align: center;
 }
 
 .border-left {
@@ -103,11 +100,11 @@
 }
 
 .current-day {
-
-}
+    background-color: #FEF6ED;
+}   
 
 .not-current-month {
-    background-color: lightgray;
+    background-color: whitesmoke;
 }
 
 .arrow-margin {
