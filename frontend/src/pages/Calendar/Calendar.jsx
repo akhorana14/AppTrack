@@ -7,8 +7,9 @@ import CalendarUtil from "./CalendarUtil";
 // TODO
 // Lists contain bootstrap icons/style
 // Swap through ~3 pages of completed/upcoming lists (transition animations)
-// Display events in calendar days
+// Display color-coded events in calendar days
 // Calendar days must be scrollable
+// Simulate retrieved events with hardcoded objects
 // Call API to retrieve events
 
 function Calendar(props) {
