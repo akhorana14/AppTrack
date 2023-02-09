@@ -9,6 +9,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Accordion from 'react-bootstrap/Accordion';
+import Badge from 'react-bootstrap/Badge';
 
 import {BellFill, CheckCircleFill, EnvelopeFill, ExclamationCircleFill} from 'react-bootstrap-icons';
 
@@ -21,9 +22,10 @@ let listOfStages = [
 ];
 
 let emails = [
-    {subject: "Thank You For Applying!", body: "Applied"},
-    {subject: "Please complete this Leetcode Assessment.", body: "Online Assessment"},
-    {subject: "You've been invited to Interview", body: "Interview 1"}
+    {subject: "Thank You For Applying!", body: "Applied", type: "Application Confirmation"},
+    {subject: "Please complete this Leetcode Assessment.", body: "Online Assessment", type:"OA"},
+    {subject: "You've been invited to Interview", body: "Interview 1", type: "Interview"},
+    {subject: "Try Our Product", body: "Try Our Product", type: "Other"}
 ]
 
 function StageList(props) {
@@ -74,10 +76,11 @@ function EmailAccordion(props) {
          <Accordion flush className="mini-accordion">
             <Accordion.Item eventKey="0">
                 <Accordion.Header>
-                    <h6 className="m-0">{props.subject}</h6>
+                        <h6><Badge bg="warning" text="dark" className="m-0 me-2">{props.type}</Badge>{props.subject}</h6>
                 </Accordion.Header>
                 <Accordion.Body>
-                  {props.body}
+                  <p>{props.body}</p>
+                  <Button variant="dark" size="sm">Reclassify</Button>
                 </Accordion.Body>
               </Accordion.Item>
             </Accordion>
@@ -90,10 +93,10 @@ function ActionItemAccordion(props) {
             <Accordion.Item eventKey="0">
                 <Accordion.Header>
                     <h6 className="m-0">{props.subject}</h6>
-                    <button type="button" class="btn-close btn-sm position-absolute end-0 me-5" aria-label="Close"></button>
+                    <button type="button" className="btn-close btn-sm position-absolute end-0 me-5" aria-label="Close"></button>
                 </Accordion.Header>
                 <Accordion.Body>
-                  {props.body}
+                  <p className="mb-0">{props.body}</p>
                 </Accordion.Body>
               </Accordion.Item>
             </Accordion>
