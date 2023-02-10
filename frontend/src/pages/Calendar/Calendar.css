@@ -31,7 +31,7 @@
     background-color: white;
     color: #001D6E;
     padding-top: 4%;
-    padding-left: 7%;
+    position: relative;
 }
 
 .left-bottom {
@@ -39,7 +39,7 @@
     background-color: #6475A3;
     color: #FEE2C5;
     padding-top: 4%;
-    padding-left: 7%;
+    position: relative;
 }
 
 .right-top {
@@ -129,8 +129,21 @@
 
 .left-headers {
     font-size: 2.5em;
+    margin-left: 7%;
 }
 
-.left-list {
-    font-size: 1.5em;
+.bottom-arrows-container {
+    height: 40px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.page-arrows {
+    width: 28px;
+    height: 28px;
+    fill: currentColor;
+    margin-left: 15px;
+    cursor: pointer;
 }
