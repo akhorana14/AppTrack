@@ -6,8 +6,8 @@
     color: var(--apptrack-light);
     align-self: center;
     font-size: 1.5rem;
-    margin-left: 0.5em;
-    margin-right: 0.5em;
+    margin-left: 0em;
+    margin-right: 0em;
     display: flex;
 }
 
@@ -15,8 +15,8 @@
     color: var(--apptrack-light);
     align-self: center;
     font-size: 1.5rem;
-    margin-left: 0.5em;
-    margin-right: 0.5em;
+    margin-left: 0em;
+    margin-right: 0em;
     display: flex;
 }
 

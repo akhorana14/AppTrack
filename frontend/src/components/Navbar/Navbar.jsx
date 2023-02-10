@@ -7,7 +7,8 @@ import './Navbar.css';
 
 function getNavbar() {
     const navDropDownTitle = (<Icon.Justify href="#menu" class="menu">Menu</Icon.Justify>)
-
+    const navHomeButton = (<Icon.HouseDoorFill href="#home" class="home">Home</Icon.HouseDoorFill>)
+    const navProfileButton = (<Icon.PersonFill href="#profile" class="profile">Profile</Icon.PersonFill>)
     return (
         <Navbar variant="dark" expand="lg" >
           <Navbar.Brand href="#home">AppTrack</Navbar.Brand>
@@ -24,15 +25,16 @@ function getNavbar() {
 
                 <NavDropdown.Item href="#action/3.3">
                   Companies</NavDropdown.Item>
-                  
+
                 <NavDropdown.Divider />
                 <NavDropdown.Item href="#action/3.4">
                   Settings
                 </NavDropdown.Item>
-
+                
               </NavDropdown>
-              <Icon.HouseDoorFill href="#home" class="home" />
-              <Icon.PersonFill href="#profile" class="profile" />
+              
+              <button type="button" class="btn btn-link">{navProfileButton}</button>
+              <button type="button" class="btn btn-link">{navHomeButton}</button>
             </Nav>
           </Navbar.Collapse>
       </Navbar>
