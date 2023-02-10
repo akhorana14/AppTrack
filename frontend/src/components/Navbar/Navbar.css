@@ -1,3 +1,35 @@
 .navbar {
     background-color:  var(--apptrack-primary);
 }
+
+.home {
+    color: var(--apptrack-light);
+    align-self: center;
+    font-size: 1.5rem;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    display: flex;
+}
+
+.profile {
+    color: var(--apptrack-light);
+    align-self: center;
+    font-size: 1.5rem;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    display: flex;
+}
+
+.menu {
+    color: var(--apptrack-light);
+    align-self: center;
+    font-size: 1.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.2rem;
+    display: flex;
+}
+
+.dropdown-toggle::after {
+    display: none; 
+  }
+
