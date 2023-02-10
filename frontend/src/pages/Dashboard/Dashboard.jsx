@@ -45,7 +45,13 @@ function Dashboard() {
     return (
         <>
             <Navbar />
-            <p>Put search bar here later</p>
+
+            {/*searchbar: https://bbbootstrap.com/snippets/bootstrap-5-search-bar-microphone-icon-inside-12725910*/}
+            <div class="form">
+                  <i class="fa fa-search"></i>
+                  <input type="text" class="form-control form-input" placeholder="Search your notifications"></input>
+                  <span class="left-pan"><i class="bi bi-search"></i></span>
+            </div>
 
             <div id="table-container">
                 <div id="new-updates-div">
