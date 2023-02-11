@@ -145,9 +145,27 @@ function Calendar(props) {
                         {calendar[week][day].date}
                     </div>
                     <ul>
-                        <li style={{color: "red"}}><span style={{color: "black"}}>Event 1</span></li>
-                        <li style={{color: "green"}}><span style={{color: "black"}}>Event 2</span></li>
-                        <li style={{color: "blue"}}><span style={{color: "black"}}>Event 3</span></li>
+                        <li style={{color: "red"}}>
+                            <span className="calendar-box-item">
+                                <span className="calendar-box-item-text">
+                                    Amazon Interview [really long text]
+                                </span>
+                            </span>
+                        </li>
+                        <li style={{color: "green"}}>
+                            <span className="calendar-box-item">
+                                <span className="calendar-box-item-text">
+                                    Google Interview
+                                </span>
+                            </span>
+                        </li>
+                        <li style={{color: "blue"}}>
+                            <span className="calendar-box-item">
+                                <span className="calendar-box-item-text">
+                                    Facebook Interview
+                                </span>
+                            </span>
+                        </li>
                     </ul>
                 </div>
             );

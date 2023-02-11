@@ -90,6 +90,21 @@
 
 .calendar-box > ul {
     text-align: left;
+    margin-left: 5%;
+    margin-right: 7.5%;
+    padding-left: 12.5%;
+}
+
+.calendar-box-item {
+    display: block;
+    color: black;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.calendar-box-item-text {
+    cursor: pointer;
 }
 
 .border-left {
