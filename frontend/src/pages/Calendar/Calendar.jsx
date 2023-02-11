@@ -24,7 +24,7 @@ function Calendar(props) {
 
     useEffect(() => {
         var retrievedUpcomingEvents = []; 
-        for (var i = 0; i < 15; i++) {
+        for (var i = 0; i < 4; i++) {
             retrievedUpcomingEvents.push(
                 {
                     company: "Amazon" + i,
@@ -155,14 +155,14 @@ function Calendar(props) {
                         <li style={{color: "green"}}>
                             <span className="calendar-box-item">
                                 <span className="calendar-box-item-text">
-                                    Google Interview
+                                    Meta Interview [really long text]
                                 </span>
                             </span>
                         </li>
                         <li style={{color: "blue"}}>
                             <span className="calendar-box-item">
                                 <span className="calendar-box-item-text">
-                                    Facebook Interview
+                                    Google Interview [really long text]
                                 </span>
                             </span>
                         </li>
@@ -187,7 +187,9 @@ function Calendar(props) {
 
     return (
         <div className="background">
-            <Navbar />
+            <div className="navbar-container">
+                <Navbar />
+            </div>
             <div className="body">
                 <div className="left">
                     <div className="left-top">
