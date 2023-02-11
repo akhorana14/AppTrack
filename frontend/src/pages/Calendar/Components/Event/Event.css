@@ -1,0 +1,39 @@
+.event {
+    margin-left: 7%;
+    margin-right: 7%;
+    margin-top: 5%;
+    height: 13%;
+    padding: 2%;
+    font-size: 0.75vw;
+    display: flex;
+    flex-flow: row;
+}
+
+.event-info {
+    width: 100%;
+}
+
+.upcoming {
+    background-color: whitesmoke;
+    color: #001D6E;
+    box-shadow: 0px 3px 3px gray;
+}
+
+.completed {
+    background-color: #505D82;
+    color: #FEE2C5;
+    box-shadow: 0px 3px 3px #001D6E;
+}
+
+.link-container {
+    align-items: center;
+    display: flex;
+    vertical-align: center;
+}
+
+.link {
+    cursor: pointer;
+    fill: currentColor;
+    height: 24px;
+    width: 24px;
+}
