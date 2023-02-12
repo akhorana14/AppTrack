@@ -19,7 +19,7 @@ function getNavbar() {
         <Navbar.Collapse id="basic-navbar-nav">
 
           <Nav className="position-absolute end-0"> {/* align below items to the right */}
-            <NavDropdown title={navDropDownTitle} id="basic-nav-dropdown">
+            <NavDropdown title={navDropDownTitle} id="basic-nav-dropdown" align="end">
               <NavDropdown.Item href="#action/3.1">
                 Dashboard</NavDropdown.Item>
 
