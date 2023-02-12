@@ -3,7 +3,7 @@ import './static/globals.css';
 
 import Calendar from "./pages/Calendar/Calendar"
 import Company from "./pages/Company/Company"
-import Settings from "./pages/Settings/Settings"
+import Profile from "./pages/Profile/Profile"
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
@@ -13,7 +13,7 @@ function App() {
     <Router>
         <Routes>
             <Route path="/calendar" element={<Calendar />} />
-            <Route path="/settings" element={<Settings />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/company/:company" element={<Company />} />
         </Routes>
     </Router>
