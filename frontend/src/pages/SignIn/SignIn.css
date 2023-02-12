@@ -8,6 +8,11 @@ body {
     margin: auto;
     margin-top: 125px;
     text-align: center;
-    padding: 70px 0;
+    padding: 125px 0;
     background: rgb(255, 255, 255);
+}
+
+.google {
+    width: 25%;
+    margin: auto;
 }
