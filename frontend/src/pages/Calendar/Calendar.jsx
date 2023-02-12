@@ -4,6 +4,7 @@ import "./Calendar.css"
 import Navbar from "../../components/Navbar/Navbar";
 import CalendarUtil from "./CalendarUtil";
 import Event from "./Components/Event/Event";
+import CalendarBox from "./Components/CalendarBox/CalendarBox";
 
 function Calendar(props) {
     const eventsPerPage = 4;
@@ -20,11 +21,11 @@ function Calendar(props) {
     const [numUpcomingPages, setNumUpcomingPages] = useState(3); 
     const [numCompletedPages, setNumCompletedPages] = useState(3); 
 
-    const [calendarEvents, setCalendarEvents] = useState([]);
+    const [dailyEvents, setDailyEvents] = useState([]);
 
     useEffect(() => {
         var retrievedUpcomingEvents = []; 
-        for (var i = 0; i < 15; i++) {
+        for (var i = 0; i < 10; i++) {
             retrievedUpcomingEvents.push(
                 {
                     company: "Amazon" + i,
@@ -50,6 +51,8 @@ function Calendar(props) {
         }
         setCompletedEvents(retrievedCompletedEvents);
         setNumCompletedPages(Math.min(3, Math.floor((retrievedCompletedEvents.length-1)/eventsPerPage)+1));
+
+        var retrievedDailyEvents = [];
     }, []);
 
     function handleUpcomingPageChange(increment) {
@@ -77,7 +80,7 @@ function Calendar(props) {
     }
 
     function jsxUpcomingEvents() {
-        var events = upcomingEvents.slice(4*upcomingPage-4, 4*upcomingPage);
+        var events = upcomingEvents.slice(eventsPerPage*upcomingPage-eventsPerPage, eventsPerPage*upcomingPage);
         return (
             <>
                 {
@@ -131,43 +134,8 @@ function Calendar(props) {
     function jsxWeekDays(week) {
         var weekDays = [];
         for (var day = 0; day < 7; day++) {
-            var boxClassName = "calendar-box";
-            if (week !== 5) boxClassName += " border-bottom";
-            if (day !== 0) boxClassName += " border-left";
-            if (!calendar[week][day].isDisplayedMonth) boxClassName += " not-current-month";
-
-            var dateClassName = "";
-            if (calendar[week][day].isToday) dateClassName += " current-day";
-
             weekDays.push(
-                <div className={boxClassName} key={day}>
-                    <div className={dateClassName}>
-                        {calendar[week][day].date}
-                    </div>
-                    <ul>
-                        <li style={{color: "red"}}>
-                            <span className="calendar-box-item">
-                                <span className="calendar-box-item-text">
-                                    Amazon Interview [really long text]
-                                </span>
-                            </span>
-                        </li>
-                        <li style={{color: "green"}}>
-                            <span className="calendar-box-item">
-                                <span className="calendar-box-item-text">
-                                    Meta Interview [really long text]
-                                </span>
-                            </span>
-                        </li>
-                        <li style={{color: "blue"}}>
-                            <span className="calendar-box-item">
-                                <span className="calendar-box-item-text">
-                                    Google Interview [really long text]
-                                </span>
-                            </span>
-                        </li>
-                    </ul>
-                </div>
+                <CalendarBox calendar={calendar} week={week} day={day} key={day} events={[]}/>
             );
         }
         return weekDays;

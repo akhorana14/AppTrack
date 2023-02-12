@@ -100,18 +100,6 @@
     font-size: 12px;
 }
 
-.calendar-box-item {
-    display: block;
-    color: black;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-.calendar-box-item-text {
-    cursor: pointer;
-}
-
 .border-left {
     border-left: 1px solid;
 }
