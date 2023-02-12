@@ -138,8 +138,8 @@
 }
 
 .arrow {
-    width: 28px;
-    height: 28px;
+    width: 1.75vw;
+    height: 1.75vw;
     fill: currentColor;
     cursor: pointer;
 }
@@ -155,16 +155,17 @@
 .month-year-display {
     margin-left: 2%;  
     user-select: none;
+    font-size: 3.5vw;
 }
 
 .left-headers {
-    font-size: 2.5em;
+    font-size: 2.5vw;
     margin-left: 7%;
     user-select: none;
 }
 
 .bottom-arrows-container {
-    height: 40px;
+    height: 10%;
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -172,8 +173,8 @@
 }
 
 .page-arrows {
-    width: 28px;
-    height: 28px;
+    width: 1.75vw;
+    height: 1.75vw;
     fill: currentColor;
     margin-left: 15px;
 }
