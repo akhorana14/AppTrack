@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from "../../components/Navbar/Navbar"
 import './Dashboard.css';
+import '../../static/globals.css';
 
 let sampleNewUpdate = [ {"Company": "Meta", "Date":"1/1/2023", "Status":"Rejected"} ,
                    {"Company": "Google", "Date":"1/1/2023", "Status":"Rejected"} ,
@@ -54,7 +55,7 @@ function Dashboard() {
             {/* fix this later */}
 
             <div id="table-container">
-                <div id="new-updates-div">
+                <div id="new-updates-div" class="d-flex align-items-center">
                     <div id="left-side-label-container">New Updates</div>
                     <table class="table table-striped table-hover" id="new-update-table">  
                         <thead>
@@ -68,7 +69,7 @@ function Dashboard() {
                     </table>
                 </div>
                 
-                <div id="completed-updates-div">
+                <div id="completed-updates-div" class="d-flex align-items-center">
                     <div id="left-side-label-container"><p>Completed</p></div>
                     <table class="table table-striped table-hover" id="completed-table">  
                         <thead>

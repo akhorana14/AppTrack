@@ -1,9 +1,8 @@
-html, body {
-    max-height:100%;
+html, body, #root {
+    height:100%;
     padding:0;
     margin:0;
     text-align:center;
-    
  }
  
 #left-side-label-container {
@@ -15,8 +14,9 @@ html, body {
 
 #table-container {
     max-height: 100%;
-    width:100%;
-    overflow-y: hidden;
+    width:100%;  
+    overflow-y: hidden;  
+    padding-right: 2%;
 }
 
 #new-updates-div {
@@ -49,3 +49,13 @@ html, body {
     padding-right: 2%;
     padding-left: 2%;
 }
+
+#new-update-table.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: var(--apptrack-light-beige);
+ }
+
+ #completed-table.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: var(--apptrack-light-blue);
+ }
