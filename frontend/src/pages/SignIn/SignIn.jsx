@@ -1,5 +1,6 @@
 import Navbar from "../../components/Navbar/Navbar"
-import GoogleLogin from 'react-google-login';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
 import './SignIn.css';
 
 function SignIn() {
@@ -10,13 +11,9 @@ function SignIn() {
                 <h1>Welcome to AppTrack</h1>
                 <h2>You miss all the shots you don't take!</h2>
                 <div>
-                <GoogleLogin
-                        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-                        buttonText="Log In with Google"
-                        onSuccess={handleLogin}
-                        onFailure={handleFailure}
-                        cookiePolicy={'single_host_origin'}
-                ></GoogleLogin>
+                    <GoogleOAuthProvider clientId="350232392626-4lul15jckdjhqj2lkp4mphugoqbsvll7.apps.googleusercontent.com">
+                        <GoogleLogin onSuccess={handleLogin} onError={handleFailure} />
+                    </GoogleOAuthProvider>
                 </div>
                 <p>Sorry! For now, we only support Google Authentication. More coming soon!</p>
             </div>
@@ -24,12 +21,13 @@ function SignIn() {
     );
 };
 
+
 const handleFailure = (result) => {
     alert(result);
 };
 
 const handleLogin = async (googleData) => {
-    
+    console.log(googleData);
 };
 
 export default SignIn;
