@@ -16,7 +16,11 @@ let sampleCompleted = [ {"Company": "Twilio", "Date":"1/1/2023", "Status":"Rejec
                         {"Company": "Spotify", "Date":"1/1/2023", "Status":"Rejected"} ,
                         {"Company": "Uber", "Date":"1/1/2023", "Status":"Rejected"} ,
                         {"Company": "Pinterest", "Date":"1/1/2023", "Status":"Rejected"},
-                        {"Company": "Twitter", "Date":"1/1/2023", "Status":"Rejected"}]
+                        {"Company": "Twitter", "Date":"1/1/2023", "Status":"Rejected"},
+                        {"Company": "Twitt2er", "Date":"1/1/2023", "Status":"Rejected"},
+                        {"Company": "Twitt3er", "Date":"1/1/2023", "Status":"Rejected"},
+                        {"Company": "Twitt5er", "Date":"1/1/2023", "Status":"Rejected"},
+                      ]
 
 function Dashboard() {
 
