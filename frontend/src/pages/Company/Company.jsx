@@ -49,8 +49,8 @@ function Company() {
                                 <h6 className="text-muted">Last update: January 23, 2022</h6>
                             </h3>
                             <div className="mt-1 d-flex align-items-center">
-                                <LevelsButton />
-                                <LeetcodeButton />
+                                <LevelsButton company={companyName}/>
+                                <LeetcodeButton company={companyName}/>
                             </div>
                             <StageList list={listOfStages} />
                         </Col>
@@ -160,18 +160,18 @@ function StageList(props) {
     )
 }
 
-function LevelsButton() {
+function LevelsButton(props) {
     return (
-        <Button variant="light" className="levels-btn d-flex align-items-center">
+        <Button href={`https://www.levels.fyi/companies/${props.company}/salaries`} variant="light" className="levels-btn d-flex align-items-center">
             <img src="https://www.levels.fyi/assets/levelsiconfilledcolored.png" height="28" width="28" alt="Levels.fyi Logo" />
             Levels.fyi
         </Button>
     );
 }
 
-function LeetcodeButton() {
+function LeetcodeButton(props) {
     return (
-        <Button variant="dark" className="leetcode-btn d-flex align-items-center">
+        <Button href={`https://leetcode.com/discuss/interview-question?currentPage=1&orderBy=most_relevant&query=${props.company}`}variant="dark" className="leetcode-btn d-flex align-items-center">
             <img src="https://leetcode.com/static/images/LeetCode_logo_rvs.png" height="28" width="28" alt="Leetcode Logo" />
             Leetcode
         </Button>
