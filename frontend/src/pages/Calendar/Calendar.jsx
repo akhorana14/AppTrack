@@ -5,9 +5,11 @@ import Navbar from "../../components/Navbar/Navbar";
 import CalendarUtil from "./CalendarUtil";
 import Event from "./Components/Event/Event";
 import CalendarBox from "./Components/CalendarBox/CalendarBox";
+import CalendarAPI from "./CalendarAPI";
 
 function Calendar(props) {
     const eventsPerPage = 4;
+    const maxEventPages = 3;
 
     const [date, setDate] = useState(new Date());
     const [month, setMonth] = useState(date.getMonth());    
@@ -18,41 +20,22 @@ function Calendar(props) {
     const [completedEvents, setCompletedEvents] = useState([]);
     const [upcomingPage, setUpcomingPage] = useState(1); 
     const [completedPage, setCompletedPage] = useState(1);
-    const [numUpcomingPages, setNumUpcomingPages] = useState(3); 
-    const [numCompletedPages, setNumCompletedPages] = useState(3); 
+    const [numUpcomingPages, setNumUpcomingPages] = useState(maxEventPages); 
+    const [numCompletedPages, setNumCompletedPages] = useState(maxEventPages); 
 
     const [dailyEvents, setDailyEvents] = useState([]);
 
     useEffect(() => {
-        var retrievedUpcomingEvents = []; 
-        for (var i = 0; i < 10; i++) {
-            retrievedUpcomingEvents.push(
-                {
-                    company: "Amazon" + i,
-                    date: "2/9/2023",
-                    subject: "Interview",
-                    companyURL: "company/" + i
-                }
-            )
-        }
-        setUpcomingEvents(retrievedUpcomingEvents);
-        setNumUpcomingPages(Math.min(3, Math.floor((retrievedUpcomingEvents.length-1)/eventsPerPage)+1)); 
+        var upcomingEvents = CalendarAPI.getUpcomingEvents(); 
+        setUpcomingEvents(upcomingEvents);
+        setNumUpcomingPages(Math.min(maxEventPages, Math.floor((upcomingEvents.length-1)/eventsPerPage)+1)); 
 
-        var retrievedCompletedEvents = []; 
-        for (i = 0; i < 4; i++) {
-            retrievedCompletedEvents.push(
-                {
-                    company: "Google" + i,
-                    date: "2/11/2023",
-                    subject: "Accepted",
-                    companyURL: "company/" + i
-                }
-            )
-        }
-        setCompletedEvents(retrievedCompletedEvents);
-        setNumCompletedPages(Math.min(3, Math.floor((retrievedCompletedEvents.length-1)/eventsPerPage)+1));
+        var completedEvents = CalendarAPI.getCompletedEvents(); 
+        setCompletedEvents(completedEvents);
+        setNumCompletedPages(Math.min(maxEventPages, Math.floor((completedEvents.length-1)/eventsPerPage)+1));
 
-        var retrievedDailyEvents = [];
+        var dailyEvents = CalendarAPI.getDailyEvents();
+        setDailyEvents(dailyEvents);
     }, []);
 
     function handleUpcomingPageChange(increment) {
@@ -135,7 +118,7 @@ function Calendar(props) {
         var weekDays = [];
         for (var day = 0; day < 7; day++) {
             weekDays.push(
-                <CalendarBox calendar={calendar} week={week} day={day} key={day} events={[]}/>
+                <CalendarBox calendar={calendar} week={week} day={day} key={day} events={dailyEvents}/>
             );
         }
         return weekDays;
