@@ -48,7 +48,7 @@ function GetNavbar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
 
-          <Nav className="position-absolute end-0"> {/* align below items to the right */}
+          <Nav className="ms-auto"> {/* align below items to the right */}
             <NavDropdown title={navNotifications} id="notifications" align="end">
               <div className='notificationHeading'>
                 <p className='headingNotification'>Notifications</p>
@@ -66,6 +66,9 @@ function GetNavbar() {
 
               <NavDropdown.Item href="#action/4.3">
                 Companies</NavDropdown.Item>
+
+              <NavDropdown.Item href="#action/4.1">
+                Sign In</NavDropdown.Item>  
 
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/4.4">

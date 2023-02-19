@@ -1,7 +1,8 @@
 html, body, #root {
-    height:100%;
+    max-height:100%;
     padding:0;
     margin:0;
+    
  }
  
 #left-side-label-container {
@@ -12,23 +13,25 @@ html, body, #root {
 }
 
 #table-container {
-    max-height: 100%;
+    max-height: 85%;
     width:100%;  
     overflow-y: hidden;  
     padding-right: 2%;
 }
 
 #new-updates-div {
-    max-height:20%;
+    height:40vh;
     width:100%;
     margin:auto;
+    padding-top: 5vh;
     overflow-y: scroll;
 }
 
 #completed-updates-div {
-    max-height:50%;
+    height:40vh;
     width:100%;
     margin:auto;
+    padding-top: 16vh;
     overflow-y: scroll;
 }
 
@@ -47,6 +50,7 @@ html, body, #root {
     padding-bottom: 1%;
     padding-right: 2%;
     padding-left: 2%;
+    height: 7%;
 }
 
 #new-update-table.table-striped>tbody>tr:nth-child(odd)>td, 
@@ -57,4 +61,8 @@ html, body, #root {
  #completed-table.table-striped>tbody>tr:nth-child(odd)>td, 
 .table-striped>tbody>tr:nth-child(odd)>th {
    background-color: var(--apptrack-light-blue);
+ }
+
+ td {
+     width: 33.3%;
  }

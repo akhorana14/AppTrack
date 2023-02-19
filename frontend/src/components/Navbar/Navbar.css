@@ -1,5 +1,6 @@
 .navbar {
     background-color:  var(--apptrack-primary);
+    height: 8vh;
 }
 
 .home {
@@ -91,4 +92,3 @@
 .dropdown-toggle::after {
     display: none; 
 }
-
