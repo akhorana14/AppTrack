@@ -158,6 +158,9 @@ function Calendar(props) {
                                     <></>
                                 }
                             </div>
+                            <div className="middle-page-container">
+                                {upcomingPage} of {numUpcomingPages}
+                            </div>
                             <div className="right-arrow-container">
                                 {
                                     upcomingPage < numUpcomingPages
@@ -185,6 +188,9 @@ function Calendar(props) {
                                     :
                                     <></>
                                 }
+                            </div>
+                            <div className="middle-page-container">
+                                {completedPage} of {numCompletedPages}
                             </div>
                             <div className="right-arrow-container">
                                 {

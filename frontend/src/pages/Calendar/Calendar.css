@@ -145,7 +145,7 @@
 }
 
 .bottom-arrows-container {
-    height: 10%;
+    height: 12%;
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -161,13 +161,22 @@
 }
 
 .left-arrow-container {
-    width: 50%;
-    text-align: right;
-    margin-right: 5%;
+    display: flex;
+    align-items: center;
+    width: 35%;
+    justify-content: right;
 }
 
 .right-arrow-container {
-    width: 50%;
-    text-align: left;
-    margin-left: 5%;
+    display: flex;
+    align-items: center;
+    width: 35%;
+    justify-content: left;
+}
+
+.middle-page-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
 }
