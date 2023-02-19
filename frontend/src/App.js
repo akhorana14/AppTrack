@@ -14,7 +14,7 @@ function App() {
     <Router>
         <Routes>
             <Route path="/calendar" element={<Calendar />} />
-            <Route path="/signin" element={<SignIn />} />
+            <Route path="/" element={<SignIn />} />
             <Route path="/company/:company" element={<Company />} />
             <Route path="/dashboard" element={<Dashboard />} />
         </Routes>

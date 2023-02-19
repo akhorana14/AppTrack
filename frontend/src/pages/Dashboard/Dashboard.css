@@ -2,6 +2,7 @@ html, body, #root {
     max-height:100%;
     padding:0;
     margin:0;
+    
  }
  
 #left-side-label-container {
@@ -22,7 +23,7 @@ html, body, #root {
     height:40vh;
     width:100%;
     margin:auto;
-    padding-top: 15vh;
+    padding-top: 5vh;
     overflow-y: scroll;
 }
 
@@ -30,7 +31,7 @@ html, body, #root {
     height:40vh;
     width:100%;
     margin:auto;
-    padding-top: 14.5vh;
+    padding-top: 16vh;
     overflow-y: scroll;
 }
 
@@ -60,4 +61,8 @@ html, body, #root {
  #completed-table.table-striped>tbody>tr:nth-child(odd)>td, 
 .table-striped>tbody>tr:nth-child(odd)>th {
    background-color: var(--apptrack-light-blue);
+ }
+
+ td {
+     width: 33.3%;
  }

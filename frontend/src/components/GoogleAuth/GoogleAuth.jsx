@@ -1,5 +1,6 @@
 import React, { useEffect, useRef,} from 'react';
 import Button from 'react-bootstrap/esm/Button';
+import {Google} from 'react-bootstrap-icons';
 
 const GOOGLE_IDENTITY_URL = 'https://accounts.google.com/gsi/client';
 const clientId = process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID;
@@ -13,8 +14,8 @@ let scriptLoadingStarted = false;
 
 function GoogleButton(props) {
     return (
-        <Button variant="dark" onClick={props.authFunction}>
-            Sign In With Google
+        <Button variant="dark" onClick={props.authFunction} className="m-2 d-flex align-items-center">
+            <Google style={{"margin-right":"5px"}}></Google> Sign In With Google 
         </Button>
     )
 }

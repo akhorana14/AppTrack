@@ -4,21 +4,21 @@ import './Dashboard.css';
 import '../../static/globals.css';
 
 let sampleNewUpdate = [{ "Company": "Meta", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Google", "Date": "1/1/2023", "Status": "Rejected" },
+{ "Company": "Google", "Date": "10/1/2023", "Status": "Rejected" },
 { "Company": "Amazon", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Netflix", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Apple", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Walmart", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Mcdonalds", "Date": "1/1/2023", "Status": "Rejected" }]
+{ "Company": "Netflix", "Date": "12/12/2023", "Status": "Rejected" },
+{ "Company": "Apple", "Date": "11/1/2023", "Status": "Rejected" },
+{ "Company": "Walmart", "Date": "1/21/2023", "Status": "Rejected" },
+{ "Company": "Mcdonalds", "Date": "11/1/2023", "Status": "Rejected" }]
 
-let sampleCompleted = [ {"Company": "Twilio", "Date":"1/1/2023", "Status":"Rejected"} ,
+let sampleCompleted = [ {"Company": "Twilio", "Date":"1/10/2023", "Status":"Rejected"} ,
                         {"Company": "Reddit", "Date":"1/1/2023", "Status":"Rejected"} ,
-                        {"Company": "Spotify", "Date":"1/1/2023", "Status":"Rejected"} ,
+                        {"Company": "Spotify", "Date":"11/21/2023", "Status":"Rejected"} ,
                         {"Company": "Uber", "Date":"1/1/2023", "Status":"Rejected"} ,
-                        {"Company": "Pinterest", "Date":"1/1/2023", "Status":"Rejected"},
-                        {"Company": "Twitter", "Date":"1/1/2023", "Status":"Rejected"},
-                        {"Company": "Twitt2er", "Date":"1/1/2023", "Status":"Rejected"},
-                        {"Company": "Twitt3er", "Date":"1/1/2023", "Status":"Rejected"},
+                        {"Company": "Pinterest", "Date":"10/1/2023", "Status":"Rejected"},
+                        {"Company": "Twitter", "Date":"1/21/2023", "Status":"Rejected"},
+                        {"Company": "Twitt2er", "Date":"11/31/2023", "Status":"Rejected"},
+                        {"Company": "Twitt3er", "Date":"1/12/2023", "Status":"Rejected"},
                         {"Company": "Twitt5er", "Date":"1/1/2023", "Status":"Rejected"},
                       ]
 

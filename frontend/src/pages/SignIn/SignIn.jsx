@@ -4,7 +4,7 @@ import './SignIn.css';
 
 function SignIn() {
     return (
-        <div className="body">
+        <div className="body-signin">
             <Navbar />
             <div className="centersquare">
                 <h1>Welcome to AppTrack</h1>
