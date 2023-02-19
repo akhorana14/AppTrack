@@ -4,14 +4,12 @@ html, body, #root, .main-content {
 
 .left-half {
     background-color: white;
+    padding: 25px 50px 25px 50px;
 }
 
 .right-half {
-    background-color: var(--apptrack-light);
-}
-
-.main-row .col {
-    padding: 10px 25px 10px 25px;
+    background-color: var(--apptrack-primary-light);
+    padding: 25px 50px 25px 50px;
 }
 
 .checklist {
@@ -21,7 +19,8 @@ html, body, #root, .main-content {
 }
 
 .checklist li {
-    margin-bottom: 12px;
+    margin-bottom: 15px;
+    position: relative;
 }
 .checklist h6 {
     display: inline-block;
@@ -30,4 +29,45 @@ html, body, #root, .main-content {
 
 .levels-btn {
     background-color: #e2e6ea;
+    border-style: none;
+    margin-right: 5px;
+}
+
+.leetcode-btn {
+    border-style: none;
+}
+ 
+.vertical-line{
+    position:absolute;
+    height:100%;
+    width:1px;
+    border-left:1px solid black;
+    left:12px;
+    top:20px;
+}
+
+.email-history, .action-items {
+    background-color: #e2e6ea;
+    height: 35%;
+    box-shadow: 1px 4px 4px rgba(0, 0, 0, 0.25);
+    overflow-y: auto;
+}
+
+.mini-accordion {
+    background-color: white;
+    box-shadow: 1px 4px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+}
+
+.accordion-button:focus, .accordion-button:not(.collapsed) {
+    background-color: white;
+    border-color: white;
+    outline: none;
+    color:black;
+    box-shadow: none;
+}
+
+.btn-close:focus {
+    box-shadow: none;
 }

@@ -1,0 +1,68 @@
+html, body, #root {
+    max-height:100%;
+    padding:0;
+    margin:0;
+    
+ }
+ 
+#left-side-label-container {
+    max-height: 100%;
+    width:5%;
+    float:left;
+    transform: rotate(270deg);
+}
+
+#table-container {
+    max-height: 85%;
+    width:100%;  
+    overflow-y: hidden;  
+    padding-right: 2%;
+}
+
+#new-updates-div {
+    height:40vh;
+    width:100%;
+    margin:auto;
+    padding-top: 5vh;
+    overflow-y: scroll;
+}
+
+#completed-updates-div {
+    height:40vh;
+    width:100%;
+    margin:auto;
+    padding-top: 16vh;
+    overflow-y: scroll;
+}
+
+#new-update-table {
+    width:95%;
+    float:right;
+}
+
+#completed-table {
+    width:95%;
+    float:right;
+}
+
+.search {
+    padding-top: 1%;
+    padding-bottom: 1%;
+    padding-right: 2%;
+    padding-left: 2%;
+    height: 7%;
+}
+
+#new-update-table.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: var(--apptrack-light-beige);
+ }
+
+ #completed-table.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: var(--apptrack-light-blue);
+ }
+
+ td {
+     width: 33.3%;
+ }

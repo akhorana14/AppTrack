@@ -1,4 +1,94 @@
 .navbar {
-    background-color: #001D6E;
-    height: 100%;
+    background-color:  var(--apptrack-primary);
+    height: 8vh;
+}
+
+.home {
+    color: var(--apptrack-light);
+    align-self: center;
+    font-size: 1.5rem;
+    margin-left: 0em;
+    margin-right: 0em;
+    display: flex;
+}
+
+.profile {
+    color: var(--apptrack-light);
+    align-self: center;
+    font-size: 1.5rem;
+    margin-left: 0em;
+    margin-right: 0em;
+    display: flex;
+}
+
+.bell {
+    color: var(--apptrack-light);
+    align-self: center;
+    font-size: 1.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.2rem;
+    display: flex;
+}
+
+.notificationHeading {
+    display: flex;
+    margin-left: 1rem;
+    width: 210px;
+    align-items: center;
+}
+
+.headingNotification {
+    font-size: 20px;
+}
+
+.buttonRead {
+    border: none;
+    text-align: right;
+    background-color: white;
+    font-size: 10px;
+    padding-top: 20px;
+    padding-left: 10px;
+    text-decoration: underline;
+    font-weight: bold;
+}
+.buttonRead:hover {
+    border: none;
+    text-align: right;
+    background-color: white;
+    font-size: 10px;
+    padding-top: 20px;
+    padding-left: 10px;
+    text-decoration: #001D6E;
+    color: #001D6E;
+    font-weight: bold;
+}
+
+.menu {
+    color: var(--apptrack-light);
+    align-self: center;
+    font-size: 1.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.2rem;
+    display: flex;
+}
+
+.buttonNotification {
+    background-color: #E6F0FF;
+    display: flex;
+    width: 210px;
+    margin-bottom: 0.25rem;
+    border-color: #001D6E;
+}
+.p1 {
+    font-size: 15px;
+    font-weight: bold;
+}
+.p2 {
+    font-size: 10px;
+    position: absolute;
+    padding-left: 150px;
+}
+
+.dropdown-toggle::after {
+    display: none; 
 }
