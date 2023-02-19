@@ -63,23 +63,25 @@ function CreateApplication() {
                             <label htmlFor="company-name">Company name *</label>
                             <input value={companyName} className="form-control" placeholder="Enter company name" onChange={companyNameChange}/>
                         </div>
-                        <div className="form-group">
+                        <div className="form-group create-app-margin-top">
                             <label htmlFor="title">Job title *</label>
                             <input value={jobTitle} className="form-control" placeholder="Enter job title" onChange={jobTitleChange} />
                         </div>
-                        <div className="form-group">
+                        <div className="form-group create-app-margin-top">
                             <label htmlFor="title">LeetCode link</label>
                             <input value={leetcodeLink} className="form-control" aria-describedby="leetcode-help" placeholder="Enter LeetCode link" onChange={leetcodeLinkChange} />
                             <small id="leetcode-help" className="form-text text-muted">Common technical interview problems can be found at a company's LeetCode</small>
                         </div>
-                        <div className="form-group">
+                        <div className="form-group create-app-margin-top">
                             <label htmlFor="title">levels.fyi link</label>
                             <input value={levelsLink} className="form-control" aria-describedby="title-help" placeholder="Enter levels.fyi link"  onChange={levelsLinkChange}/>
                             <small id="title-help" className="form-text text-muted">Information on compensation can be found at a company's levels.fyi</small>
                         </div>
-                        <button type="button" className="btn btn-primary blue-button" onClick={handleClear}>Clear</button>
-                        <button type="button" className="btn btn-success green-button" onClick={handleSubmit}>Submit</button>
-                        <span className="create-app-error-msg">{errorMsg}</span>
+                        <div className="create-app-margin-top">
+                            <button type="button" className="btn btn-primary blue-button" onClick={handleClear}>Clear</button>
+                            <button type="button" className="btn btn-success green-button" onClick={handleSubmit}>Submit</button>
+                            <span className="create-app-error-msg">{errorMsg}</span>
+                        </div>
                     </form>
                 </div>
             </div>
