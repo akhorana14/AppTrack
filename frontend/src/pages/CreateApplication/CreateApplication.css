@@ -1,0 +1,61 @@
+.navbar-container {
+    height: 7%;
+}
+
+.create-app-background {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-flow: column;
+}
+
+.create-app-body {
+    height: 93%;
+    display: flex;
+    flex-flow: row;
+}
+
+.create-app-right {
+    width: 40%;
+    background-color: #E6F0FF;
+    padding: 5%;
+}
+
+.create-app-left {
+    width: 50%;
+    background-color: white;
+    padding: 5%;
+}
+
+.create-app-right-top-text {
+    font-size: 10vh;
+}
+
+.create-app-right-bottom-text {
+    font-size: 5vh;
+}
+
+.create-app-left-text {
+    font-size: 5vh;
+    color: #001D6E;
+}
+
+.blue-button {
+    background-color: #001D6E;
+    border-radius: 0%;
+    border: none;
+}
+
+.blue-button:hover {
+    background-color: #00103b;
+}
+
+.green-button {
+    border-radius: 0%;
+    border: none;
+    margin-left: 2%
+}
+
+.create-app-error-msg {
+    margin-left: 2%;
+}

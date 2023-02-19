@@ -3,6 +3,7 @@ import './static/globals.css';
 
 import Calendar from "./pages/Calendar/Calendar"
 import Company from "./pages/Company/Company"
+import CreateApplication from "./pages/CreateApplication/CreateApplication"
 import SignIn from "./pages/SignIn/SignIn"
 import Dashboard from "./pages/Dashboard/Dashboard"
 
@@ -16,6 +17,7 @@ function App() {
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/" element={<SignIn />} />
             <Route path="/company/:company" element={<Company />} />
+            <Route path="/createApplication" element={<CreateApplication />} />
             <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
     </Router>
