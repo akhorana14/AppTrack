@@ -46,7 +46,7 @@ function Company() {
                             <h1 className="display-3 font-weight-normal mb-0">{`${companyName}`}</h1>
                             <h3>Software Engineer Intern
                                 <br />
-                                <h6 className="text-muted">Last update: January 23, 2022</h6>
+                                <h6 className="text-muted my-1">Last update: January 23, 2022</h6>
                             </h3>
                             <div className="mt-1 d-flex align-items-center">
                                 <LevelsButton company={companyName}/>
@@ -130,15 +130,15 @@ function EmailHistory(props) {
         </Row>
     ];
 }
-function Stage(stage, index) {
+function Stage(props) {
     return (
         <div className="d-flex align-items-center">
             {
-                index === 0 ? (<ExclamationCircleFill size={24} />) : (<CheckCircleFill size={24} />)
+                props.index === 0 ? (<ExclamationCircleFill size={24} fill="orange" />) : (<CheckCircleFill size={24} />)
             }
             <h6 className="m-0">
-                {stage.type}
-                <span className="text-muted"> {stage.date}</span>
+                {props.stage.type}
+                <span className="text-muted"> {props.stage.date}</span>
             </h6>
             <div className={styles["vertical-line"]}></div>
         </div>
@@ -151,7 +151,7 @@ function StageList(props) {
                 props.list.slice(0).reverse().map((stage, index) => {
                     return (
                         <li>
-                            <Stage {...stage} index={index} />
+                            <Stage stage={stage} index={index} />
                         </li>
                     );
                 })

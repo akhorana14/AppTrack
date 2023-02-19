@@ -28,6 +28,10 @@
     padding-left: 8px;
 }
 
+.checklist svg {
+    z-index: 1;
+}
+
 .levels-btn {
     background-color: #e2e6ea;
     border-style: none;
