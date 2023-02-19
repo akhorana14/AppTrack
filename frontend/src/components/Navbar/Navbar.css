@@ -1,8 +1,4 @@
 .navbar {
-<<<<<<< HEAD
-    background-color: #001D6E;
-    height: 100%;
-=======
     background-color:  var(--apptrack-primary);
     height: 8vh;
 }
@@ -95,5 +91,4 @@
 
 .dropdown-toggle::after {
     display: none; 
->>>>>>> main
 }

@@ -138,11 +138,7 @@ function Calendar(props) {
 
     return (
         <div className="background">
-<<<<<<< HEAD
-            <div className="navbar-container">
-=======
             <div className="calendar-navbar-container">
->>>>>>> main
                 <Navbar />
             </div>
             <div className="body">
@@ -223,15 +219,6 @@ function Calendar(props) {
                     <div className="right-space">
                     </div>
                     <div className="right-day-names">
-<<<<<<< HEAD
-                        <div className="calendar-box day-box border-bottom">SUN</div> 
-                        <div className="calendar-box day-box border-left border-bottom">MON</div>
-                        <div className="calendar-box day-box border-left border-bottom">TUE</div>
-                        <div className="calendar-box day-box border-left border-bottom">WED</div>
-                        <div className="calendar-box day-box border-left border-bottom">THU</div>
-                        <div className="calendar-box day-box border-left border-bottom">FRI</div>
-                        <div className="calendar-box day-box border-left border-bottom">SAT</div>
-=======
                         <div className="calendar-box day-box calendar-header-border-bottom">SUN</div> 
                         <div className="calendar-box day-box calendar-header-border-left calendar-header-border-bottom">MON</div>
                         <div className="calendar-box day-box calendar-header-border-left calendar-header-border-bottom">TUE</div>
@@ -239,7 +226,6 @@ function Calendar(props) {
                         <div className="calendar-box day-box calendar-header-border-left calendar-header-border-bottom">THU</div>
                         <div className="calendar-box day-box calendar-header-border-left calendar-header-border-bottom">FRI</div>
                         <div className="calendar-box day-box calendar-header-border-left calendar-header-border-bottom">SAT</div>
->>>>>>> main
                     </div>
                     <div className="right-bottom">
                         {jsxCalendar()}
