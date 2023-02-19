@@ -5,3 +5,7 @@
     --apptrack-light-blue: #dfe9f0;
     --apptrack-light-beige: #fcfaf7;
 }
+
+html, body, #root {
+    height: 100%;
+}

@@ -1,6 +1,6 @@
 import Header from "../../components/Header"
 import Navbar from "../../components/Navbar/Navbar"
-import './Company.css';
+import styles from './Company.module.css';
 
 import { useParams } from "react-router-dom";
 
@@ -39,10 +39,10 @@ function Company() {
         <>
             <Header title={`Your Application @ ${companyName}`} />
             <Navbar />
-            <div className="main-content">
+            <div className={styles["main-content"]}>
                 <Container fluid className="h-100">
                     <Row className="justify-content-center h-100">
-                        <Col className="left left-half">
+                        <Col className={styles["left-half"]}>
                             <h1 className="display-3 font-weight-normal mb-0">{`${companyName}`}</h1>
                             <h3>Software Engineer Intern
                                 <br />
@@ -54,7 +54,7 @@ function Company() {
                             </div>
                             <StageList list={listOfStages} />
                         </Col>
-                        <Col className="right right-half">
+                        <Col className={styles["right-half"]}>
                             <ActionItems items={actionItems} />
                             <EmailHistory emails={emails} />
                         </Col>
@@ -75,7 +75,7 @@ function ActionItems(props) {
     if (props.items.length === 0) {
         return [
             title,
-            <Row className="action-items d-flex text-center align-items-center">
+            <Row className={`${styles["action-items"]} d-flex text-center align-items-center`}>
                 <Col className="p-2 m-1">
                     <p>No items found</p>
                 </Col>
@@ -84,7 +84,7 @@ function ActionItems(props) {
     }
     return [
         title,
-        <Row className="action-items">
+        <Row className={styles["action-items"]}>
             <Col className="p-2 m-1">
                 {
                     props.items.slice(0).reverse().map(item => {
@@ -108,7 +108,7 @@ function EmailHistory(props) {
     if (props.emails.length === 0) {
         return [
             title,
-            <Row className="email-history d-flex text-center align-items-center">
+            <Row className={`${styles["email-history"]} d-flex text-center align-items-center`}>
                 <Col className="p-2 m-1">
                     <p>No items found</p>
                 </Col>
@@ -117,7 +117,7 @@ function EmailHistory(props) {
     }
     return [
         title,
-        <Row className="email-history">
+        <Row className={styles["email-history"]}>
             <Col className="p-2 m-1">
                 {
                     props.emails.slice(0).reverse().map(email => {
@@ -140,13 +140,13 @@ function Stage(stage, index) {
                 {stage.type}
                 <span className="text-muted"> {stage.date}</span>
             </h6>
-            <div className="vertical-line"></div>
+            <div className={styles["vertical-line"]}></div>
         </div>
     );
 }
 function StageList(props) {
     return (
-        <ul className="checklist mt-3">
+        <ul className={`${styles.checklist} mt-3`}>
             {
                 props.list.slice(0).reverse().map((stage, index) => {
                     return (
@@ -162,7 +162,7 @@ function StageList(props) {
 
 function LevelsButton(props) {
     return (
-        <Button href={`https://www.levels.fyi/companies/${props.company}/salaries`} variant="light" className="levels-btn d-flex align-items-center">
+        <Button href={`https://www.levels.fyi/companies/${props.company}/salaries`} variant="light" className={`${styles["levels-btn"]} d-flex align-items-center`}>
             <img src="https://www.levels.fyi/assets/levelsiconfilledcolored.png" height="28" width="28" alt="Levels.fyi Logo" />
             Levels.fyi
         </Button>
@@ -171,7 +171,7 @@ function LevelsButton(props) {
 
 function LeetcodeButton(props) {
     return (
-        <Button href={`https://leetcode.com/discuss/interview-question?currentPage=1&orderBy=most_relevant&query=${props.company}`}variant="dark" className="leetcode-btn d-flex align-items-center">
+        <Button href={`https://leetcode.com/discuss/interview-question?currentPage=1&orderBy=most_relevant&query=${props.company}`} variant="dark" className={`${styles["leetcode-btn"]} d-flex align-items-center`}>
             <img src="https://leetcode.com/static/images/LeetCode_logo_rvs.png" height="28" width="28" alt="Leetcode Logo" />
             Leetcode
         </Button>
@@ -180,7 +180,7 @@ function LeetcodeButton(props) {
 
 function EmailAccordion(props) {
     return (
-        <Accordion flush className="mini-accordion">
+        <Accordion flush className={styles["mini-accordion"]}>
             <Accordion.Item eventKey="0">
                 <Accordion.Header>
                     <h6><Badge bg="warning" text="dark" className="m-0 me-2">{props.type}</Badge>{props.subject}</h6>
@@ -196,7 +196,7 @@ function EmailAccordion(props) {
 
 function ActionItemAccordion(props) {
     return (
-        <Accordion flush className="mini-accordion">
+        <Accordion flush className={styles["mini-accordion"]}>
             <Accordion.Item eventKey="0">
                 <Accordion.Header>
                     <h6 className="m-0">{props.subject}</h6>

@@ -14,8 +14,8 @@ let scriptLoadingStarted = false;
 
 function GoogleButton(props) {
     return (
-        <Button variant="dark" onClick={props.authFunction} className="m-2 d-flex align-items-center">
-            <Google style={{"margin-right":"5px"}}></Google> Sign In With Google 
+        <Button variant="dark" onClick={props.authFunction} className="mt-3 mb-3 p-1 d-flex align-items-center">
+            <Google className="pe-1" size={24} />Login With Google 
         </Button>
     )
 }

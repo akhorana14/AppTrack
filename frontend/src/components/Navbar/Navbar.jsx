@@ -58,20 +58,20 @@ function GetNavbar() {
               <tbody>{newUpdateNotification}</tbody>
             </NavDropdown>
             <NavDropdown title={navDropDownTitle} id="basic-nav-dropdown" align="end">
-              <NavDropdown.Item href="#action/4.1">
+              <NavDropdown.Item href="/dashboard">
                 Dashboard</NavDropdown.Item>
 
-              <NavDropdown.Item href="#action/4.2">
+              <NavDropdown.Item href="/calendar">
                 Calendar</NavDropdown.Item>
 
-              <NavDropdown.Item href="#action/4.3">
+              <NavDropdown.Item href="/company/google">
                 Companies</NavDropdown.Item>
 
-              <NavDropdown.Item href="#action/4.1">
+              <NavDropdown.Item href="/">
                 Sign In</NavDropdown.Item>  
 
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/4.4">
+              <NavDropdown.Item href="/settings">
                 Settings
               </NavDropdown.Item>
 
