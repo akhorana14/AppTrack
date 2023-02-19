@@ -6,12 +6,12 @@
     overflow: hidden;
 }
 
-.border-left {
-    border-left: 1px solid;
+.calendar-border-left {
+    border-left: 1px solid lightgray;
 }
 
-.border-bottom {
-    border-bottom: 1px solid;
+.calendar-border-bottom {
+    border-bottom: 1px solid lightgray;
 }
 
 .not-current-month {

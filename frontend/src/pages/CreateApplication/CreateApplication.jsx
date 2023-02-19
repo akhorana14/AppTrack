@@ -46,7 +46,7 @@ function CreateApplication() {
 
     return (
         <div className="create-app-background">
-            <div className="navbar-container">
+            <div className="create-app-navbar-container">
                 <Navbar />
             </div>
             <div className="create-app-body">
