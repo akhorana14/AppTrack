@@ -16,7 +16,7 @@ class CalendarAPI {
 
     static getCompletedEvents() {
         var completedEvents = [];
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < 5; i++) {
             completedEvents.push(
                 {
                     company: "Google" + i,

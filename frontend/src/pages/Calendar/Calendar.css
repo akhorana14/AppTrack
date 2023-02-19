@@ -150,15 +150,24 @@
     bottom: 0;
     width: 100%;
     text-align: center;
+    display: flex;
 }
 
 .page-arrows {
     width: 1.75vw;
     height: 1.75vw;
     fill: currentColor;
-    margin-left: 15px;
+    cursor: pointer;
 }
 
-.page-arrows-enabled {
-    cursor: pointer;
+.left-arrow-container {
+    width: 50%;
+    text-align: right;
+    margin-right: 5%;
+}
+
+.right-arrow-container {
+    width: 50%;
+    text-align: left;
+    margin-left: 5%;
 }
