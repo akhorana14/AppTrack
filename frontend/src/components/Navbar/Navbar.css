@@ -1,3 +1,10 @@
+<<<<<<< HEAD
 .navbar {
     background-color:  var(--apptrack-primary);
 }
+=======
+.navbar {
+    background-color: #001D6E;
+    height: 100%;
+}
+>>>>>>> Calendar
