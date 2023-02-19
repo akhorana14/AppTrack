@@ -5,12 +5,12 @@
     flex-flow: column;
 }
 
-.navbar-container {
-    height: 7%;
+.calendar-navbar-container {
+    height: 8%;
 }
 
 .body {
-    height: 93%;
+    height: 92%;
     display: flex;
     flex-flow: row;
 }
@@ -100,12 +100,12 @@
     font-size: 12px;
 }
 
-.border-left {
-    border-left: 1px solid;
+.calendar-header-border-left {
+    border-left: 1px solid lightgray;
 }
 
-.border-bottom {
-    border-bottom: 1px solid;
+.calendar-header-border-bottom {
+    border-bottom: 1px solid lightgray;
 }
 
 .left-title {

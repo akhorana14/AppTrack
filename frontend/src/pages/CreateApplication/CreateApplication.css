@@ -1,5 +1,5 @@
-.navbar-container {
-    height: 7%;
+.create-app-navbar-container {
+    height: 8%;
 }
 
 .create-app-background {
@@ -10,7 +10,7 @@
 }
 
 .create-app-body {
-    height: 93%;
+    height: 92%;
     display: flex;
     flex-flow: row;
 }

@@ -4,8 +4,8 @@ import "./CalendarBox.css"
 
 function CalendarBox(props) {
     var boxClassName = "calendar-box";
-    if (props.week !== 5) boxClassName += " border-bottom";
-    if (props.day !== 0) boxClassName += " border-left";
+    if (props.week !== 5) boxClassName += " calendar-border-bottom";
+    if (props.day !== 0) boxClassName += " calendar-border-left";
     if (!props.calendar[props.week][props.day].isDisplayedMonth) boxClassName += " not-current-month";
 
     var dateClassName = "date";
