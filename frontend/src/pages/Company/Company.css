@@ -71,3 +71,23 @@ html, body, #root, .main-content {
 .btn-close:focus {
     box-shadow: none;
 }
+
+.no-resize {
+    resize: none;
+}
+
+.blue-button {
+    background-color: #001D6E;
+    border-radius: 0%;
+    border: none;
+}
+
+.blue-button:hover {
+    background-color: #00103b;
+}
+
+.green-button {
+    border-radius: 0%;
+    border: none;
+    margin-left: 2%;
+}

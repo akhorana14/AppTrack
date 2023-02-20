@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar/Navbar"
 import './Company.css';
 
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -33,6 +34,37 @@ let actionItems = [
 ]
 
 function Company() {
+    const [errorMsg, setErrorMsg] = useState("* indicates required fields");
+    const [actionItem, setActionItem] = useState("");
+    const [description, setDescription] = useState("");
+    const [date, setDate] = useState("");
+
+    function handleActionItemSubmit() {
+        console.log({
+            actionItem: actionItem,
+            description: description,
+            date: date
+        });
+    }
+
+    function updateActionItem(e) {
+        setActionItem(e.target.value);
+    }
+
+    function updateDescription(e) {
+        setDescription(e.target.value);
+    }
+
+    function updateDate(e) {
+        setDate(e.target.value);
+    }
+
+    function handleClear() {
+        setActionItem("");
+        setDescription("");
+        setDate("");
+    }
+    
     let { company: companyName } = useParams();
     companyName = capitalizeFirstLetter(companyName);
     return (
@@ -53,6 +85,31 @@ function Company() {
                                 <LeetcodeButton company={companyName}/>
                             </div>
                             <StageList list={listOfStages} />
+                            <div className="mt-5">
+                                <h3>Add an action item
+                                    <br />
+                                    <h6 className="text-muted">Manually keep track of untracked updates</h6>
+                                </h3>
+                                <form>
+                                    <div className="form-group mt-2">
+                                        <label htmlFor="update-title">Action Item *</label>
+                                        <input className="form-control" placeholder="Enter action item" onChange={updateActionItem} value={actionItem}/>
+                                    </div>
+                                    <div className="form-group mt-2">
+                                        <label htmlFor="description">Description *</label>
+                                        <textarea class="form-control no-resize" rows="3" onChange={updateDescription} placeholder="Enter description" value={description}></textarea>
+                                    </div>
+                                    <div className="form-group mt-2">
+                                        <label htmlFor="description">Date *</label>                                        
+                                        <input className="form-control" placeholder="Enter date" onChange={updateDate} value={date}/>                            
+                                        <small className="form-text text-muted">Enter the date in MM/DD/YYYY format</small>
+                                    </div>
+
+                                    <button type="button" className="btn btn-primary blue-button mt-3" onClick={handleClear}>Clear</button>
+                                    <button type="button" className="btn btn-success green-button mt-3" onClick={handleActionItemSubmit}>Submit</button>
+                                    <span className="create-app-error-msg">{errorMsg}</span>
+                                </form>
+                            </div>
                         </Col>
                         <Col className="right right-half">
                             <ActionItems items={actionItems} />
