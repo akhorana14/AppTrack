@@ -1,18 +1,18 @@
 import Navbar from "../../components/Navbar/Navbar"
 import GoogleAuth from "../../components/GoogleAuth/GoogleAuth";
-import './SignIn.css';
+import styles from './SignIn.module.css';
 
 function SignIn() {
     return (
-        <div className="body-signin">
+        <div className={styles["signin"]}>
             <Navbar />
-            <div className="centersquare">
+            <div className={styles.centersquare}>
                 <h1>Welcome to AppTrack</h1>
-                <h2>You miss all the shots you don't take!</h2>
-                <div className="google">
+                <h5>You miss all the shots you don't take!</h5>
+                <div className={styles.google}>
                     <GoogleAuth />
                 </div>
-                <p>Sorry! For now, we only support Google Authentication. More coming soon!</p>
+                <p className="text-muted">We only support Google Authentication at this time.</p>
             </div>
         </div>
     );
