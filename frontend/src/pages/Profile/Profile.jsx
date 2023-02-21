@@ -8,6 +8,13 @@ import * as Icon from 'react-bootstrap-icons';
 function Profile() {
     const [selected, setSelected] = React.useState("Account");
 
+    function confirmDeletion() {
+        let result = window.confirm("Are you sure you want to delete your account?");
+        if (result) {
+            console.log("Account deleted");
+        }
+    }
+
     function performSelection(e) {
         let items = document.getElementsByClassName(style.sidebar_item);
         for (let i = 0; i < items.length; i++) {
@@ -37,7 +44,6 @@ function Profile() {
     function updateSelected(e) {
         let text = e.textContent;
         setSelected(text);
-        console.log(selected);
     }
 
     return (
@@ -74,6 +80,7 @@ function Profile() {
                 selected === "Account" ? (
                     <div class={style.content}>
                         <h1>Account</h1>
+                        <button class={"btn btn-danger " + style.delete} onClick={confirmDeletion}>Delete Account</button>
                     </div>
                 ) : selected === "Notifications" ? (
                     <div class={style.content}>
@@ -93,8 +100,10 @@ function Profile() {
                     <div class={style.content}>
                         <h1>Settings</h1>
                         <p>Display Settings</p>
-                        <input type="radio" name="action" id="track" value="track" /><label for="track">Light Mode</label><br />
-                        <input type="radio" name="action" id="event" value="event"  /><label for="event">Dark Mode</label><br />
+                        <fieldset>
+                            <input type="radio" name="action" id="track" value="track" /><label for="track">Light Mode</label><br />
+                            <input type="radio" name="action" id="event" value="event"  /><label for="event">Dark Mode</label><br />
+                        </fieldset>
                     </div>
                 ) : selected === "About" ? (
                     <div class={style.content}>
