@@ -91,3 +91,45 @@ fieldset {
     margin-top: 30px;
 }
 
+.listGroup {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 20%;
+    padding-right: 20%;
+    text-align: left;
+}
+
+.listItem {
+    display: flex;
+    justify-content: space-between;
+}
+
+.switch {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.cardList {
+    display: flex;
+    justify-content: center;
+}
+
+.card {
+    margin-left: 10px;
+}
+
+.dateWrapper {
+    display: inline-block;
+    width: 20%;
+    margin: 0px 0px 0px 0px;
+    align-items: center;
+}
+
+.date {
+    margin: 0px 0px 0px 0px;
+}
+
+.center {
+    align-items: center;
+}
+

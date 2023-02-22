@@ -6,7 +6,9 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Image from 'react-bootstrap/Image'
 import Collapse from "react-bootstrap/esm/Collapse";
-import Accordion from "react-bootstrap/esm/Accordion";
+import ListGroup from "react-bootstrap/esm/ListGroup";
+import Form from 'react-bootstrap/Form';
+import Card from 'react-bootstrap/Card';
 
 
 function Profile(props) {
@@ -105,7 +107,7 @@ function Profile(props) {
                                 <h1>Account</h1>
                             </div>
                             <div class="card-body">
-                                <Image className="accountPicture" src="https://www.w3schools.com/howto/img_avatar.png" roundedCircle />
+                                <Image className="accountPicture" src="https://www.w3schools.com/howto/img_avatar.png" roundedCircle width={300} />
                                 <br /> <br />
                                 <h5 class="card-title">You are currently signed in as: Username</h5>
                                 <p class="card-text">Update your account with the options below.</p>
@@ -116,13 +118,7 @@ function Profile(props) {
                                 </Button> <br />
                                 <Collapse in={open}>
                                     <div id="collapse">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                                    aliquip ex ea commodo consequat. Duis aute irure dolor in
-                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                                    culpa qui officia deserunt mollit anim id est laborum.
+                                        Google Auth Button Placeholder
                                     </div>
                                 </Collapse>
                                 <Button className={style.delete} variant="danger" onClick={handleShow}>
@@ -138,9 +134,18 @@ function Profile(props) {
                                 <h1>Notifications</h1>
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">Special title treatment</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <h5 class="card-title">Notifications you recieve</h5>
+                                <p class="card-text">Change when you recieve notifications from AppTrack</p>
+                                <ListGroup id="notificationList" className={style.listGroup}>
+                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Notification Option 1"/></ListGroup.Item>
+                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Notification Option 2" /></ListGroup.Item>
+                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Notification Option 3"/></ListGroup.Item>
+                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Notification Option 4"/></ListGroup.Item>
+                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Notification Option 5" /></ListGroup.Item>
+                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Notification Option 6" /></ListGroup.Item>
+                                </ListGroup>
+                                <br />
+                                <a href="#" class="btn btn-primary">Submit</a>
                             </div>
                         </div>
                     </div>
@@ -151,9 +156,18 @@ function Profile(props) {
                                 <h1>Privacy</h1>
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">Special title treatment</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <h5 class="card-title">How AppTrack uses your data</h5>
+                                <p class="card-text">Change how AppTrack can give you personalized feedback</p>
+                                <ListGroup id="privacyList" className={style.listGroup}>
+                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Privacy Option 1" /></ListGroup.Item>
+                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Privacy Option 2"/></ListGroup.Item>
+                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Privacy Option 3" /></ListGroup.Item>
+                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Privacy Option 4" /></ListGroup.Item>
+                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Privacy Option 5"/></ListGroup.Item>
+                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Privacy Option 6"/></ListGroup.Item>
+                                </ListGroup>
+                                <br />
+                                <a href="#" class="btn btn-primary">Submit</a>
                             </div>
                         </div>
                     </div>
@@ -165,8 +179,41 @@ function Profile(props) {
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title">Display Settings</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <p class="card-text">Choose a fun color scheme to use AppTrack with</p>
+                                <div className={style.cardList}>
+                                <Card className={style.card} style={{ width: '18rem' }}>
+                                    <Card.Body>
+                                    <Card.Title>Default Light Mode</Card.Title>
+                                    <Card.Text>
+                                        The default Light Mode for AppTrack.
+                                    </Card.Text>
+                                        <Button variant="primary">Select</Button>
+                                    </Card.Body>
+                                </Card>
+                                <Card className={style.card} style={{ width: '18rem' }}>
+                                    <Card.Body>
+                                    <Card.Title>Default Dark Mode</Card.Title>
+                                    <Card.Text>
+                                        The default Dark Mode for AppTrack.
+                                    </Card.Text>
+                                        <Button variant="primary">Select</Button>
+                                    </Card.Body>
+                                </Card>
+                                </div>
+                                <br />
+                                <h5 class="card-title">Email Processing</h5>
+                                <p class="card-text">Choose how AppTrack handles your job updates automatically </p>
+                                <ListGroup className={style.listGroup}>
+                                <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Allow AppTrack to automatically handle job updates."/></ListGroup.Item>
+                                </ListGroup>
+                                <br />
+                                <p class="card-text">Allow AppTrack to check for job updates past </p>
+                                <br />
+                                <div className={style.dateWrapper}> 
+                                    <Form.Control type="date" className={style.date} />
+                                </div>
+                                <br /> <br />
+                                <a href="#" class="btn btn-primary">Submit</a>
                             </div>
                         </div>
                     </div>
@@ -177,9 +224,8 @@ function Profile(props) {
                                 <h1>About</h1>
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">Special title treatment</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <h5 class="card-title">What is AppTrack?</h5>
+                                <p class="card-text">During the recruiting process, many job applicants apply to hundreds of positions on a variety of sites, such as LinkedIn, Google Jobs, and Indeed. A majority of these applications are then funneled through a select group of vendors that collect information on behalf of corporate recruiters, such as Workday and Greenhouse. These platforms (and human recruiters) often provide candidates with status updates via email. We propose a web based platform that analyzes candidate’s Gmail inboxes for job status updates and notifies them when action is required or when they have progressed to the next recruiting step. This functionality differentiates us from other job tracking solutions available, which do not automatically integrate with users’ email inboxes. In addition, the web application has a calendar to track important dates, which ensures the candidate is informed of important dates they might have otherwise missed. This would simplify the recruiting process for candidates, allowing them to effectively manage a large number of job applications.</p>
                             </div>
                         </div>
                     </div>
