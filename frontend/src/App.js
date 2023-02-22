@@ -13,7 +13,8 @@ function App() {
     <Router>
         <Routes>
             <Route path="/calendar" element={<Calendar />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<Profile version="Account"/>} />
+            <Route path="/settings" element={<Profile version="Settings"/>} />
             <Route path="/company/:company" element={<Company />} />
         </Routes>
     </Router>

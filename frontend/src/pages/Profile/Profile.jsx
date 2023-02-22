@@ -2,15 +2,22 @@ import Navbar from "../../components/Navbar/Navbar"
 import React from "react";
 import style from "./Profile.module.css";
 import * as Icon from 'react-bootstrap-icons';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import Image from 'react-bootstrap/Image'
+import Collapse from "react-bootstrap/esm/Collapse";
+import Accordion from "react-bootstrap/esm/Accordion";
 
 
-
-function Profile() {
-    const [selected, setSelected] = React.useState("Account");
+function Profile(props) {
+    const [selected, setSelected] = React.useState(props.version);
+    const [show, setShow] = React.useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    const [open, setOpen] = React.useState(false);
 
     function confirmDeletion() {
-        let result = window.confirm("Are you sure you want to delete your account?");
-        if (result) {
+        if (window.confirm("Are you sure you want to delete your account?")) {
             console.log("Account deleted");
         }
     }
@@ -49,29 +56,43 @@ function Profile() {
     return (
         <>
             <Navbar />
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                <Modal.Title>Confirm Deletion</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Are you sure you want to delete your account?</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button id="deleteAccount" variant="danger" onClick={handleClose}>
+                        Delete Account
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             <div class={style.main}>
             <div class={style.sidebar}>
                 <div class={style.user_panel}>
-                    <div class={style.profile_image}> </div>
+                    <Image className={style.profile_image} src="https://www.w3schools.com/howto/img_avatar.png" roundedCircle />
                     <p>Username</p>
                 </div>
-                <div class={style.sidebar_item} onClick={performSelection}>
+                <div class={style.sidebar_item} id="Account" onClick={performSelection}>
                     <Icon.Person href="#profile" class="profile" />
                     <p>Account</p>
                 </div>
-                <div class={style.sidebar_item} onClick={performSelection}>
+                <div class={style.sidebar_item} id="Notifications" onClick={performSelection}>
                     <Icon.Bell href="#profile" class="profile" />
                     <p>Notifications</p>
                 </div>
-                <div class={style.sidebar_item} onClick={performSelection}>
+                <div class={style.sidebar_item} id="Privacy" onClick={performSelection}>
                     <Icon.ShieldLock href="#profile" class="profile" />
                     <p>Privacy</p>
                 </div>
-                <div class={style.sidebar_item} onClick={performSelection}>
+                <div class={style.sidebar_item} id="Settings" onClick={performSelection}>
                     <Icon.Gear href="#profile" class="profile" />
                     <p>Settings</p>
                 </div>
-                <div class={style.sidebar_item} onClick={performSelection}>
+                <div class={style.sidebar_item} id="About" onClick={performSelection}>
                     <Icon.QuestionCircle href="#profile" class="profile" />
                     <p>About</p>
                 </div>
@@ -79,35 +100,88 @@ function Profile() {
             {
                 selected === "Account" ? (
                     <div class={style.content}>
-                        <h1>Account</h1>
-                        <button class={"btn btn-danger " + style.delete} onClick={confirmDeletion}>Delete Account</button>
+                        <div class="card">
+                            <div class="card-header">
+                                <h1>Account</h1>
+                            </div>
+                            <div class="card-body">
+                                <Image className="accountPicture" src="https://www.w3schools.com/howto/img_avatar.png" roundedCircle />
+                                <br /> <br />
+                                <h5 class="card-title">You are currently signed in as: Username</h5>
+                                <p class="card-text">Update your account with the options below.</p>
+                                <br />
+                                <Button className={style.primary} variant="primary" onClick={() => setOpen(!open)}
+                                    aria-controls="collapse" aria-expanded={open}>
+                                    Change Email
+                                </Button> <br />
+                                <Collapse in={open}>
+                                    <div id="collapse">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                    aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                                    culpa qui officia deserunt mollit anim id est laborum.
+                                    </div>
+                                </Collapse>
+                                <Button className={style.delete} variant="danger" onClick={handleShow}>
+                                    Delete Account
+                                </Button>
+                            </div>
+                        </div>
                     </div>
                 ) : selected === "Notifications" ? (
                     <div class={style.content}>
-                        <h1>Notifications</h1>
-                        <p>I would like to recieve notifications when...</p>
-                        <fieldset>
-                        <input type="radio" name="action" id="track" value="track" /><label for="track">Option A</label><br />
-                        <input type="radio" name="action" id="event" value="event"  /><label for="event">Option B</label><br />
-                        <input type="radio" name="action" id="message" value="message" /><label for="message">Option C</label><br />
-                        </fieldset>
+                        <div class="card">
+                            <div class="card-header">
+                                <h1>Notifications</h1>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                        </div>
                     </div>
                 ) : selected === "Privacy" ? (
                     <div class={style.content}>
-                        <h1>Privacy</h1>
+                        <div class="card">
+                            <div class="card-header">
+                                <h1>Privacy</h1>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                        </div>
                     </div>
                 ) : selected === "Settings" ? (
                     <div class={style.content}>
-                        <h1>Settings</h1>
-                        <p>Display Settings</p>
-                        <fieldset>
-                            <input type="radio" name="action" id="track" value="track" /><label for="track">Light Mode</label><br />
-                            <input type="radio" name="action" id="event" value="event"  /><label for="event">Dark Mode</label><br />
-                        </fieldset>
+                        <div class="card">
+                            <div class="card-header">
+                                <h1>Settings</h1>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Display Settings</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                        </div>
                     </div>
                 ) : selected === "About" ? (
                     <div class={style.content}>
-                        <h1>About</h1>
+                        <div class="card">
+                            <div class="card-header">
+                                <h1>About</h1>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                        </div>
                     </div>
                 ) : (
                     <div class={style.content}>

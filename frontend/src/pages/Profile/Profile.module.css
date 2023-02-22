@@ -57,6 +57,11 @@ p {
     background-size: cover;
 }
 
+.accountPicture {
+    height: 50%;
+    width: 50%;
+}
+
 .content {
     text-align: center;
     align-items: center;
@@ -64,6 +69,7 @@ p {
     width: 100%;
     padding-left: 10%;
     padding-right: 10%;
+    margin-top: 20px;
 }
 
 .main {
