@@ -133,3 +133,15 @@ fieldset {
     align-items: center;
 }
 
+.profile {
+    font-size: 1.5rem;
+    margin-left: 0em;
+    margin-right: 0em;
+}
+
+.google {
+    width: 25%;
+    margin: auto;
+}
+
+

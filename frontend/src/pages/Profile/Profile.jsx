@@ -9,6 +9,7 @@ import Collapse from "react-bootstrap/esm/Collapse";
 import ListGroup from "react-bootstrap/esm/ListGroup";
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
+import GoogleAuth from "../../components/GoogleAuth/GoogleAuth";
 
 
 function Profile(props) {
@@ -79,23 +80,23 @@ function Profile(props) {
                     <p>Username</p>
                 </div>
                 <div class={style.sidebar_item} id="Account" onClick={performSelection}>
-                    <Icon.Person href="#profile" class="profile" />
+                    <Icon.Person href="#profile" className={style.profile} />
                     <p>Account</p>
                 </div>
                 <div class={style.sidebar_item} id="Notifications" onClick={performSelection}>
-                    <Icon.Bell href="#profile" class="profile" />
+                    <Icon.Bell href="#profile" className={style.profile} />
                     <p>Notifications</p>
                 </div>
                 <div class={style.sidebar_item} id="Privacy" onClick={performSelection}>
-                    <Icon.ShieldLock href="#profile" class="profile" />
+                    <Icon.ShieldLock href="#profile" className={style.profile} />
                     <p>Privacy</p>
                 </div>
                 <div class={style.sidebar_item} id="Settings" onClick={performSelection}>
-                    <Icon.Gear href="#profile" class="profile" />
+                    <Icon.Gear href="#profile" className={style.profile} />
                     <p>Settings</p>
                 </div>
                 <div class={style.sidebar_item} id="About" onClick={performSelection}>
-                    <Icon.QuestionCircle href="#profile" class="profile" />
+                    <Icon.QuestionCircle href="#profile" className={style.profile} />
                     <p>About</p>
                 </div>
             </div>
@@ -118,7 +119,9 @@ function Profile(props) {
                                 </Button> <br />
                                 <Collapse in={open}>
                                     <div id="collapse">
-                                        Google Auth Button Placeholder
+                                        <div className={style.google}>
+                                            <GoogleAuth />
+                                        </div>
                                     </div>
                                 </Collapse>
                                 <Button className={style.delete} variant="danger" onClick={handleShow}>
