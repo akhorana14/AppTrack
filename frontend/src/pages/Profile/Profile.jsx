@@ -57,7 +57,7 @@ function Profile(props) {
     }
 
     return (
-        <>
+        <div className={style["profile-body"]}>
             <Navbar />
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
@@ -228,7 +228,7 @@ function Profile(props) {
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title">What is AppTrack?</h5>
-                                <p class="card-text">During the recruiting process, many job applicants apply to hundreds of positions on a variety of sites, such as LinkedIn, Google Jobs, and Indeed. A majority of these applications are then funneled through a select group of vendors that collect information on behalf of corporate recruiters, such as Workday and Greenhouse. These platforms (and human recruiters) often provide candidates with status updates via email. We propose a web based platform that analyzes candidate’s Gmail inboxes for job status updates and notifies them when action is required or when they have progressed to the next recruiting step. This functionality differentiates us from other job tracking solutions available, which do not automatically integrate with users’ email inboxes. In addition, the web application has a calendar to track important dates, which ensures the candidate is informed of important dates they might have otherwise missed. This would simplify the recruiting process for candidates, allowing them to effectively manage a large number of job applications.</p>
+                                <p class="card-text text-start">During the recruiting process, many job applicants apply to hundreds of positions on a variety of sites, such as LinkedIn, Google Jobs, and Indeed. A majority of these applications are then funneled through a select group of vendors that collect information on behalf of corporate recruiters, such as Workday and Greenhouse. These platforms (and human recruiters) often provide candidates with status updates via email. We propose a web based platform that analyzes candidate’s Gmail inboxes for job status updates and notifies them when action is required or when they have progressed to the next recruiting step. This functionality differentiates us from other job tracking solutions available, which do not automatically integrate with users’ email inboxes. In addition, the web application has a calendar to track important dates, which ensures the candidate is informed of important dates they might have otherwise missed. This would simplify the recruiting process for candidates, allowing them to effectively manage a large number of job applications.</p>
                             </div>
                         </div>
                     </div>
@@ -239,7 +239,7 @@ function Profile(props) {
                 )
             }
         </div>
-        </>
+        </div>
     );
 };
 
