@@ -66,6 +66,19 @@
     width: 50%;
 }
 
+.logout_panel {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding: 10px;
+    border: 0.05em solid #e6e6e6;
+    cursor: pointer;
+}
+
+.logout_panel:hover {
+    background-color: #d1d4d4;
+}
+
 .content {
     text-align: center;
     align-items: center;

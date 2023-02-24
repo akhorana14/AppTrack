@@ -19,10 +19,13 @@ function Profile(props) {
     const handleShow = () => setShow(true);
     const [open, setOpen] = React.useState(false);
 
-    function confirmDeletion() {
-        if (window.confirm("Are you sure you want to delete your account?")) {
-            console.log("Account deleted");
-        }
+    function handleCloseDelete() {
+        window.location = "/";
+        setShow(false);
+    }
+
+    function logOut() {
+        window.location = "/";
     }
 
     function performSelection(e) {
@@ -68,7 +71,7 @@ function Profile(props) {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button id="deleteAccount" variant="danger" onClick={handleClose}>
+                    <Button id="deleteAccount" variant="danger" onClick={handleCloseDelete}>
                         Delete Account
                     </Button>
                 </Modal.Footer>
@@ -98,6 +101,10 @@ function Profile(props) {
                 <div class={style.sidebar_item} id="About" onClick={performSelection}>
                     <Icon.QuestionCircle href="#profile" className={style.profile} />
                     <p>About</p>
+                </div>
+                <div class={style.logout_panel} id="Log Out" onClick={logOut}>
+                    <Icon.ArrowBarRight className={style.profile} />
+                    <p>Log Out</p>
                 </div>
             </div>
             {
