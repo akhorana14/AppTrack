@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "npx tsc",
-    "start": "npm run build && node ./dist/index.js"
+    "build": "npx tsc --build --force",
+    "start": "npm run build && node ./dist/routes/index.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
