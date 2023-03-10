@@ -15,5 +15,3 @@ app.use('/gauth', gauthRouter);
 app.use('/', (req, res) => {
     res.send('Well done!');
 })
-
-
