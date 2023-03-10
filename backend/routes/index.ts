@@ -1,6 +1,6 @@
 import express from 'express';
 import 'dotenv/config';
-import gauthRouter from "./gauth/gauth";
+import gauthRouter from "./gauth/GoogleAuthRouter";
 
 const app = express();
 
@@ -15,5 +15,3 @@ app.use('/gauth', gauthRouter);
 app.use('/', (req, res) => {
     res.send('Well done!');
 })
-
-
