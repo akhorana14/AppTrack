@@ -1,17 +1,9 @@
-import express from 'express';
-import 'dotenv/config';
-import gauthRouter from "./gauth/gauth";
+import express from "express";
 
-const app = express();
+const router = express.Router();
+export default router;
 
-const port = process.env.PORT;
-
-app.listen(port, () => {
-    console.log(`The application is listening on port ${port}!`);
-})
-
-app.use('/gauth', gauthRouter);
-
-app.use('/', (req, res) => {
+router.get('/', (req, res) => {
     res.send('Well done!');
 })
+
