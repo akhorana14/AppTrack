@@ -7,7 +7,38 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testAPIRouter = require("./routes/testAPI");
+const sql = require('mssql');
 var app = express();
+
+// Use Azure VM Managed Identity to connect to the SQL database
+const config = {
+  server: 'sqlserver.database.windows.net',
+  authentication: {
+    type: 'azure-active-directory-msi-vm',
+    options: {
+      resource: 'https://database.windows.net/'
+    }
+  },
+  options: {
+    encrypt: true,
+    database: 'sqlserver'
+  }
+};
+
+// Connect to SQL database and execute a query
+// void makeRequest(queryString) {
+//   sql.connect(queryString, config=config, function (err) {
+//     if (err) console.log(err);
+//     var request = new sql.Request();
+//     // query to the database and get the records
+//     request.query(queryString, function (err, recordset) {
+//         if (err) console.log(err)
+//         // send records as a response
+//         console.log(recordset);
+//     });
+//   });
+// }
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
