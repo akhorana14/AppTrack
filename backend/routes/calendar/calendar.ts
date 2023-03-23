@@ -11,7 +11,7 @@ router.get("/upcomingEvents", (req: any, res: any) => {
     for (var i = 0; i < 3; i++) {
         var company = new Company("Amazon" + i, "/company/Amazon", "xyz", "xyz", "red");
 
-        upcomingEvents.push(new Event("05/01/2002", "Interview", "You have an interview offer from Amazon",
+        upcomingEvents.push(new Event("03/23/2023", "Interview", "You have an interview offer from Amazon",
         company, "https://www.google.com", false, ""));
     }
 
@@ -26,7 +26,7 @@ router.get("/completedEvents", (req: any, res: any) => {
     for (var i = 0; i < 7; i++) {
         var company = new Company("Google" + i, "/company/Google", "xyz", "xyz", "green");
 
-        completedEvents.push(new Event("05/01/2002", "OA", "You have an OA offer from Google",
+        completedEvents.push(new Event("03/23/2023", "OA", "You have an OA offer from Google",
         company, "https://www.google.com", false, ""));
     }
 
@@ -41,7 +41,7 @@ router.get("/dailyEvents", (req: any, res: any) => {
     for (var i = 1; i <= 9; i++) {
         var company = new Company("Meta" + i, "/company/Meta", "xyz", "xyz", "blue");
 
-        dailyEvents.push(new Event("03/0" + i + "/2002", "Acceptance", "You have an Acceptance offer from Meta",
+        dailyEvents.push(new Event("03/0" + i + "/2023", "Acceptance", "You have an Acceptance offer from Meta",
         company, "https://www.google.com", false, ""));
     }
 

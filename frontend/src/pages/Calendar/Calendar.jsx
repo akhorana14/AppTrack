@@ -41,8 +41,6 @@ function Calendar(props) {
             
             setUpcomingEvents(upcomingEvents);
             setNumUpcomingPages(Math.min(maxEventPages, Math.floor((upcomingEvents.length-1)/eventsPerPage)+1)); 
-            console.log("Upcoming Events:");
-            console.log(upcomingEvents);
         });
 
         fetch("http://localhost:9000/calendar/completedEvents")
@@ -61,8 +59,6 @@ function Calendar(props) {
             
             setCompletedEvents(completedEvents);
             setNumCompletedPages(Math.min(maxEventPages, Math.floor((completedEvents.length-1)/eventsPerPage)+1)); 
-            console.log("Completed Events:");
-            console.log(completedEvents);
         });
 
         fetch("http://localhost:9000/calendar/dailyEvents")
@@ -70,15 +66,24 @@ function Calendar(props) {
         .then((data) => {
             var dailyEvents = [];
 
-            console.log(data.dailyEvents);
-
             for (var i = 0; i < data.dailyEvents.length; i++) {
                 var event = data.dailyEvents[i];
+                var month = parseInt(event.date.substring(0, 2))-1;
+                var day = parseInt(event.date.substring(3, 5));
+                var year = parseInt(event.date.substring(6));
+
+                dailyEvents.push({
+                    company: event.company.name,
+                    message: event.subject,
+                    companyURL: event.company.link,
+                    color: event.company.color,
+                    month: month,
+                    day: day,
+                    year: year
+                });
             }
 
             setDailyEvents(dailyEvents);
-            console.log("Daily Events:");
-            console.log(dailyEvents);
         }); 
     }, []);
 
