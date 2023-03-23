@@ -8,7 +8,8 @@ import passport from 'passport';
 
 import indexRouter from "./routes/index";
 import gauthRouter from "./routes/gauth/gauth";
-import calendarRouter from "./routes/calendar/calendar"
+import calendarRouter from "./routes/calendar/calendar";
+import createappRouter from "./routes/createapp/createapp";
 
 const app = express();
 app.use(cookieParser());
@@ -33,6 +34,7 @@ app.listen(port, () => {
 
 app.use('/gauth', gauthRouter);
 app.use('/calendar', calendarRouter);
+app.use('/createapp', createappRouter);
 
 app.get('/success', (req, res) => res.send("Success"));
 app.get('/error', (req, res) => res.send("error logging in"));
