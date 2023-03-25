@@ -6,6 +6,8 @@ import passport from 'passport';
 
 import indexRouter from "./routes/index";
 import gauthRouter from "./routes/gauth/gauth";
+import companyRouter from "./routes/company/company";
+import { DataSource } from "typeorm"
 
 const app = express();
 app.use(cookieParser());
@@ -25,6 +27,8 @@ app.listen(port, () => {
 })
 
 app.use('/gauth', gauthRouter);
+
+app.use('/company', companyRouter);
 
 app.get('/success', (req, res) => res.send("Success"));
 app.get('/error', (req, res) => res.send("error logging in"));
