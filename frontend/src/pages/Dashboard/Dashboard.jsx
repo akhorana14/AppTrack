@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import Navbar from "../../components/Navbar/Navbar"
+import Navbar from "../../components/Navbar/Navbar";
 import './Dashboard.css';
 import '../../static/globals.css';
+import MotivationModal from '../../components/MotivationPopup/MotivationModal';
 
 let sampleNewUpdate = [{ "Company": "Meta", "Date": "1/1/2023", "Status": "Rejected" },
 { "Company": "Google", "Date": "10/1/2023", "Status": "Rejected" },
@@ -51,7 +52,7 @@ function Dashboard() {
     <>
       <div className='text-center'>
         <Navbar />
-
+        <MotivationModal />
         {/* searchbar: https://bbbootstrap.com/snippets/bootstrap-5-search-bar-microphone-icon-inside-12725910*/}
         <div class="search">
           <i class="fa fa-search"></i>
