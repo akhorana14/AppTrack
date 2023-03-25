@@ -7,7 +7,6 @@ import passport from 'passport';
 import indexRouter from "./routes/index";
 import gauthRouter from "./routes/gauth/gauth";
 import companyRouter from "./routes/company/company";
-import { DataSource } from "typeorm"
 
 const app = express();
 app.use(cookieParser());
