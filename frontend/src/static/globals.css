@@ -4,6 +4,9 @@
     --apptrack-light: #E6F0FF;
     --apptrack-light-blue: #dfe9f0;
     --apptrack-light-beige: #fcfaf7;
+    --apptrack-medium-pink: #d199c8;
+    --apptrack-light-pink: #fff0fc;
+    --apptrack-sky-blue: #d9f5ff;
 }
 
 html, body, #root {
