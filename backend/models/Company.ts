@@ -1,13 +1,18 @@
+import { Column, Entity, PrimaryColumn } from "typeorm";
+
+@Entity()
 export default class Company {
+    @PrimaryColumn()
     name: string;
-    link: string; 
+    @Column()
     leetcodeLink: string;
+    @Column()
     levelsLink: string;
+    @Column()
     color: string;
 
-    constructor(name: string, link: string, leetcodeLink: string, levelsLink: string, color: string) {
+    constructor(name: string, leetcodeLink: string, levelsLink: string, color: string) {
         this.name = name;
-        this.link = link;
         this.leetcodeLink = leetcodeLink;
         this.levelsLink = levelsLink;
         this.color = color;

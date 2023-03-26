@@ -1,23 +1,46 @@
 import Company from "./Company";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Classification } from "./Classification";
+import User from "./User";
 
+@Entity()
 export default class Event {
-    date: string;
+    @PrimaryGeneratedColumn()
+    id: number;
+    @ManyToOne(type => User) @JoinColumn()
+    user: User;
+    @Column()
+    date: Date;
+    @Column()
     subject: string;
-    message: string;
+    @Column()
+    body: string;
+    @ManyToOne(type => Company) @JoinColumn()
     company: Company;
+    @Column()
     emailLink: string;
-    
+    @Column()
     isActionItem: boolean;
-    action: string;
+    @Column()
+    classification: Classification;
+    @Column({ nullable: true })
+    isRead?: boolean;
+    @Column({ nullable: true })
+    actionDate?: Date;
 
-    constructor(date: string, subject: string, message: string, company: Company, emailLink: string, 
-        isActionItem: boolean, action: string) {
+    constructor(user: User, date: Date, subject: string, body: string, company: Company, emailLink: string,
+        isActionItem: boolean, classification: Classification, isRead?: boolean, actionDate?: Date) {
+        this.user = user;
         this.date = date;
         this.subject = subject;
-        this.message = message;
+        this.body = body;
         this.company = company;
         this.emailLink = emailLink;
         this.isActionItem = isActionItem;
-        this.action = action;
+        this.classification = classification;
+        this.isRead = isRead;
+        this.actionDate = actionDate;
     }
+
+
 }

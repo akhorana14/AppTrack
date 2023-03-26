@@ -1,5 +1,7 @@
 import { DataSource } from "typeorm"
 import User from "../../models/User";
+import Event from "../../models/Event";
+import Company from "../../models/Company";
 
 const datasource = new DataSource({
     "type": "mssql",
@@ -12,7 +14,7 @@ const datasource = new DataSource({
     "synchronize": true,
     "logging": false,
     //Add your entities here
-    "entities": [User]
+    "entities": [User, Company, Event]
 }
 );
 
