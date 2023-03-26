@@ -4,7 +4,7 @@ import passport from 'passport';
 import GoogleAuth from '../../utils/google/GoogleAuth';
 import GmailClient from '../../utils/google/GmailClient';
 import User from '../../models/User';
-import { UserController } from '../../controllers/UserController';
+import UserController from '../../controllers/UserController';
 
 const router = express.Router();
 export default router;

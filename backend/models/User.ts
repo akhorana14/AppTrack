@@ -5,7 +5,7 @@ import { Column, Entity, PrimaryColumn } from 'typeorm';
 @Entity()
 export default class User implements googleauth.Profile {
     /* Google Profile - Inherited from googleauth.Profile */
-    @PrimaryColumn() 
+    @PrimaryColumn()
     id: string;
     displayName: string;
     username?: string | undefined;
@@ -19,6 +19,6 @@ export default class User implements googleauth.Profile {
 
     /* AppTrack Profile */
     tokens?: Auth.Credentials;
-    @Column('text', {select: false, nullable: true})
-    lastScannedEmailId?:string;
+    @Column('text', { select: false, nullable: true })
+    lastScannedEmailId?: string;
 }

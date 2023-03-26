@@ -25,7 +25,7 @@ function GetNavbar() {
 
   const newUpdateNotification = sampleNewUpdate.map((info) => {
     return (
-      <NavDropdown.Item id={info.Company}>
+      <NavDropdown.Item id={info.Company} key={info.Company}>
         {visible && (
           <button className='buttonNotification'>
             <p className='p1'>{info.Company}</p>
@@ -36,10 +36,10 @@ function GetNavbar() {
     )
   });
 
-  const navDropDownTitle = (<Icon.Justify href="#menu" class="menu">Menu</Icon.Justify>)
-  const navNotifications = (<Icon.BellFill href="#bell" class="bell">Notification</Icon.BellFill>)
-  const navHomeButton = (<Icon.HouseDoorFill href="#home" class="home">Home</Icon.HouseDoorFill>)
-  const navProfileButton = (<Icon.PersonFill href="#profile" class="profile">Profile</Icon.PersonFill>)
+  const navDropDownTitle = (<Icon.Justify href="#menu" className="menu">Menu</Icon.Justify>)
+  const navNotifications = (<Icon.BellFill href="#bell" className="bell">Notification</Icon.BellFill>)
+  const navHomeButton = (<Icon.HouseDoorFill href="#home" className="home">Home</Icon.HouseDoorFill>)
+  const navProfileButton = (<Icon.PersonFill href="#profile" className="profile">Profile</Icon.PersonFill>)
   return (
 
     <Navbar variant="dark" expand="lg" >
@@ -77,8 +77,8 @@ function GetNavbar() {
 
             </NavDropdown>
 
-            <button type="button" class="btn btn-link">{navProfileButton}</button>
-            <button type="button" class="btn btn-link">{navHomeButton}</button>
+            <button type="button" className="btn btn-link">{navProfileButton}</button>
+            <button type="button" className="btn btn-link">{navHomeButton}</button>
           </Nav>
         </Navbar.Collapse>
       </Container>
