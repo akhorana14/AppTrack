@@ -42,6 +42,25 @@ function CreateApplication() {
             leetcodeLink: leetcodeLink,
             levelsLink: levelsLink
         });
+
+        
+        fetch("http://localhost:9000/createapp/create", {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                companyName: companyName,
+                jobTitle: jobTitle,
+                leetcodeLink: leetcodeLink,
+                levelsLink: levelsLink
+            })
+        })
+        .then((response) => response.json())
+        .then((response) => {
+            console.log(response.status);
+            if (response.status !== "success") {
+                setErrorMsg(response.status);
+            }
+        }); 
     }
 
     return (
