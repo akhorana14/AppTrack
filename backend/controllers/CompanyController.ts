@@ -10,7 +10,7 @@ export default class UserController {
         });
     }
 
-    static save(company: Company) {
+    static save(...company: Company[]) {
         this.userRepository.save(company);
     }
 }

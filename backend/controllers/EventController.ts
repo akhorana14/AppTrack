@@ -10,7 +10,7 @@ export default class UserController {
         });
     }
 
-    static save(event: Event) {
+    static save(...event: Event[]) {
         this.userRepository.save(event);
     }
 }
