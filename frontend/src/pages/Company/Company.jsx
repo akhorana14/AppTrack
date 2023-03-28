@@ -3,7 +3,7 @@ import Navbar from "../../components/Navbar/Navbar"
 import styles from './Company.module.css';
 
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -14,24 +14,34 @@ import Badge from 'react-bootstrap/Badge';
 
 import { BellFill, CheckCircleFill, EnvelopeFill, ExclamationCircleFill } from 'react-bootstrap-icons';
 
-//Replace this later with a call to the backend API
-let listOfStages = [
-    { date: "01/01/2022", type: "Applied" },
-    { date: "01/02/2022", type: "Online Assessment" },
-    { date: "01/03/2022", type: "Interview 1" },
-    { date: "01/04/2022", type: "Interview 2" }
+//This order was taken very carefully from backend/models/Classification.ts
+//Make sure to keep it in this order to avoid mixing up labels
+let classifications = [
+    "Applied",
+    "OA",
+    "Interview",
+    "Offer",
+    "Reject",
+    "Other"
 ];
 
-let emails = [
-    { subject: "Thank You For Applying!", body: "Applied", type: "Application Confirmation" },
-    { subject: "Please complete this Leetcode Assessment.", body: "Online Assessment", type: "OA" },
-    { subject: "You've been invited to Interview", body: "Interview 1", type: "Interview" },
-    { subject: "Try Our Product", body: "Try Our Product", type: "Other" }
-]
+//Replace this later with a call to the backend API
+let listOfStages = [
+    { date: "01/01/2022", classification: "Applied" },
+    { date: "01/02/2022", classification: "Online Assessment" },
+    { date: "01/03/2022", classification: "Interview 1" },
+    { date: "01/04/2022", classification: "Interview 2" }
+];
 
-let actionItems = [
-    { subject: "Upcoming Interview", body: "You have an upcoming interview." }
-]
+async function getEvents(companyName) {
+    let res = await fetch(`${process.env.REACT_APP_BACKEND}/company/${companyName}`, {
+        credentials: "include"
+    });
+    if (res.ok) {
+        return await res.json();
+    }
+    return [];
+}
 
 function Company() {
     const [errorMsg, setErrorMsg] = useState("* indicates required fields");
@@ -64,8 +74,16 @@ function Company() {
         setDescription("");
         setDate("");
     }
-    
+
     let { company: companyName } = useParams();
+    const [events, setEvents] = useState([]);
+    useEffect(() => {
+        async function fetchData() {
+            const apiData = await getEvents(companyName);
+            setEvents(apiData);
+        }
+        fetchData();
+    }, []);
     companyName = capitalizeFirstLetter(companyName);
     return (
         <>
@@ -81,10 +99,10 @@ function Company() {
                                 <h6 className="text-muted my-1">Last update: January 23, 2022</h6>
                             </h3>
                             <div className="mt-1 d-flex align-items-center">
-                                <LevelsButton company={companyName}/>
-                                <LeetcodeButton company={companyName}/>
+                                <LevelsButton company={companyName} />
+                                <LeetcodeButton company={companyName} />
                             </div>
-                            <StageList list={listOfStages} />
+                            <StageList list={events.filter(item => item.isActionItem === true)} />
                             <div className="mt-5">
                                 <h3>Add an action item
                                     <br />
@@ -93,15 +111,15 @@ function Company() {
                                 <form>
                                     <div className="form-group mt-2">
                                         <label htmlFor="update-title">Action Item *</label>
-                                        <input className="form-control" placeholder="Enter action item" onChange={updateActionItem} value={actionItem}/>
+                                        <input className="form-control" placeholder="Enter action item" onChange={updateActionItem} value={actionItem} />
                                     </div>
                                     <div className="form-group mt-2">
                                         <label htmlFor="description">Description *</label>
                                         <textarea class="form-control no-resize" rows="3" onChange={updateDescription} placeholder="Enter description" value={description}></textarea>
                                     </div>
                                     <div className="form-group mt-2">
-                                        <label htmlFor="description">Date *</label>                                        
-                                        <input className="form-control" placeholder="Enter date" onChange={updateDate} value={date}/>                            
+                                        <label htmlFor="description">Date *</label>
+                                        <input className="form-control" placeholder="Enter date" onChange={updateDate} value={date} />
                                         <small className="form-text text-muted">Enter the date in MM/DD/YYYY format</small>
                                     </div>
 
@@ -112,8 +130,8 @@ function Company() {
                             </div>
                         </Col>
                         <Col className={styles["right-half"]}>
-                            <ActionItems items={actionItems} />
-                            <EmailHistory emails={emails} />
+                            <ActionItems items={events.filter(item => item.isActionItem === true)} />
+                            <EmailHistory emails={events} />
                         </Col>
                     </Row>
                 </Container>
@@ -189,13 +207,13 @@ function EmailHistory(props) {
 }
 function Stage(props) {
     return (
-        <div className="d-flex align-items-center">
+        <div key={props.index} className="d-flex align-items-center">
             {
                 props.index === 0 ? (<ExclamationCircleFill size={24} fill="orange" />) : (<CheckCircleFill size={24} />)
             }
             <h6 className="m-0">
-                {props.stage.type}
-                <span className="text-muted"> {props.stage.date}</span>
+                {classifications[props.stage.classification]}
+                <span className="text-muted"> {new Date(props.stage.date).toLocaleDateString()}</span>
             </h6>
             <div className={styles["vertical-line"]}></div>
         </div>
@@ -240,7 +258,13 @@ function EmailAccordion(props) {
         <Accordion flush className={styles["mini-accordion"]}>
             <Accordion.Item eventKey="0">
                 <Accordion.Header>
-                    <h6><Badge bg="warning" text="dark" className="m-0 me-2">{props.type}</Badge>{props.subject}</h6>
+                    <h6>
+                        <Badge bg="warning" text="dark" className="m-0 me-2">{ /* We do this here to get the name for the classification, which is typically a number*/classifications[props.classification]}
+                        </Badge>
+                        <a href={props.emailLink} className="m-0 p-0" target="_blank" rel="noreferrer">
+                            {props.subject}
+                        </a>
+                    </h6>
                 </Accordion.Header>
                 <Accordion.Body>
                     <p>{props.body}</p>
