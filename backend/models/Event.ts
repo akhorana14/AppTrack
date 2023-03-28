@@ -11,13 +11,13 @@ export default class Event {
     user: User;
     @Column()
     date: Date;
-    @Column()
+    @Column({ length: 1000 })
     subject: string;
-    @Column()
+    @Column({ type:"varchar", length:"MAX" })
     body: string;
     @ManyToOne(type => Company) @JoinColumn()
     company: Company;
-    @Column()
+    @Column({ length: 500 })
     emailLink: string;
     @Column()
     isActionItem: boolean;

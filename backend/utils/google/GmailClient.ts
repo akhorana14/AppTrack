@@ -32,22 +32,56 @@ export default class GmailClient {
      * @param query See here https://developers.google.com/gmail/api/reference/rest/v1/users.messages/list for query parameters.
      * @returns a list of message ids
      */
-    public async getListOfMessageIds(query?:string):Promise<string[]> {
-        const { data: { messages } } = await this.gmail.users.messages.list({ userId: 'me', q: query});
-        const messageIds = messages!.map(message => message.id!);
+    public async getListOfMessageIds(query?: string): Promise<string[]> {
+        const { data: { messages, nextPageToken } } = await this.gmail.users.messages.list(
+            {
+                userId: 'me',
+                q: query,
+                includeSpamTrash: true,
+                maxResults: 500
+            }
+        );
+        const messageIds: string[] = messages === undefined ? []:messages!.map(message => message.id!);
+        let pageToken = nextPageToken;
+        while (pageToken != undefined) {
+            const { data: { messages, nextPageToken } } = await this.gmail.users.messages.list(
+                {
+                    pageToken: pageToken
+                }
+            );
+            messageIds.push(...messages!.map(message => message.id!));
+            pageToken = nextPageToken;
+        }
         return messageIds;
     }
 
     public async getEmailsContainingKeyword(keyword: string) {
         const messageIds = await this.getListOfMessageIds(keyword);
-        let messages:{date:string, from:string, subject:string, body:string }[] = [];
-        for(var messageId of messageIds) {
+        let messages: { date: string, from: string, subject: string, body: string }[] = [];
+        for (let messageId of messageIds) {
             let { data: { payload: message } } = await this.gmail.users.messages.get({ userId: 'me', id: messageId, format: "full" });
-            let sender = message!.headers!.find(header => {return header.name == "From"})?.value!;
-            let subject = message!.headers!.find(header => {return header.name == "Subject"})?.value!;
-            let date = message!.headers!.find(header => {return header.name == "Date"})?.value!;
-            let body = Buffer.from(message!.parts![0].body!.data! ??= "" , 'base64').toString("ascii");
-            messages.push({date: date, from: sender, subject: subject, body: body});
+            let sender = message!.headers!.find(header => { return header.name == "From" })?.value!;
+            let subject = message!.headers!.find(header => { return header.name == "Subject" })?.value!;
+            let date = message!.headers!.find(header => { return header.name == "Date" })?.value!;
+            let body = Buffer.from(message!.parts![0].body!.data! ??= "", 'base64').toString("ascii");
+            messages.push({ date: date, from: sender, subject: subject, body: body });
+        }
+        return messages;
+    }
+
+    public static getEmailHeader(message: gmail_v1.Schema$MessagePart, headerName: string): string {
+        return message!.headers!.find(header => { return header.name == headerName })?.value!;
+    }
+
+    public static getEmailBody(message: gmail_v1.Schema$MessagePart): string {
+        return Buffer.from(message!.parts![0].body!.data! ??= "", 'base64').toString("ascii");
+    }
+
+    public async getEmailsFromMessageId(...messageIds: string[]) {
+        const messages: gmail_v1.Schema$MessagePart[] = [];
+        for (let messageId of messageIds) {
+            let { data: { payload: message } } = await this.gmail.users.messages.get({ userId: 'me', id: messageId, format: "full" });
+            messages.push(message!);
         }
         return messages;
     }
