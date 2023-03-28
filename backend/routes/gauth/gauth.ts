@@ -16,14 +16,15 @@ passport.use(new GoogleStrategy({
   callbackURL: process.env.APPTRACK_GOOGLE_OAUTH_REDIRECT!
 },
   async function (accessToken: string, refreshToken: string, user: User, done: (arg0: null, arg1: User) => any) {
-    let dbUser = await UserController.getById(user.id)
+    let dbUser = await UserController.getById(user.id);
     if (dbUser === null) {
       //Save this user into the database
       UserController.save(user);
     }
     else {
       //Merge attributes from database with local user object
-      user = { ...user, ...UserController.getById(user.id) };
+      //This overwrites any properties from the database with the ones from the local one
+      user = {...await UserController.getById(user.id), ...user };
     }
     user.tokens = { access_token: accessToken };
     return done(null, user);
@@ -34,7 +35,7 @@ router.get('/', passport.authenticate('google', { scope: process.env.APPTRACK_GO
 router.get('/gauthcallback', passport.authenticate('google', { failureRedirect: '/error' }),
   function (req, res) {
     // Successful authentication, redirect success.
-    res.redirect('./gmailtest');
+    res.redirect('/user/refresh');
   });
 
 router.get('/gmailtest', GoogleAuth.getAuthMiddleware(), async function (req: any, res, next) {

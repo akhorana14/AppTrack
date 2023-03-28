@@ -19,6 +19,7 @@ export default class User implements googleauth.Profile {
 
     /* AppTrack Profile */
     tokens?: Auth.Credentials;
-    @Column('text', { select: false, nullable: true })
-    lastScannedEmailId?: string;
+    //last time email was scraped - in seconds since epoch (1/1/1970)
+    @Column({ nullable: true })
+    lastEmailRefreshTime?: number;
 }
