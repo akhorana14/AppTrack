@@ -12,7 +12,7 @@ const router = express.Router();
 export default router;
 
 //Refresh (re-scrape new emails from user inbox)
-router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any, res, next) {
+router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any, res) {
     let user: User = req.user;
     let messages = await getEmails(new GmailClient(user), user.lastEmailRefreshTime);
     let newEvents: Event[] = [];
