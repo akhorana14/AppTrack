@@ -38,7 +38,7 @@ function GetNavbar() {
   const navNotifications = (<Icon.BellFill href="#bell" class="bell">Notification</Icon.BellFill>)
   const navHomeButton = (<Icon.HouseDoorFill href="#home" class="home">Home</Icon.HouseDoorFill>)
   const navProfileButton = (<Icon.PersonFill href="#profile" class="profile">Profile</Icon.PersonFill>)
-  const navLogoutButton = (<Icon.DoorOpenFill class="logout">Logout</Icon.DoorOpenFill>)
+  const navLogoutButton = (<Icon.BoxArrowRight class="logout">Logout</Icon.BoxArrowRight>)
   return (
 
     <Navbar variant="dark" expand="lg" >
