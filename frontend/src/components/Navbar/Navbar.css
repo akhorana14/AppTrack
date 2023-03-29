@@ -72,7 +72,7 @@
     font-weight: bold;
 }
 
-tbody {
+.tablebody {
     display: block;
     height: 175px;
     overflow-y: auto;

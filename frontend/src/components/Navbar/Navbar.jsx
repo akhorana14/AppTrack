@@ -54,7 +54,7 @@ function GetNavbar() {
                 <button className="buttonRead" onClick={() => removeElements()}>Clear All</button>
               </div>
               <NavDropdown.Divider />
-              <tbody>{companies.map((info, index) => (
+              <tbody className='tablebody'>{companies.map((info, index) => (
                 <NavDropdown.Item key={index} onClick={() => clickNotification(index)}>
                   <button className='buttonNotification' id={info.Company}>
                     <div className='buttonDiv'>
