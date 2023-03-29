@@ -83,6 +83,7 @@ function Company() {
                             <div className="mt-1 d-flex align-items-center">
                                 <LevelsButton company={companyName}/>
                                 <LeetcodeButton company={companyName}/>
+                                <UntrackButton company={companyName} />
                             </div>
                             <StageList list={listOfStages} />
                             <div className="mt-5">
@@ -97,7 +98,7 @@ function Company() {
                                     </div>
                                     <div className="form-group mt-2">
                                         <label htmlFor="description">Description *</label>
-                                        <textarea class="form-control no-resize" rows="3" onChange={updateDescription} placeholder="Enter description" value={description}></textarea>
+                                        <textarea className="form-control no-resize" rows="3" onChange={updateDescription} placeholder="Enter description" value={description}></textarea>
                                     </div>
                                     <div className="form-group mt-2">
                                         <label htmlFor="description">Date *</label>                                        
@@ -233,6 +234,29 @@ function LeetcodeButton(props) {
             Leetcode
         </Button>
     );
+}
+
+function handleUntrackButtonSubmit(company) {
+    fetch(`http://localhost:9000/company/${company}/delete`, {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            companyName: company
+        })
+    })
+    .then((response) => response.json())
+    .then((response) => {
+        console.log(response.status);
+    }); 
+}
+
+function UntrackButton(props) {
+    return (
+        <Button onClick={() =>handleUntrackButtonSubmit(props.company)} variant="warning" className={`${styles["untrack-btn"]} d-flex align-items-center`}>
+            <img src="https://static-00.iconduck.com/assets.00/trash-icon-462x512-njvey5nf.png" height="28" width="28" alt="Trash Icon" />
+            <span className={`${styles["untrack-text"]}`}>Untrack</span>
+        </Button>
+    ); 
 }
 
 function EmailAccordion(props) {

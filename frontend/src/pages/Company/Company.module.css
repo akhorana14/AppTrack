@@ -40,6 +40,15 @@
 
 .leetcode-btn {
     border-style: none;
+    margin-right: 5px;
+}
+
+.untrack-btn {
+    border-style: none;
+}
+
+.untrack-text {
+    margin-left: 2px;
 }
  
 .vertical-line{

@@ -8,8 +8,10 @@ export default router;
 
 router.post("/create", jsonParser, (req: any, res: any) => {
     console.log(req.body);
-    
+
+    var status = "success"; 
+
     res.send({
-        "status": "Company name too long"
-    });
+        "status": status
+    })
 }); 
