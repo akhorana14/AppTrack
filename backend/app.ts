@@ -21,7 +21,8 @@ app.use(expressSession({
 }));
 
 app.use(cors({
-    origin: '*'
+    origin: `${process.env.APPTRACK_FRONTEND}`,
+    credentials: true
 }));
 
 app.use(passport.initialize());

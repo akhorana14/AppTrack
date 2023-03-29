@@ -1,8 +1,6 @@
 import express from 'express';
 import googleauth from 'passport-google-oauth';
 import passport from 'passport';
-import GoogleAuth from '../../utils/google/GoogleAuth';
-import GmailClient from '../../utils/google/GmailClient';
 import User from '../../models/User';
 import UserController from '../../controllers/UserController';
 
@@ -34,12 +32,6 @@ router.get('/', passport.authenticate('google', { scope: process.env.APPTRACK_GO
 
 router.get('/gauthcallback', passport.authenticate('google', { failureRedirect: '/error' }),
   function (req, res) {
-    // Successful authentication, redirect success.
+    // Redirect to the endpoint that checks the user's inbox for new emails
     res.redirect('/user/refresh');
   });
-
-router.get('/gmailtest', GoogleAuth.getAuthMiddleware(), async function (req: any, res, next) {
-  let client = new GmailClient(req.user);
-  let firstMsgId = (await client.getListOfMessageIds())[0];
-  res.send("This is your most recent email:<br><br>" + await client.getRawMessage(firstMsgId));
-});

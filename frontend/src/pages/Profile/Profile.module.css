@@ -131,6 +131,11 @@
     margin-left: 10px;
 }
 
+.card2 {
+    align-items: center;
+    display: inline-block;
+}
+
 .dateWrapper {
     display: inline-block;
     width: 20%;
@@ -155,5 +160,3 @@
 .google {
     display: inline-block;
 }
-
-

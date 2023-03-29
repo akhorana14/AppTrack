@@ -1,11 +1,11 @@
-import Navbar from "../../components/Navbar/Navbar"
+import Navbar2 from "../../components/Navbar/Navbar2"
 import GoogleAuth from "../../components/GoogleAuth/GoogleAuth";
 import styles from './SignIn.module.css';
 
 function SignIn() {
     return (
         <div className={styles["signin"]}>
-            <Navbar />
+            <Navbar2 />
             <div className={styles.centersquare}>
                 <h1>Welcome to AppTrack</h1>
                 <h5>You miss all the shots you don't take!</h5>

@@ -28,6 +28,11 @@ function Profile(props) {
         window.location = "/";
     }
 
+    function deactivate() {
+        window.location = "/";
+        console.log(document.getElementById('reasonForDeactivation').value);
+    }
+
     function performSelection(e) {
         let items = document.getElementsByClassName(style.sidebar_item);
         for (let i = 0; i < items.length; i++) {
@@ -223,7 +228,18 @@ function Profile(props) {
                                     <Form.Control type="date" className={style.date} />
                                 </div>
                                 <br /> <br />
-                                <a href="#" class="btn btn-primary">Submit</a>
+                                <Card className={style.card2} style={{ width: '35rem' }}>
+                                    <Card.Body>
+                                    <Card.Title>Deactivate Account</Card.Title>
+                                        <div style={{ display: 'flex' }}>
+                                            <input style={{ width: '30rem', height: '2rem' }} class="form-control" id="reasonForDeactivation" placeholder="Reason for Deactivation"></input>
+                                            <a href="#" class="btn btn-secondary" style={{ height: '2rem', marginLeft: '1rem', fontSize: '0.8rem'}} onClick={deactivate}>Deactivate</a>
+                                        </div>
+                                    </Card.Body>
+                                </Card>
+                                <br />
+                                <div><a href="#" class="btn btn-primary" style={{ margin: '1rem'}}>Submit</a>
+                                <a href="#" class="btn btn-secondary" style={{ margin: '1rem'}} onClick={logOut}>Logout</a></div>
                             </div>
                         </div>
                     </div>

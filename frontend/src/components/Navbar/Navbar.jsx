@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import * as Icon from 'react-bootstrap-icons';
 import React from 'react';
+
 import { useState } from 'react';
 
 import './Navbar.css';
@@ -17,29 +18,27 @@ let sampleNewUpdate = [{ "Company": "Meta", "Date": "1/1/2023", "Status": "Rejec
 { "Company": "Mcdonalds", "Date": "1/1/2023", "Status": "Rejected" }]
 
 function GetNavbar() {
-  const [visible, setVisible] = useState(true);
 
-  const removeElement = () => {
-    setVisible((prev) => !prev);
+  if (sampleNewUpdate.length > 200) {
+    sampleNewUpdate = sampleNewUpdate.slice(0, 200);
+  }
+
+  const [companies, setCompanies] = useState(sampleNewUpdate);
+
+  const clickNotification = (index) => {
+    window.location = "/Company/" + companies[index].Company;
   };
 
-  const newUpdateNotification = sampleNewUpdate.map((info) => {
-    return (
-      <NavDropdown.Item id={info.Company} key={info.Company}>
-        {visible && (
-          <button className='buttonNotification'>
-            <p className='p1'>{info.Company}</p>
-            <p className='p2'>{info.Date}</p>
-          </button>
-        )}
-      </NavDropdown.Item>
-    )
-  });
+  const removeElements = () => {
+    const newList = [];
+    setCompanies(newList);
+  };
 
-  const navDropDownTitle = (<Icon.Justify href="#menu" className="menu">Menu</Icon.Justify>)
-  const navNotifications = (<Icon.BellFill href="#bell" className="bell">Notification</Icon.BellFill>)
-  const navHomeButton = (<Icon.HouseDoorFill href="#home" className="home">Home</Icon.HouseDoorFill>)
-  const navProfileButton = (<Icon.PersonFill href="#profile" className="profile">Profile</Icon.PersonFill>)
+  const navDropDownTitle = (<Icon.Justify href="#menu" class="menu">Menu</Icon.Justify>)
+  const navNotifications = (<Icon.BellFill href="#bell" class="bell">Notification</Icon.BellFill>)
+  const navHomeButton = (<Icon.HouseDoorFill href="#home" class="home">Home</Icon.HouseDoorFill>)
+  const navProfileButton = (<Icon.PersonFill href="#profile" class="profile">Profile</Icon.PersonFill>)
+  const navLogoutButton = (<Icon.BoxArrowRight class="logout">Logout</Icon.BoxArrowRight>)
   return (
 
     <Navbar variant="dark" expand="lg" >
@@ -52,11 +51,20 @@ function GetNavbar() {
             <NavDropdown title={navNotifications} id="notifications" align="end">
               <div className='notificationHeading'>
                 <p className='headingNotification'>Notifications</p>
-                <button className="buttonRead" onClick={removeElement}>Mark all as read</button>
+                <button className="buttonRead" onClick={() => removeElements()}>Clear All</button>
               </div>
               <NavDropdown.Divider />
-              <tbody>{newUpdateNotification}</tbody>
-            </NavDropdown>
+              <tbody className='tablebody'>{companies.map((info, index) => (
+                <NavDropdown.Item key={index} onClick={() => clickNotification(index)}>
+                  <button className='buttonNotification' id={info.Company}>
+                    <div className='buttonDiv'>
+                      <p className='p1'>{info.Company}</p>
+                      <p className='p2'>{info.Date}</p>
+                    </div>
+                  </button>
+                </NavDropdown.Item>
+              ))}</tbody>
+              </NavDropdown>
             <NavDropdown title={navDropDownTitle} id="basic-nav-dropdown" align="end">
               <NavDropdown.Item href="/dashboard">
                 Dashboard</NavDropdown.Item>
@@ -77,13 +85,18 @@ function GetNavbar() {
 
             </NavDropdown>
 
-            <button type="button" className="btn btn-link">{navProfileButton}</button>
-            <button type="button" className="btn btn-link">{navHomeButton}</button>
+            <button type="button" class="btn btn-link">{navProfileButton}</button>
+            <button type="button" class="btn btn-link">{navHomeButton}</button>
+            <button type="button" class="btn btn-link" onClick={logout}>{navLogoutButton}</button>
           </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
+}
+
+function logout() {
+  window.location = "/";
 }
 
 export default GetNavbar;
