@@ -26,7 +26,7 @@ function GetNavbar() {
   const [companies, setCompanies] = useState(sampleNewUpdate);
 
   const clickNotification = (index) => {
-    //redirect to correct page
+    window.location = "/Company/" + companies[index].Company;
   };
 
   const removeElements = () => {
