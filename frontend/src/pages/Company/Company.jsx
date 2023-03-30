@@ -237,16 +237,14 @@ function LeetcodeButton(props) {
 }
 
 function handleUntrackButtonSubmit(company) {
-    fetch(`http://localhost:9000/company/${company}/delete`, {
+    fetch(`http://localhost:9000/company/${company}/untrack`, {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
             companyName: company
         })
-    })
-    .then((response) => response.json())
-    .then((response) => {
-        console.log(response.status);
+    }).then(() => {
+        window.location.href = "/dashboard";
     }); 
 }
 

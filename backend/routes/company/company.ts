@@ -2,6 +2,9 @@ import express from "express";
 import GmailClient from "../../utils/google/GmailClient";
 import GoogleAuth from "../../utils/google/GoogleAuth";
 
+import EventController from "../../controllers/EventController";
+import CompanyController from "../../controllers/CompanyController";
+
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 
@@ -15,10 +18,18 @@ router.get('/:company/emails', GoogleAuth.getAuthMiddleware(), async function (r
 });
 
 
-router.post("/:company/untrack", jsonParser, (req: any, res: any) => {
-    console.log(req.body);
-    
-    res.send({
+router.post("/:company/untrack", jsonParser, async function (req: any, res: any) {
+    await EventController.removeCompany(req.user, req.body.companyName); 
+
+    await res.send({
         "status": "Untracking company"
+    });
+}); 
+
+router.post("/:company/addStatus", jsonParser, async function (req: any, res: any) {
+    await EventController.addStatus(req.user, req.body.companyName, req.body.status); 
+
+    await res.send({
+        "status": "Added status"
     });
 }); 
