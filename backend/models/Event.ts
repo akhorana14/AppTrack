@@ -5,7 +5,7 @@ import User from "./User";
 
 @Entity()
 export default class Event {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn("uuid")
     id: number;
     @ManyToOne(type => User) @JoinColumn()
     user: User;

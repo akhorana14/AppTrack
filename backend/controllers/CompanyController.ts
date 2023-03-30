@@ -10,7 +10,16 @@ export default class CompanyController {
         });
     }
 
-    static save(...company: Company[]) {
-        this.companyRepository.save(company);
+    static async getByNameAndCreateIfNotExist(name: string):Promise<Company | null> {
+        if(!await this.companyRepository.exist({where: {name: name}})) {
+            await this.save(new Company(name, "", "", "blue"));
+        }
+        return this.companyRepository.findOne({
+            where: {name: name}
+        });
+    }
+
+    static async save(...company: Company[]) {
+        await this.companyRepository.save(company);
     }
 }

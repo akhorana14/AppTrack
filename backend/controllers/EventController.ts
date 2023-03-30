@@ -23,8 +23,8 @@ export default class EventController {
         });
     }
 
-    static save(...event: Event[]) {
-        this.eventRepository.save(event);
+    static async save(...event: Event[]) {
+        await this.eventRepository.save(event);
     }
 
 
