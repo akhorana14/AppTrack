@@ -1,20 +1,23 @@
 import { LessThan, MoreThan } from "typeorm";
+import { EntityTarget, FindOptionsWhere } from "typeorm";
+import Company from "../models/Company";
 import Event from "../models/Event";
+import User from "../models/User";
 import DBClient from "../utils/db/DBClient";
 import CompanyController from "./CompanyController";
 import UserController from "./UserController";
 
 export default class EventController {
-    static readonly userRepository = DBClient.getRepository(Event);
+    static readonly eventRepository = DBClient.getRepository(Event);
 
-    static async getById(id: number):Promise<Event | null> {
-        return this.userRepository.findOne({
-            where: {id: id}
+    static async getById(id: string): Promise<Event | null> {
+        return this.eventRepository.findOne({
+            where: { id: id }
         });
     }
 
     static async removeCompany(user: string, company: string):Promise<void> {
-        var eventsToRemove = await this.userRepository.find({
+        var eventsToRemove = await this.eventRepository.find({
             relations: {
                 company: true,
                 user: true
@@ -29,11 +32,11 @@ export default class EventController {
             }
         });
 
-        await this.userRepository.remove(eventsToRemove);
+        await this.eventRepository.remove(eventsToRemove);
     }
 
     static async getDailyEvents(user: string):Promise<Event[]> {
-        return this.userRepository.find({
+        return this.eventRepository.find({
             relations: {
                 user: true,
                 company: true
@@ -47,8 +50,18 @@ export default class EventController {
         });
     }
 
+    static async getEventsByUserAndCompany(user: User, company: Company) {
+        return this.eventRepository.find({
+            where: { company: company, user: this.getDBObject(user, User) as FindOptionsWhere<User> },
+            //Sort ascending by date
+            order: {
+                date: "ASC"
+            }
+        });
+    }
+
     static async getCompletedEvents(user: string):Promise<Event[]> {
-        return this.userRepository.find({
+        return this.eventRepository.find({
             relations: {
                 user: true,
                 company: true
@@ -64,7 +77,7 @@ export default class EventController {
     }
 
     static async getUpcomingEvents(user: string):Promise<Event[]> {
-        return this.userRepository.find({
+        return this.eventRepository.find({
             relations: {
                 user: true,
                 company: true
@@ -86,11 +99,31 @@ export default class EventController {
         
         if (userObj != null && companyObj != null) {
             var status = new Event(userObj, date, "", "", companyObj, "", true, classification, false, date); 
-            this.userRepository.insert(status);
+            this.eventRepository.insert(status);
         }
     }
 
-    static save(...event: Event[]) {
-        this.userRepository.save(event);
+    static async save(...event: Event[]) {
+        await this.eventRepository.save(event);
+    }
+
+
+    /**
+    * This method returns an object that contains only fields that are stored in the database. This is primarily used
+    * by the controllers in order to avoid querying for irrelevant fields that aren't stored in the database anyway (like User's displayName). 
+    * 
+    * @returns an object that only contains the fields that are stored in a database (so only fields that are marked with a typeorm annotation)
+    */
+    private static getDBObject(obj: any, target: EntityTarget<any>): any {
+        let columns = DBClient.getMetadata(target).columns;
+        let newObj: any = {};
+        for (let property in obj) {
+            //Check if this object property (field) has an associated column in the database
+            if (columns.some(col => col.propertyName === property)) {
+                //If it does, copy it over to our "pure" DB object
+                newObj[property] = obj[property];
+            }
+        }
+        return newObj;
     }
 }

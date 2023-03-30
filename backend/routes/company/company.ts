@@ -1,5 +1,6 @@
 import express from "express";
-import GmailClient from "../../utils/google/GmailClient";
+import CompanyController from "../../controllers/CompanyController";
+import EventController from "../../controllers/EventController";
 import GoogleAuth from "../../utils/google/GoogleAuth";
 
 import EventController from "../../controllers/EventController";
@@ -11,10 +12,15 @@ const jsonParser = bodyParser.json();
 const router = express.Router();
 export default router;
 
-router.get('/:company/emails', GoogleAuth.getAuthMiddleware(), async function (req: any, res, next) {
-    //This thing just filters by keyword
-    let emails = await new GmailClient(req.user).getEmailsContainingKeyword(req.params["company"]);
-    res.send(emails);
+router.get('/:company', GoogleAuth.getAuthMiddleware(), async function (req: any, res) {
+    let companyName: string = req.params["company"];
+    let company = await CompanyController.getByName(companyName);
+    if(company != null) {
+        res.send(await EventController.getEventsByUserAndCompany(req.user, company!));
+    }
+    else {
+        res.sendStatus(404);
+    }
 });
 
 

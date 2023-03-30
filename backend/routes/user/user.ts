@@ -6,13 +6,13 @@ import GoogleAuth from "../../utils/google/GoogleAuth";
 import Event from "../../models/Event"
 import EventController from "../../controllers/EventController";
 import CompanyController from "../../controllers/CompanyController";
-import { Classification } from "../../models/Classification";
+import { Classification, parseClassification } from "../../models/Classification";
 
 const router = express.Router();
 export default router;
 
 //Refresh (re-scrape new emails from user inbox)
-router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any, res, next) {
+router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any, res) {
     let user: User = req.user;
     let messages = await getEmails(new GmailClient(user), user.lastEmailRefreshTime);
     let newEvents: Event[] = [];
@@ -21,20 +21,25 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
         let subject = GmailClient.getEmailHeader(message, "Subject");
         let body = GmailClient.getEmailBody(message);
         let emailLink = `https://mail.google.com/mail/u/0/#search/rfc822msgid:${encodeURIComponent(GmailClient.getEmailHeader(message, "Message-ID"))}`;
-        //Dummy for now until AI is up
-        let company = await CompanyController.getByName("Google");
-        let isActionItem = true;
-        let classification = Classification.APPLIED;
+        let companyName = getEmailCompanyHeuristic(body);
+        let company = await CompanyController.getByNameAndCreateIfNotExist(companyName);
+        let classification = parseClassification(await getEmailClassification(body));
+        if (classification == null) {
+            res.send(`Error with classification name ${classification}!`);
+            return;
+        }
+        let isActionItem = classification != Classification.OTHER ? true : false;
+        //Begin dummy data
         let actionDate = date;
         //End dummy data
         newEvents.push(new Event(user, date, subject, body, company!, emailLink, isActionItem, classification, false, actionDate));
     }
     //Convert milliseconds to seconds
-    user.lastEmailRefreshTime = Math.round(new Date().getTime() / 1000); 
+    user.lastEmailRefreshTime = Math.round(new Date().getTime() / 1000);
     //Save the user's new refresh time
-    UserController.save(user);
+    await UserController.save(user);
     //Save all of the events
-    EventController.save(...newEvents);
+    await EventController.save(...newEvents);
     res.send("Successfully refreshed inbox!");
     //res.redirect()
 });
@@ -55,5 +60,76 @@ async function getEmails(client: GmailClient, after?: number) {
         messageIds = await client.getListOfMessageIds(`after: ${after}`);
     }
     return client.getEmailsFromMessageId(...messageIds);
+}
+/**
+ * Contacts NER  endpoints to get details about email like company name and position title from AI.
+ * 
+ * @param messageBody the string body of the email message
+ * @returns 
+ */
+async function getEmailCompanyAndPosition(messageBody: string): Promise<{company: string, position: string}> {
+    let company:string = "";
+    let position:string = "";
+    if (!process.env.APPTRACK_NER) {
+        console.error("No variable APPTRACK_NER in environment")
+    }
+    let nerResponse = await fetch(process.env.APPTRACK_NER!, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: messageBody })
+    });
+    if (nerResponse.ok) {
+        let jsonObj = await nerResponse.json();
+        company = jsonObj.Company;
+        position = jsonObj.Position;
+    }
+    else {
+        console.error("Error connecting to NER network!");
+    }
+    return {company: company, position: position};
+}
+
+/**
+ * A function that basically matches keywords to determine the company that an email is from. Will be used temporarily
+ * until the NER classifier becomes decent.
+ * 
+ * @param messageBody 
+ * @returns 
+ */
+function getEmailCompanyHeuristic(messageBody: string) {
+    const companies = ["Meta", "Apple", "Amazon", "Netflix", "Google"];
+    for(let company of companies) {
+        if(messageBody.toLowerCase().includes(company.toLowerCase())) {
+            return company;
+        }
+    }
+    return "Unknown";
+}
+
+/**
+ * Contacts classification neural network endpoint to classify email type (Applied, OA, etc.) using AI model.
+ * @param messageBody the message body in string form
+ * @returns a string of the classification obtained from the neural network, pass into parseClassification to convert to Classification enum
+ */
+async function getEmailClassification(messageBody: string):Promise<string> {
+    if (!process.env.APPTRACK_CLASSIFIER) {
+        console.error("No variable APPTRACK_CLASSIFIER in environment")
+    }
+    let classifierResponse = await fetch(process.env.APPTRACK_CLASSIFIER!, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: messageBody })
+    });
+    if (classifierResponse.ok) {
+        return await classifierResponse.text();
+    }
+    else {
+        console.error("Error connecting to classifier network!");
+    }
+    return "";
 }
 

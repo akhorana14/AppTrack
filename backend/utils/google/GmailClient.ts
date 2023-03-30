@@ -27,7 +27,7 @@ export default class GmailClient {
     }
 
     /**
-     * Get a list of message ids with an optional query (normal Gmail search queries). 
+     * Get a list of message ids with an optional query (normal Gmail search queries like "from: test@example.com"). 
      * 
      * @param query See here https://developers.google.com/gmail/api/reference/rest/v1/users.messages/list for query parameters.
      * @returns a list of message ids
@@ -41,7 +41,7 @@ export default class GmailClient {
                 maxResults: 500
             }
         );
-        const messageIds: string[] = messages === undefined ? []:messages!.map(message => message.id!);
+        const messageIds: string[] = messages === undefined ? [] : messages!.map(message => message.id!);
         let pageToken = nextPageToken;
         while (pageToken != undefined) {
             const { data: { messages, nextPageToken } } = await this.gmail.users.messages.list(
@@ -55,26 +55,28 @@ export default class GmailClient {
         return messageIds;
     }
 
-    public async getEmailsContainingKeyword(keyword: string) {
-        const messageIds = await this.getListOfMessageIds(keyword);
-        let messages: { date: string, from: string, subject: string, body: string }[] = [];
-        for (let messageId of messageIds) {
-            let { data: { payload: message } } = await this.gmail.users.messages.get({ userId: 'me', id: messageId, format: "full" });
-            let sender = message!.headers!.find(header => { return header.name == "From" })?.value!;
-            let subject = message!.headers!.find(header => { return header.name == "Subject" })?.value!;
-            let date = message!.headers!.find(header => { return header.name == "Date" })?.value!;
-            let body = Buffer.from(message!.parts![0].body!.data! ??= "", 'base64').toString("ascii");
-            messages.push({ date: date, from: sender, subject: subject, body: body });
-        }
-        return messages;
-    }
-
     public static getEmailHeader(message: gmail_v1.Schema$MessagePart, headerName: string): string {
         return message!.headers!.find(header => { return header.name == headerName })?.value!;
     }
 
     public static getEmailBody(message: gmail_v1.Schema$MessagePart): string {
-        return Buffer.from(message!.parts![0].body!.data! ??= "", 'base64').toString("ascii");
+        if (message.mimeType?.startsWith('multipart')) {
+            let fullBody = message.body!.data == undefined ? "" : message.body!.data;
+            for (let msgPart of message.parts!) {
+                if (msgPart.mimeType?.startsWith("multipart")) {
+                    for (let subMsgPart of msgPart.parts!) {
+                        if (subMsgPart.mimeType?.startsWith('text/plain')) {
+                            fullBody += Buffer.from(subMsgPart.body!.data!, 'base64').toString("ascii");
+                        }
+                    }
+                }
+                else if(msgPart.mimeType?.startsWith("text/plain")) {
+                    fullBody += msgPart.body!.data == undefined ? "" : Buffer.from(msgPart.body!.data!, 'base64').toString("ascii");
+                }
+            }
+            return fullBody;
+        }
+        return Buffer.from(message.body!.data! ??= "", 'base64').toString("ascii");
     }
 
     public async getEmailsFromMessageId(...messageIds: string[]) {
