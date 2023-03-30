@@ -25,14 +25,6 @@ let classifications = [
     "Other"
 ];
 
-//Replace this later with a call to the backend API
-let listOfStages = [
-    { date: "01/01/2022", classification: "Applied" },
-    { date: "01/02/2022", classification: "Online Assessment" },
-    { date: "01/03/2022", classification: "Interview 1" },
-    { date: "01/04/2022", classification: "Interview 2" }
-];
-
 async function getEvents(companyName) {
     let res = await fetch(`${process.env.REACT_APP_BACKEND}/company/${companyName}`, {
         credentials: "include"
@@ -85,7 +77,7 @@ function Company() {
         fetchData();
     }, []);
     companyName = capitalizeFirstLetter(companyName);
-    return (
+    return events.length === 0 ? null: (
         <>
             <Header title={`Your Application @ ${companyName}`} />
             <Navbar />
@@ -96,7 +88,7 @@ function Company() {
                             <h1 className="display-3 font-weight-normal mb-0">{`${companyName}`}</h1>
                             <h3>Software Engineer Intern
                                 <br />
-                                <h6 className="text-muted my-1">Last update: January 23, 2022</h6>
+                                <h6 className="text-muted my-1">Last update: {new Date(events[events.length - 1].date).toLocaleString()}</h6>
                             </h3>
                             <div className="mt-1 d-flex align-items-center">
                                 <LevelsButton company={companyName} />
@@ -213,7 +205,7 @@ function Stage(props) {
             }
             <h6 className="m-0">
                 {classifications[props.stage.classification]}
-                <span className="text-muted"> {new Date(props.stage.date).toLocaleDateString()}</span>
+                <span className="text-muted"> {new Date(props.stage.date).toLocaleString()}</span>
             </h6>
             <div className={styles["vertical-line"]}></div>
         </div>
