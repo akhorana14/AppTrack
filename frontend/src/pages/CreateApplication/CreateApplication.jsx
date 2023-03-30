@@ -44,7 +44,7 @@ function CreateApplication() {
         });
 
         
-        fetch("http://localhost:9000/createapp/create", {
+        fetch(`${process.env.REACT_APP_BACKEND}/createapp/create`, {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -52,13 +52,16 @@ function CreateApplication() {
                 jobTitle: jobTitle,
                 leetcodeLink: leetcodeLink,
                 levelsLink: levelsLink
-            })
+            }),
+            credentials: "include"
         })
         .then((response) => response.json())
         .then((response) => {
             console.log(response.status);
             if (response.status !== "success") {
                 setErrorMsg(response.status);
+            } else {
+                window.location.href = `/company/${companyName}`; 
             }
         }); 
     }

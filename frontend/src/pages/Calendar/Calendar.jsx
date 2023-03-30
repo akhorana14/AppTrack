@@ -25,7 +25,9 @@ function Calendar(props) {
     const [dailyEvents, setDailyEvents] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:9000/calendar/upcomingEvents")
+        fetch(`${process.env.REACT_APP_BACKEND}/calendar/upcomingEvents`, {  
+            credentials: "include"
+        })
         .then((response) => response.json())
         .then((data) => {
             var upcomingEvents = [];
@@ -54,7 +56,9 @@ function Calendar(props) {
             }
         });
 
-        fetch("http://localhost:9000/calendar/completedEvents")
+        fetch(`${process.env.REACT_APP_BACKEND}/calendar/completedEvents`, {  
+            credentials: "include"
+        })
         .then((response) => response.json())
         .then((data) => {
             var completedEvents = [];
@@ -83,7 +87,9 @@ function Calendar(props) {
             }
         });
 
-        fetch("http://localhost:9000/calendar/dailyEvents")
+        fetch(`${process.env.REACT_APP_BACKEND}/calendar/dailyEvents`, {  
+            credentials: "include"
+        })
         .then((response) => response.json())
         .then((data) => {
             console.log("Daily Events");

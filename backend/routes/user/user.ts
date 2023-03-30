@@ -22,7 +22,7 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
         let body = GmailClient.getEmailBody(message);
         let emailLink = `https://mail.google.com/mail/u/0/#search/rfc822msgid:${encodeURIComponent(GmailClient.getEmailHeader(message, "Message-ID"))}`;
         let companyName = getEmailCompanyHeuristic(body);
-        let company = await CompanyController.getByNameAndCreateIfNotExist(companyName);
+        let company = await CompanyController.getByNameAndCreateIfNotExist(companyName, "", "");
         let classification = parseClassification(await getEmailClassification(body));
         if (classification == null) {
             res.send(`Error with classification name ${classification}!`);

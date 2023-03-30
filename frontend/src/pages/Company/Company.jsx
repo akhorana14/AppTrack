@@ -265,12 +265,13 @@ function LeetcodeButton(props) {
 }
 
 function handleUntrackButtonSubmit(company) {
-    fetch(`http://localhost:9000/company/${company}/untrack`, {
+    fetch(`${process.env.REACT_APP_BACKEND}/company/${company}/untrack`, {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
             companyName: company
-        })
+        }),
+        credentials: "include"
     }).then(() => {
         window.location.href = "/dashboard";
     }); 
@@ -289,17 +290,17 @@ function UntrackButton(props) {
 
 function handleStatusButtonSubmit(company, status) {
     console.log("Adding " + company + ", " + status);
-    fetch(`http://localhost:9000/company/${company}/addStatus`, {
+    fetch(`${process.env.REACT_APP_BACKEND}/company/${company}/addStatus`, {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
             companyName: company,
             status: status
-        })
+        }),
+        credentials: "include"
     }).then(response => response.json())
     .then(response => {
-        console.log(response);
-        //window.location.href = "";
+        window.location.href = "";
     }); 
 }
 

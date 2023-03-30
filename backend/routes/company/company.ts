@@ -23,7 +23,7 @@ router.get('/:company', GoogleAuth.getAuthMiddleware(), async function (req: any
 });
 
 
-router.post("/:company/untrack", jsonParser, async function (req: any, res: any) {
+router.post("/:company/untrack", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
     await EventController.removeCompany(req.user, req.body.companyName); 
 
     await res.send({
@@ -31,7 +31,7 @@ router.post("/:company/untrack", jsonParser, async function (req: any, res: any)
     });
 }); 
 
-router.post("/:company/addStatus", jsonParser, async function (req: any, res: any) {
+router.post("/:company/addStatus", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
     var classification = -1; 
 
     switch(req.body.status) {
@@ -56,7 +56,7 @@ router.post("/:company/addStatus", jsonParser, async function (req: any, res: an
     }
 
     if (classification !== -1) {
-        await EventController.addStatus(req.user, req.body.companyName, classification); 
+        await EventController.addStatus(req.user, req.body.companyName, classification, req.body.status); 
         await res.send({
             "status": "Added status"
         });

@@ -16,6 +16,16 @@ export default class EventController {
         });
     }
 
+    static async getEventsByUserAndCompany(user: User, company: Company) {
+        return this.eventRepository.find({
+            where: { company: company, user: this.getDBObject(user, User) as FindOptionsWhere<User> },
+            //Sort ascending by date
+            order: {
+                date: "ASC"
+            }
+        });
+    }
+
     static async removeCompany(user: string, company: string):Promise<void> {
         var eventsToRemove = await this.eventRepository.find({
             relations: {
@@ -35,70 +45,54 @@ export default class EventController {
         await this.eventRepository.remove(eventsToRemove);
     }
 
-    static async getDailyEvents(user: string):Promise<Event[]> {
+    static async getDailyEvents(user: User):Promise<Event[]> {
         return this.eventRepository.find({
             relations: {
                 user: true,
                 company: true
             },
             where: {
-                user: {
-                    id: user
-                },
+                user: this.getDBObject(user, User) as FindOptionsWhere<User>,
                 isActionItem: true
             }
         });
     }
 
-    static async getEventsByUserAndCompany(user: User, company: Company) {
-        return this.eventRepository.find({
-            where: { company: company, user: this.getDBObject(user, User) as FindOptionsWhere<User> },
-            //Sort ascending by date
-            order: {
-                date: "ASC"
-            }
-        });
-    }
-
-    static async getCompletedEvents(user: string):Promise<Event[]> {
+    static async getCompletedEvents(user: User):Promise<Event[]> {
         return this.eventRepository.find({
             relations: {
                 user: true,
                 company: true
             },
             where: {
-                user: {
-                    id: user
-                },
+                user: this.getDBObject(user, User) as FindOptionsWhere<User>,
                 isActionItem: true,
                 actionDate: LessThan(new Date()) 
             }
         });
     }
 
-    static async getUpcomingEvents(user: string):Promise<Event[]> {
+    static async getUpcomingEvents(user: User):Promise<Event[]> {
         return this.eventRepository.find({
             relations: {
                 user: true,
                 company: true
             },
             where: {
-                user: {
-                    id: user
-                },
+                user: this.getDBObject(user, User) as FindOptionsWhere<User>,
                 isActionItem: true,
                 actionDate: MoreThan(new Date())
             }
         });
     }
 
-    static async addStatus(user: string, company: string, classification: number):Promise<void> {
+    static async addStatus(user: User, company: string, classification: number, classificationText: string):Promise<void> {
         var companyObj = await CompanyController.getByName(company); 
-        var userObj = await UserController.getById(user); 
+        var userObj = await UserController.getById(user.id); 
         var date = new Date(); 
         
         if (userObj != null && companyObj != null) {
-            var status = new Event(userObj, date, "", "", companyObj, "", true, classification, false, date); 
+            var status = new Event(userObj, date, classificationText, "", companyObj, "", true, classification, false, date); 
             this.eventRepository.insert(status);
         }
     }
