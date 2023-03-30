@@ -9,7 +9,7 @@ const datasource = new DataSource({
     "port": 1433,
     "username": "apptrack",
     //Make sure you have added the database into your .env file
-    "password": "MwiCAm57^n1n",
+    "password": "",
     "database": "AppTrackDB",
     "synchronize": true,
     "logging": false,
