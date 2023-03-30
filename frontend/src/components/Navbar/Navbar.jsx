@@ -34,11 +34,11 @@ function GetNavbar() {
     setCompanies(newList);
   };
 
-  const navDropDownTitle = (<Icon.Justify href="#menu" class="menu">Menu</Icon.Justify>)
-  const navNotifications = (<Icon.BellFill href="#bell" class="bell">Notification</Icon.BellFill>)
-  const navHomeButton = (<Icon.HouseDoorFill href="#home" class="home">Home</Icon.HouseDoorFill>)
-  const navProfileButton = (<Icon.PersonFill href="#profile" class="profile">Profile</Icon.PersonFill>)
-  const navLogoutButton = (<Icon.DoorOpenFill class="logout">Logout</Icon.DoorOpenFill>)
+  const navDropDownTitle = (<Icon.Justify href="#menu" className="menu">Menu</Icon.Justify>)
+  const navNotifications = (<Icon.BellFill href="#bell" className="bell">Notification</Icon.BellFill>)
+  const navHomeButton = (<Icon.HouseDoorFill href="#home" className="home">Home</Icon.HouseDoorFill>)
+  const navProfileButton = (<Icon.PersonFill href="#profile" className="profile">Profile</Icon.PersonFill>)
+  const navLogoutButton = (<Icon.DoorOpenFill className="logout">Logout</Icon.DoorOpenFill>)
   return (
 
     <Navbar variant="dark" expand="lg" >
@@ -85,9 +85,9 @@ function GetNavbar() {
 
             </NavDropdown>
 
-            <button type="button" class="btn btn-link">{navProfileButton}</button>
-            <button type="button" class="btn btn-link">{navHomeButton}</button>
-            <button type="button" class="btn btn-link" onClick={logout}>{navLogoutButton}</button>
+            <button type="button" className="btn btn-link">{navProfileButton}</button>
+            <button type="button" className="btn btn-link">{navHomeButton}</button>
+            <button type="button" className="btn btn-link" onClick={logout}>{navLogoutButton}</button>
           </Nav>
         </Navbar.Collapse>
       </Container>

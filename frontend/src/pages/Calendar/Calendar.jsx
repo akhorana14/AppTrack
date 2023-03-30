@@ -31,16 +31,27 @@ function Calendar(props) {
             var upcomingEvents = [];
             for (var i = 0; i < data.upcomingEvents.length; i++) {
                 var event = data.upcomingEvents[i];
+
+                var dateSubstr = event.actionDate.substring(0, 10);
+                var year = parseInt(dateSubstr.substring(0, 4)); 
+                var month = parseInt(dateSubstr.substring(5, 7)); 
+                var day = parseInt(dateSubstr.substring(8, 10)); 
+                var dateStr = `${month}/${day}/${year}`;
+
                 upcomingEvents.push({
                     company: event.company.name,
-                    date: event.date,
+                    date: dateStr,
                     subject: event.subject,
-                    companyURL: event.company.link
+                    companyURL: `/company/${event.company.name}`
                 });
             }
             
             setUpcomingEvents(upcomingEvents);
-            setNumUpcomingPages(Math.min(maxEventPages, Math.floor((upcomingEvents.length-1)/eventsPerPage)+1)); 
+            var numUpcomingPages = Math.min(maxEventPages, Math.floor((upcomingEvents.length-1)/eventsPerPage)+1); 
+            setNumUpcomingPages(numUpcomingPages); 
+            if (numUpcomingPages === 0) {
+                setUpcomingPage(0);
+            }
         });
 
         fetch("http://localhost:9000/calendar/completedEvents")
@@ -49,33 +60,48 @@ function Calendar(props) {
             var completedEvents = [];
             for (var i = 0; i < data.completedEvents.length; i++) {
                 var event = data.completedEvents[i];
+                
+                var dateSubstr = event.actionDate.substring(0, 10);
+                var year = parseInt(dateSubstr.substring(0, 4)); 
+                var month = parseInt(dateSubstr.substring(5, 7)); 
+                var day = parseInt(dateSubstr.substring(8, 10)); 
+                var dateStr = `${month}/${day}/${year}`;
+
                 completedEvents.push({
                     company: event.company.name,
-                    date: event.date,
+                    date: dateStr,
                     subject: event.subject,
-                    companyURL: event.company.link
+                    companyURL: `/company/${event.company.name}`
                 });
             }
             
             setCompletedEvents(completedEvents);
-            setNumCompletedPages(Math.min(maxEventPages, Math.floor((completedEvents.length-1)/eventsPerPage)+1)); 
+            var numCompletedPages = Math.min(maxEventPages, Math.floor((completedEvents.length-1)/eventsPerPage)+1); 
+            setNumCompletedPages(numCompletedPages); 
+            if (numCompletedPages === 0) {
+                setCompletedPage(0);
+            }
         });
 
         fetch("http://localhost:9000/calendar/dailyEvents")
         .then((response) => response.json())
         .then((data) => {
+            console.log("Daily Events");
+            console.log(data);
             var dailyEvents = [];
 
             for (var i = 0; i < data.dailyEvents.length; i++) {
                 var event = data.dailyEvents[i];
-                var month = parseInt(event.date.substring(0, 2))-1;
-                var day = parseInt(event.date.substring(3, 5));
-                var year = parseInt(event.date.substring(6));
+
+                var dateSubstr = event.actionDate.substring(0, 10);
+                var year = parseInt(dateSubstr.substring(0, 4)); 
+                var month = parseInt(dateSubstr.substring(5, 7))-1; 
+                var day = parseInt(dateSubstr.substring(8, 10)); 
 
                 dailyEvents.push({
                     company: event.company.name,
                     message: event.subject,
-                    companyURL: event.company.link,
+                    companyURL: `/company/${event.company.name}`,
                     color: event.company.color,
                     month: month,
                     day: day,

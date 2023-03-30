@@ -104,3 +104,7 @@
     border: none;
     margin-left: 2%;
 }
+
+.manual-status-select {
+    margin-right: 5px;
+}

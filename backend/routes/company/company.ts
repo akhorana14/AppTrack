@@ -3,6 +3,7 @@ import GmailClient from "../../utils/google/GmailClient";
 import GoogleAuth from "../../utils/google/GoogleAuth";
 
 import EventController from "../../controllers/EventController";
+import { Classification } from "../../models/Classification";
 
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
@@ -26,9 +27,37 @@ router.post("/:company/untrack", jsonParser, async function (req: any, res: any)
 }); 
 
 router.post("/:company/addStatus", jsonParser, async function (req: any, res: any) {
-    await EventController.addStatus(req.user, req.body.companyName, req.body.status); 
+    var classification = -1; 
 
-    await res.send({
-        "status": "Added status"
-    });
+    switch(req.body.status) {
+        case "Applied":
+            classification = Classification.APPLIED;
+            break;
+        case "Online Assessment":
+            classification = Classification.ONLINE_ASSESSMENT;
+            break;
+        case "Interview":
+            classification = Classification.INTERVIEW;
+            break;
+        case "Offer":
+            classification = Classification.OFFER;
+            break;
+        case "Reject":
+            classification = Classification.REJECT;
+            break;
+        default: 
+            classification = -1;
+            break;
+    }
+
+    if (classification !== -1) {
+        await EventController.addStatus(req.user, req.body.companyName, classification); 
+        await res.send({
+            "status": "Added status"
+        });
+    } else {
+        await res.send({
+            "status": "Failed to add status"
+        });
+    }
 }); 

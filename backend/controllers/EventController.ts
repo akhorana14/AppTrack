@@ -35,7 +35,8 @@ export default class EventController {
     static async getDailyEvents(user: string):Promise<Event[]> {
         return this.userRepository.find({
             relations: {
-                user: true
+                user: true,
+                company: true
             },
             where: {
                 user: {
@@ -49,7 +50,8 @@ export default class EventController {
     static async getCompletedEvents(user: string):Promise<Event[]> {
         return this.userRepository.find({
             relations: {
-                user: true
+                user: true,
+                company: true
             },
             where: {
                 user: {
@@ -64,7 +66,8 @@ export default class EventController {
     static async getUpcomingEvents(user: string):Promise<Event[]> {
         return this.userRepository.find({
             relations: {
-                user: true
+                user: true,
+                company: true
             },
             where: {
                 user: {
