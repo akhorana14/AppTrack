@@ -26,7 +26,7 @@ export default class EventController {
         });
     }
 
-    static async removeCompany(user: string, company: string):Promise<void> {
+    static async removeCompany(user: User, company: string):Promise<void> {
         var eventsToRemove = await this.eventRepository.find({
             relations: {
                 company: true,
@@ -36,9 +36,7 @@ export default class EventController {
                 company: {
                     name: company
                 },
-                user: {
-                    id: user
-                }
+                user: this.getDBObject(user, User) as FindOptionsWhere<User>
             }
         });
 
@@ -86,13 +84,12 @@ export default class EventController {
         });
     }
 
-    static async addStatus(user: User, company: string, classification: number, classificationText: string):Promise<void> {
+    static async addStatus(user: User, company: string, classification: number, classificationText: string, description: string, date: Date):Promise<void> {
         var companyObj = await CompanyController.getByName(company); 
         var userObj = await UserController.getById(user.id); 
-        var date = new Date(); 
         
         if (userObj != null && companyObj != null) {
-            var status = new Event(userObj, date, classificationText, "", companyObj, "", true, classification, false, date); 
+            var status = new Event(userObj, date, classificationText, description, companyObj, "", true, classification, false, date); 
             this.eventRepository.insert(status);
         }
     }

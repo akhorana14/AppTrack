@@ -56,7 +56,7 @@ router.post("/:company/addStatus", GoogleAuth.getAuthMiddleware(), jsonParser, a
     }
 
     if (classification !== -1) {
-        await EventController.addStatus(req.user, req.body.companyName, classification, req.body.status); 
+        await EventController.addStatus(req.user, req.body.companyName, classification, req.body.status, req.body.description, new Date(req.body.date)); 
         await res.send({
             "status": "Added status"
         });

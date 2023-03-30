@@ -37,18 +37,32 @@ async function getEvents(companyName) {
 
 function Company() {
     const [errorMsg, setErrorMsg] = useState("* indicates required fields");
-    const [actionItem, setActionItem] = useState("");
+    const [actionItem, setActionItem] = useState("Manually Add a Status");
     const [description, setDescription] = useState("");
     const [date, setDate] = useState("");
 
-    const [statusOption, setStatusOption] = useState("Manually Add a Status"); 
-
-    function handleActionItemSubmit() {
+    function handleActionItemSubmit(company) {
         console.log({
             actionItem: actionItem,
             description: description,
             date: date
         });
+
+        console.log("Adding " + company + ", " + actionItem);
+        fetch(`${process.env.REACT_APP_BACKEND}/company/${company}/addStatus`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                companyName: company,
+                status: actionItem,
+                description: description,
+                date: date
+            }),
+            credentials: "include"
+        }).then(response => response.json())
+        .then(response => {
+            window.location.href = "";
+        }); 
     }
 
     function updateActionItem(e) {
@@ -67,10 +81,6 @@ function Company() {
         setActionItem("");
         setDescription("");
         setDate("");
-    }
-
-    function handleStatusChange(e) {
-        setStatusOption(e.target.value);
     }
     
     let { company: companyName } = useParams();
@@ -102,17 +112,6 @@ function Company() {
                                 <LeetcodeButton company={companyName}/>
                                 <UntrackButton company={companyName} />
                             </div>
-                            <div className="mt-2 d-flex align-items-center">
-                                <select className={styles["manual-status-select"]} onChange={handleStatusChange}>
-                                    <option>Manually Add a Status</option>
-                                    <option>Applied</option>
-                                    <option>Online Assessment</option>
-                                    <option>Interview</option>
-                                    <option>Offer</option>
-                                    <option>Reject</option>
-                                </select>
-                                <StatusButton company={companyName} status={statusOption} />
-                            </div>  
                             <StageList list={events.filter(item => item.isActionItem === true)} />
                             <div className="mt-5">
                                 <h3>Add an action item
@@ -121,8 +120,14 @@ function Company() {
                                 </h3>
                                 <form>
                                     <div className="form-group mt-2">
-                                        <label htmlFor="update-title">Action Item *</label>
-                                        <input className="form-control" placeholder="Enter action item" onChange={updateActionItem} value={actionItem} />
+                                        <select className={styles["manual-status-select"]} onChange={updateActionItem}>
+                                            <option>Manually Add a Status</option>
+                                            <option>Applied</option>
+                                            <option>Online Assessment</option>
+                                            <option>Interview</option>
+                                            <option>Offer</option>
+                                            <option>Reject</option>
+                                        </select>
                                     </div>
                                     <div className="form-group mt-2">
                                         <label htmlFor="description">Description *</label>
@@ -135,7 +140,7 @@ function Company() {
                                     </div>
 
                                     <button type="button" className="btn btn-primary blue-button mt-3" onClick={handleClear}>Clear</button>
-                                    <button type="button" className="btn btn-success green-button mt-3" onClick={handleActionItemSubmit}>Submit</button>
+                                    <button type="button" className="btn btn-success green-button mt-3" onClick={() => handleActionItemSubmit(companyName)}>Submit</button>
                                     <span className="create-app-error-msg">{errorMsg}</span>
                                 </form>
                             </div>
@@ -302,17 +307,6 @@ function handleStatusButtonSubmit(company, status) {
     .then(response => {
         window.location.href = "";
     }); 
-}
-
-function StatusButton(props) {
-    return (
-        <Button onClick={()=>handleStatusButtonSubmit(props.company, props.status)} variant="primary" className={`${styles["untrack-btn"]} d-flex align-items-center`}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" className="bi bi-plus-lg" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
-            </svg>
-            <span className={`${styles["untrack-text"]}`}>Add</span>
-        </Button>
-    ); 
 }
 
 function EmailAccordion(props) {
