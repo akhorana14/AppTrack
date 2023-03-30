@@ -77,6 +77,7 @@ function Company() {
         fetchData();
     }, []);
     companyName = capitalizeFirstLetter(companyName);
+    //Conditional render based on if events variable has been populated with api response or not
     return events.length === 0 ? null: (
         <>
             <Header title={`Your Application @ ${companyName}`} />
@@ -86,7 +87,7 @@ function Company() {
                     <Row className="justify-content-center h-100">
                         <Col className={styles["left-half"]}>
                             <h1 className="display-3 font-weight-normal mb-0">{`${companyName}`}</h1>
-                            <h3>Software Engineer Intern
+                            <h3>Software Engineer
                                 <br />
                                 <h6 className="text-muted my-1">Last update: {new Date(events[events.length - 1].date).toLocaleString()}</h6>
                             </h3>
