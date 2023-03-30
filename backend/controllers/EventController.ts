@@ -7,7 +7,7 @@ import DBClient from "../utils/db/DBClient";
 export default class EventController {
     static readonly eventRepository = DBClient.getRepository(Event);
 
-    static async getById(id: number): Promise<Event | null> {
+    static async getById(id: string): Promise<Event | null> {
         return this.eventRepository.findOne({
             where: { id: id }
         });
