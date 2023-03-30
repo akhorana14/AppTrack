@@ -1,6 +1,5 @@
 import express from "express";
 import CompanyController from "../../controllers/CompanyController";
-import EventController from "../../controllers/EventController";
 import GoogleAuth from "../../utils/google/GoogleAuth";
 
 import EventController from "../../controllers/EventController";
