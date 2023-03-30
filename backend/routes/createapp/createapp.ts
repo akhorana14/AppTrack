@@ -1,7 +1,6 @@
 import express from "express";
 
 import CompanyController from "../../controllers/CompanyController";
-import Company from "../../models/Company";
 
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();

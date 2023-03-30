@@ -3,7 +3,6 @@ import Event from "../models/Event";
 import DBClient from "../utils/db/DBClient";
 import CompanyController from "./CompanyController";
 import UserController from "./UserController";
-import { Classification } from "../models/Classification";
 
 export default class EventController {
     static readonly userRepository = DBClient.getRepository(Event);

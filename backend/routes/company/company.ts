@@ -3,7 +3,6 @@ import GmailClient from "../../utils/google/GmailClient";
 import GoogleAuth from "../../utils/google/GoogleAuth";
 
 import EventController from "../../controllers/EventController";
-import CompanyController from "../../controllers/CompanyController";
 
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
