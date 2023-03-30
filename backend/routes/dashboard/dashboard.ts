@@ -5,7 +5,7 @@ import GoogleAuth from "../../utils/google/GoogleAuth";
 const router = express.Router();
 export default router;
 
-router.get('/dashboard', GoogleAuth.getAuthMiddleware(), async function (req: any, res: any) {
+router.get('/', GoogleAuth.getAuthMiddleware(), async function (req: any, res: any) {
     res.send(await EventController.getNewUpdatesByUser(req.user));
 });
 
