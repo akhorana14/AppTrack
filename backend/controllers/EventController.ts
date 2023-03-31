@@ -10,7 +10,7 @@ import UserController from "./UserController";
 export default class EventController {
     static readonly eventRepository = DBClient.getRepository(Event);
 
-    static async getById(id: string): Promise<Event | null> {
+    static async getById(id: number): Promise<Event | null> {
         return this.eventRepository.findOne({
             where: { id: id }
         });
@@ -35,9 +35,23 @@ export default class EventController {
                 company: true
             },
             where: {user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
+                date: MoreThan(dateRange)},
+            order: {
+                date: "DESC"
+            }
+            
+        })
+    }
+
+    // get new updates, but order by Action Item date
+    static async getNewUpdatesByUser2(user: User) {
+        const dateRange = new Date();
+        dateRange.setDate(dateRange.getDate() - 5); // set to 5 days ago
+        return this.eventRepository.find({
+            where: {user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
                     date: MoreThan(dateRange)},
             order: {
-                date: "ASC"
+                actionDate: "ASC"
             }
             
         })

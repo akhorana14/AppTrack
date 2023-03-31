@@ -27,6 +27,10 @@ async function getNewUpdates() {
 
 function GetNavbar() {
 
+  useEffect(() => {
+    fetchNewUpdate();
+  });
+
   const [newUpdateData, setNewUpdateData] = useState([]);
 
   async function fetchNewUpdate() {
@@ -45,10 +49,6 @@ function GetNavbar() {
     const newList = [];
     setNewUpdateData(newList);
   };
-
-  useEffect(() => {
-    fetchNewUpdate();
-  }, []);
 
   const navDropDownTitle = (<Icon.Justify href="#menu" className="menu">Menu</Icon.Justify>)
   const navNotifications = (<Icon.BellFill href="#bell" className="bell">Notification</Icon.BellFill>)
@@ -75,7 +75,7 @@ function GetNavbar() {
                   <button className='buttonNotification' id={info.Company}>
                     <div className='buttonDiv'>
                       <p className='p1'>{info.Company}</p>
-                      <p className='p2'>{info.Date}</p>
+                      <p className='p2'>{info.date.substr(0,9)}</p>
                     </div>
                   </button>
                 </NavDropdown.Item>

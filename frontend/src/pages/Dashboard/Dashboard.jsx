@@ -75,8 +75,8 @@ function Dashboard() {
   const newUpdateTableRows = newUpdateData.map((info) => {
     return (
       <tr>
-        <td>{info.company}</td>
-        <td>{info.date}</td>
+        <td>{info.Company}</td>
+        <td>{info.date.substr(0,9)}</td>
         <td>{classifications[info.classification]}</td>
       </tr>
     );
