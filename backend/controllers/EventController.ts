@@ -10,7 +10,7 @@ import UserController from "./UserController";
 export default class EventController {
     static readonly eventRepository = DBClient.getRepository(Event);
 
-    static async getById(id: string): Promise<Event | null> {
+    static async getById(id: number): Promise<Event | null> {
         return this.eventRepository.findOne({
             where: { id: id }
         });
@@ -26,6 +26,41 @@ export default class EventController {
         });
     }
 
+<<<<<<< HEAD
+=======
+    // get new updates, defined as events assigned to a User where the event date is in the last 5 days
+    static async getNewUpdatesByUser(user: User) {
+        const dateRange = new Date();
+        dateRange.setDate(dateRange.getDate() - 3); // set to 3 days ago
+        return this.eventRepository.find({
+                relations: {
+                    company: true
+                },
+            where: {user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
+                    date: MoreThan(dateRange),
+                    isActionItem: true},
+            order: {
+                date: "DESC"
+            }
+            
+        })
+    }
+
+    // get new updates, but order by Action Item date
+    static async getNewUpdatesByUser2(user: User) {
+        const dateRange = new Date();
+        dateRange.setDate(dateRange.getDate() - 5); // set to 5 days ago
+        return this.eventRepository.find({
+            where: {user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
+                    date: MoreThan(dateRange)},
+            order: {
+                actionDate: "ASC"
+            }
+            
+        })
+    }
+
+>>>>>>> notifications
     static async removeCompany(user: User, company: string):Promise<void> {
         var eventsToRemove = await this.eventRepository.find({
             relations: {
