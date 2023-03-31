@@ -35,8 +35,8 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
     UserController.save(user);
     //Save all of the events
     EventController.save(...newEvents);
-    res.send("Successfully refreshed inbox!");
-    //res.redirect()
+    //res.send("Successfully refreshed inbox!");
+    res.redirect(`${process.env.APPTRACK_FRONTEND}/calendar`);
 });
 
 /**

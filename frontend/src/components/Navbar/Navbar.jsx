@@ -36,8 +36,8 @@ function GetNavbar() {
 
   const navDropDownTitle = (<Icon.Justify href="#menu" class="menu">Menu</Icon.Justify>)
   const navNotifications = (<Icon.BellFill href="#bell" class="bell">Notification</Icon.BellFill>)
-  const navHomeButton = (<Icon.HouseDoorFill href="#home" class="home">Home</Icon.HouseDoorFill>)
-  const navProfileButton = (<Icon.PersonFill href="#profile" class="profile">Profile</Icon.PersonFill>)
+  // const navHomeButton = (<Icon.HouseDoorFill href="#home" class="home">Home</Icon.HouseDoorFill>)
+  // const navProfileButton = (<Icon.PersonFill href="#profile" class="profile">Profile</Icon.PersonFill>)
   const navLogoutButton = (<Icon.BoxArrowRight class="logout">Logout</Icon.BoxArrowRight>)
   return (
 
@@ -85,8 +85,8 @@ function GetNavbar() {
 
             </NavDropdown>
 
-            <button type="button" class="btn btn-link">{navProfileButton}</button>
-            <button type="button" class="btn btn-link">{navHomeButton}</button>
+            {/* <button type="button" class="btn btn-link">{navProfileButton}</button>
+            <button type="button" class="btn btn-link">{navHomeButton}</button> */}
             <button type="button" class="btn btn-link" onClick={logout}>{navLogoutButton}</button>
           </Nav>
         </Navbar.Collapse>
