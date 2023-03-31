@@ -5,26 +5,6 @@ import '../../static/globals.css';
 import MotivationModal from '../../components/MotivationPopup/MotivationModal';
 import Button from 'react-bootstrap/Button';
 
-// Sample data below
-let sampleNewUpdate = [{ "Company": "Meta", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Google", "Date": "10/1/2023", "Status": "Rejected" },
-{ "Company": "Amazon", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Netflix", "Date": "12/12/2023", "Status": "Rejected" },
-{ "Company": "Apple", "Date": "11/1/2023", "Status": "Rejected" },
-{ "Company": "Walmart", "Date": "1/21/2023", "Status": "Rejected" },
-{ "Company": "Mcdonalds", "Date": "11/1/2023", "Status": "Rejected" }]
-
-let sampleCompleted = [ {"Company": "Twilio", "Date":"1/10/2023", "Status":"Rejected"} ,
-                        {"Company": "Reddit", "Date":"1/1/2023", "Status":"Rejected"} ,
-                        {"Company": "Spotify", "Date":"11/21/2023", "Status":"Rejected"} ,
-                        {"Company": "Uber", "Date":"1/1/2023", "Status":"Rejected"} ,
-                        {"Company": "Pinterest", "Date":"10/1/2023", "Status":"Rejected"},
-                        {"Company": "Twitter", "Date":"1/21/2023", "Status":"Rejected"},
-                        {"Company": "Twitt2er", "Date":"11/31/2023", "Status":"Rejected"},
-                        {"Company": "Twitt3er", "Date":"1/12/2023", "Status":"Rejected"},
-                        {"Company": "Twitt5er", "Date":"1/1/2023", "Status":"Rejected"},
-                      ]
-
 //This order was taken very carefully from backend/models/Classification.ts
 //Make sure to keep it in this order to avoid mixing up labels
 let classifications = [
@@ -42,7 +22,7 @@ async function getNewUpdates() {
       credentials: "include"
   });
   if (res.ok) {
-      return await res.json();
+    return await res.json();
   }
   return [];
 }
@@ -53,7 +33,17 @@ async function reorderUpdates() {
     credentials: "include"
   });
   if (res.ok) {
-    console.log("res.ok in reorder upadtes");
+    return await res.json(); 
+  }
+  return [];
+}
+
+// fetch completed events
+async function getCompletedEvents() {
+  let res = await fetch(`${process.env.REACT_APP_BACKEND}/dashboard/getCompletedEvents`, {
+    credentials: "include"
+  });
+  if (res.ok) {
     return await res.json(); 
   }
   return [];
@@ -63,27 +53,34 @@ function Dashboard() {
 
   const [newUpdateData, setNewUpdateData] = useState([]); // previously sampleNewData in useState
   const [actionDateData, setActionDateData] = useState([]); // added for action date table
-  const [upperTableData, setUpperTableData] = useState([]);
-  const [completedData, setCompletedData] = useState(sampleCompleted); // change in the future
+  const [upperTableData, setUpperTableData] = useState([]); // added for user story 6.5
+  const [completedData, setCompletedData] = useState([]); // change for user story 6.2
   const [buttonText, setButtonText] = useState("Date");
 
   async function fetchNewUpdate() {
     const newUpdates = await getNewUpdates();
     setNewUpdateData(newUpdates);
+    setUpperTableData(newUpdates);
   }
+
   async function fetchActionDateData() {
-      const actionDateUpdates = await reorderUpdates();
-      setActionDateData(actionDateUpdates);
-      console.log("actionDateUpdates length: " + actionDateUpdates.length);
+    const actionDateUpdates = await reorderUpdates();
+    setActionDateData(actionDateUpdates);
+  }
+
+  async function fetchCompletedEventData() {
+    const completedEvents = await getCompletedEvents();
+    setCompletedData(completedEvents);
   }
 
   useEffect(() => {
     fetchNewUpdate();
     fetchActionDateData();
-    setUpperTableData(newUpdateData);
+    fetchCompletedEventData();
   }, []);
 
   let newUpdateTableRows = upperTableData.map((info) => {
+    console.log(info);
     return (
       <tr>
         <td>{info.company.name}</td>
@@ -96,9 +93,9 @@ function Dashboard() {
   const completedDataTableRows = completedData.map((info) => {
     return (
       <tr>
-        <td>{info.Company}</td>
-        <td>{info.Date}</td>
-        <td>{info.Status}</td>
+        <td>{info.company.name}</td>
+        <td>{(info.date).split('T')[0]}</td>
+        <td>{classifications[info.classification]}</td>
       </tr>
     );
   });
@@ -113,18 +110,8 @@ function Dashboard() {
     else {
       setUpperTableData(newUpdateData);
     }
-
-    // let newUpdateTableRows = newUpdateData.map((info) => {
-    //   return (
-    //     <tr>
-    //       <td>{info.company.name}</td>
-    //       <td>{(info.date).split('T')[0]}</td>
-    //       <td>{classifications[info.classification]}</td>
-    //     </tr>
-    //   );
-    // });
-
   }
+
   let dateButton = <Button onClick={changeDateOrder} variant="text" style={{fontWeight: 'bold'}}>{buttonText}</Button>;
 
   return (

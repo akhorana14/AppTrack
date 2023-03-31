@@ -12,3 +12,7 @@ router.get('/', GoogleAuth.getAuthMiddleware(), async function (req: any, res: a
 router.get('/orderByActionDate', GoogleAuth.getAuthMiddleware(), async function (req: any, res: any) {
     res.send(await EventController.getNewUpdatesByUser2(req.user));
 });
+
+router.get('/getCompletedEvents', GoogleAuth.getAuthMiddleware(), async function (req: any, res: any) {
+    res.send(await EventController.getCompletedEvents(req.user));
+});

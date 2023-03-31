@@ -1,4 +1,4 @@
-import { EntityTarget, FindOptionsWhere, MoreThan } from "typeorm";
+import { EntityTarget, FindOptionsWhere, MoreThan, LessThan } from "typeorm";
 import Company from "../models/Company";
 import Event from "../models/Event";
 import User from "../models/User";
@@ -32,7 +32,8 @@ export default class EventController {
                     company: true
                 },
             where: {user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
-                    date: MoreThan(dateRange)},
+                    date: MoreThan(dateRange),
+                    isActionItem: true},
             order: {
                 date: "DESC"
             }
@@ -49,12 +50,28 @@ export default class EventController {
                 company: true
             },
             where: {user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
-                    date: MoreThan(dateRange)},
+                    date: MoreThan(dateRange),
+                    isActionItem: true},
             order: {
                 actionDate: "ASC"
             }
             
         })
+    }
+
+    // get completed events
+    static async getCompletedEvents(user: User):Promise<Event[]> {
+        return this.eventRepository.find({
+            relations: {
+                user: true,
+                company: true
+            },
+            where: {
+                user: this.getDBObject(user, User) as FindOptionsWhere<User>,
+                isActionItem: true,
+                actionDate: LessThan(new Date()) 
+            }
+        });
     }
 
     static save(...event: Event[]) {
