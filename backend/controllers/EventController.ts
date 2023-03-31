@@ -26,6 +26,23 @@ export default class EventController {
         });
     }
 
+    static async getNewUpdatesByUser(user: User) {
+        const dateRange = new Date();
+        dateRange.setDate(dateRange.getDate() - 3); // set to 3 days ago
+        return this.eventRepository.find({
+                relations: {
+                    company: true
+                },
+            where: {user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
+                    date: MoreThan(dateRange),
+                    isActionItem: true},
+            order: {
+                date: "DESC"
+            }
+            
+        })
+    }
+
     static async removeCompany(user: User, company: string):Promise<void> {
         var eventsToRemove = await this.eventRepository.find({
             relations: {

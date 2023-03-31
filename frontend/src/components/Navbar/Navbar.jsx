@@ -16,7 +16,7 @@ import './Navbar.css';
 // { "Company": "Mcdonalds", "Date": "1/1/2023", "Status": "Rejected" }]
 
 async function getNewUpdates() {
-  let res = await fetch(`${process.env.REACT_APP_BACKEND}/dashboard`, {
+  let res = await fetch(`${process.env.REACT_APP_BACKEND}/` + this.window.location.pathname, {
       credentials: "include"
   });
   if (res.ok) {
