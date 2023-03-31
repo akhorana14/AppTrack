@@ -49,7 +49,7 @@ async function getNewUpdates() {
 
 // fetch alternate order
 async function reorderUpdates() {
-  let res = await fetch(`${process.env.REACT_APP_BACKEND}/orderByActionDate`, {
+  let res = await fetch(`${process.env.REACT_APP_BACKEND}/dashboard/orderByActionDate`, {
     credentials: "include"
   });
   if (res.ok) {
