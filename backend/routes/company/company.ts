@@ -4,6 +4,9 @@ import GoogleAuth from "../../utils/google/GoogleAuth";
 
 import EventController from "../../controllers/EventController";
 import { Classification } from "../../models/Classification";
+import UserController from "../../controllers/UserController";
+
+import User from "../../models/User";
 
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
