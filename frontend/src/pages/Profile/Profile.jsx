@@ -10,6 +10,7 @@ import ListGroup from "react-bootstrap/esm/ListGroup";
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import GoogleAuth from "../../components/GoogleAuth/GoogleAuth";
+import axios from "axios";
 
 
 function Profile(props) {
@@ -23,6 +24,11 @@ function Profile(props) {
     function handleCloseDelete() {
         window.location = "/";
         setShow(false);
+    }
+
+    function submitDate() {
+        // send a request to the backend to update the date
+        axios.post('localhost:9000/api/user/updateDate', {date: date})
     }
 
     function logOut() {
@@ -239,7 +245,7 @@ function Profile(props) {
                                     </Card.Body>
                                 </Card>
                                 <br />
-                                <div><a href="#" class="btn btn-primary" style={{ margin: '1rem'}}>Submit</a>
+                                <div><a href="#" class="btn btn-primary" onClick={submitDate} style={{ margin: '1rem'}}>Submit</a>
                                 <a href="#" class="btn btn-secondary" style={{ margin: '1rem'}} onClick={logOut}>Logout</a></div>
                             </div>
                         </div>
