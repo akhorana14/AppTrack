@@ -14,7 +14,7 @@ This should build/install all necessary components for the AppTrack backend and 
 ## Backend
 To create a backend route, use the following snippet:
 ```
-router.get("/test", GoogleAuth.getAuthMiddleware(), async function (req, res, next) {
+router.get("/test", GoogleAuth.getAuthMiddleware(), async function (req:any, res:any) {
 	let user:User = req.user;
 	res.send(req.user.id);
 });
@@ -43,7 +43,7 @@ This code will send a request to the test endpoint and will include any relevant
 ### Database Integration
 Moving back to the backend, we can query and save objects to the database in our test endpoint, like so:
 ```
-router.get("/test", GoogleAuth.getAuthMiddleware(), async function (req, res, next) {
+router.get("/test", GoogleAuth.getAuthMiddleware(), async function (req:any, res:any) {
 	//Get the object from the DB
 	let company = await CompanyController.getByName("Google");
 	//Modify it
