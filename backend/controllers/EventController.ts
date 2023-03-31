@@ -1,5 +1,6 @@
-import { LessThan, MoreThan } from "typeorm";
-import { EntityTarget, FindOptionsWhere } from "typeorm";
+// import { LessThan, MoreThan } from "typeorm";
+// import { EntityTarget, FindOptionsWhere } from "typeorm";
+import { EntityTarget, FindOptionsWhere, MoreThan, LessThan} from "typeorm";
 import Company from "../models/Company";
 import Event from "../models/Event";
 import User from "../models/User";
@@ -94,8 +95,42 @@ export default class EventController {
         }
     }
 
-    static async save(...event: Event[]) {
-        await this.eventRepository.save(event);
+    // get new updates, defined as events assigned to a User where the event date is in the last 5 days
+    static async getNewUpdatesByUser(user: User) {
+        const dateRange = new Date();
+        dateRange.setDate(dateRange.getDate() - 3); // set to 3 days ago
+        return this.eventRepository.find({
+                relations: {
+                    company: true
+                },
+            where: {user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
+                    date: MoreThan(dateRange)},
+            order: {
+                date: "DESC"
+            }
+            
+        })
+    }
+
+    // get new updates, but order by Action Item date
+    static async getNewUpdatesByUser2(user: User) {
+        let dateRange = new Date();
+        dateRange.setDate(dateRange.getDate() - 3); // set to 3 days ago
+        return this.eventRepository.find({
+            relations: {
+                company: true
+            },
+            where: {user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
+                    date: MoreThan(dateRange)},
+            order: {
+                actionDate: "ASC"
+            }
+            
+        })
+    }
+
+    static save(...event: Event[]) {
+        this.eventRepository.save(event);
     }
 
 
