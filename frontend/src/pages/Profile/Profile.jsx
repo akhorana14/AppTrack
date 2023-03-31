@@ -10,7 +10,6 @@ import ListGroup from "react-bootstrap/esm/ListGroup";
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import GoogleAuth from "../../components/GoogleAuth/GoogleAuth";
-import axios from "axios";
 
 
 function Profile(props) {
