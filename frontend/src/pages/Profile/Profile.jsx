@@ -28,7 +28,17 @@ function Profile(props) {
 
     function submitDate() {
         // send a request to the backend to update the date
-        axios.post('localhost:9000/api/user/updateDate', {date: date})
+        console.log("Sending request " + date);
+        fetch(`${process.env.REACT_APP_BACKEND}/user/setDate`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                date: date
+            }),
+            credentials: "include"
+        }).then(response => response.json())
+        .then(response => {
+        }); 
     }
 
     function logOut() {
