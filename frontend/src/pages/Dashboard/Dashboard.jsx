@@ -53,7 +53,8 @@ async function reorderUpdates() {
     credentials: "include"
   });
   if (res.ok) {
-      return await res.json();
+    console.log("res.ok in reorder upadtes");
+    return await res.json(); 
   }
   return [];
 }
@@ -62,6 +63,7 @@ function Dashboard() {
 
   const [newUpdateData, setNewUpdateData] = useState([]); // previously sampleNewData in useState
   const [actionDateData, setActionDateData] = useState([]); // added for action date table
+  const [upperTableData, setUpperTableData] = useState([]);
   const [completedData, setCompletedData] = useState(sampleCompleted); // change in the future
   const [buttonText, setButtonText] = useState("Date");
 
@@ -71,15 +73,17 @@ function Dashboard() {
   }
   async function fetchActionDateData() {
       const actionDateUpdates = await reorderUpdates();
-      setNewUpdateData(actionDateUpdates);
-      console.log("actionDateUpdates" + actionDateUpdates.length);
+      setActionDateData(actionDateUpdates);
+      console.log("actionDateUpdates length: " + actionDateUpdates.length);
   }
 
   useEffect(() => {
     fetchNewUpdate();
+    fetchActionDateData();
+    setUpperTableData(newUpdateData);
   }, []);
 
-  let newUpdateTableRows = newUpdateData.map((info) => {
+  let newUpdateTableRows = upperTableData.map((info) => {
     return (
       <tr>
         <td>{info.company.name}</td>
@@ -100,26 +104,25 @@ function Dashboard() {
   });
 
   function changeDateOrder() {
-    console.log("Clicking button");
     let newText = (buttonText==="Date") ? "Action Date" : "Date"; // change label 
     setButtonText(newText);
 
     if (buttonText==="Date") {
-      fetchActionDateData();
+      setUpperTableData(actionDateData);
     }
     else {
-      fetchNewUpdate();
+      setUpperTableData(newUpdateData);
     }
 
-    let newUpdateTableRows = newUpdateData.map((info) => {
-      return (
-        <tr>
-          <td>{info.company.name}</td>
-          <td>{(info.date).split('T')[0]}</td>
-          <td>{classifications[info.classification]}</td>
-        </tr>
-      );
-    });
+    // let newUpdateTableRows = newUpdateData.map((info) => {
+    //   return (
+    //     <tr>
+    //       <td>{info.company.name}</td>
+    //       <td>{(info.date).split('T')[0]}</td>
+    //       <td>{classifications[info.classification]}</td>
+    //     </tr>
+    //   );
+    // });
 
   }
   let dateButton = <Button onClick={changeDateOrder} variant="text" style={{fontWeight: 'bold'}}>{buttonText}</Button>;
