@@ -74,7 +74,7 @@ function GetNavbar() {
                 <NavDropdown.Item key={index} onClick={() => clickNotification(index)}>
                   <button className='buttonNotification' id={info.Company}>
                     <div className='buttonDiv'>
-                      <p className='p1'>{info.Company}</p>
+                      <p className='p1'>{info.company.name}</p>
                       <p className='p2'>{info.date.substr(0,9)}</p>
                     </div>
                   </button>

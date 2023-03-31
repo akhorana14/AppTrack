@@ -29,13 +29,14 @@ export default class EventController {
     // get new updates, defined as events assigned to a User where the event date is in the last 5 days
     static async getNewUpdatesByUser(user: User) {
         const dateRange = new Date();
-        dateRange.setDate(dateRange.getDate() - 5); // set to 5 days ago
+        dateRange.setDate(dateRange.getDate() - 3); // set to 3 days ago
         return this.eventRepository.find({
-            relations: {
-                company: true
-            },
+                relations: {
+                    company: true
+                },
             where: {user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
-                date: MoreThan(dateRange)},
+                    date: MoreThan(dateRange),
+                    isActionItem: true},
             order: {
                 date: "DESC"
             }
