@@ -3,36 +3,52 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import * as Icon from 'react-bootstrap-icons';
-import React from 'react';
-
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import './Navbar.css';
 
-let sampleNewUpdate = [{ "Company": "Meta", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Google", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Amazon", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Netflix", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Apple", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Walmart", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Mcdonalds", "Date": "1/1/2023", "Status": "Rejected" }]
+// let sampleNewUpdate = [{ "Company": "Meta", "Date": "1/1/2023", "Status": "Rejected" },
+// { "Company": "Google", "Date": "1/1/2023", "Status": "Rejected" },
+// { "Company": "Amazon", "Date": "1/1/2023", "Status": "Rejected" },
+// { "Company": "Netflix", "Date": "1/1/2023", "Status": "Rejected" },
+// { "Company": "Apple", "Date": "1/1/2023", "Status": "Rejected" },
+// { "Company": "Walmart", "Date": "1/1/2023", "Status": "Rejected" },
+// { "Company": "Mcdonalds", "Date": "1/1/2023", "Status": "Rejected" }]
+
+async function getNewUpdates() {
+  let res = await fetch(`${process.env.REACT_APP_BACKEND}/dashboard`, {
+      credentials: "include"
+  });
+  if (res.ok) {
+    return await res.json();
+  }
+  return [];
+}
 
 function GetNavbar() {
 
-  if (sampleNewUpdate.length > 200) {
-    sampleNewUpdate = sampleNewUpdate.slice(0, 200);
+  const [newUpdateData, setNewUpdateData] = useState([]);
+
+  async function fetchNewUpdate() {
+    let newUpdates = await getNewUpdates();
+    if (newUpdates.length > 200) {
+      newUpdates = newUpdates.slice(0, 200);
+    }
+    setNewUpdateData(newUpdates);
   }
 
-  const [companies, setCompanies] = useState(sampleNewUpdate);
-
   const clickNotification = (index) => {
-    window.location = "/Company/" + companies[index].Company;
+    window.location = "/Company/" + newUpdateData[index].Company;
   };
 
   const removeElements = () => {
     const newList = [];
-    setCompanies(newList);
+    setNewUpdateData(newList);
   };
+
+  useEffect(() => {
+    fetchNewUpdate();
+  }, []);
 
   const navDropDownTitle = (<Icon.Justify href="#menu" className="menu">Menu</Icon.Justify>)
   const navNotifications = (<Icon.BellFill href="#bell" className="bell">Notification</Icon.BellFill>)
@@ -54,7 +70,7 @@ function GetNavbar() {
                 <button className="buttonRead" onClick={() => removeElements()}>Clear All</button>
               </div>
               <NavDropdown.Divider />
-              <tbody className='tablebody'>{companies.map((info, index) => (
+              <tbody className='tablebody'>{newUpdateData.map((info, index) => (
                 <NavDropdown.Item key={index} onClick={() => clickNotification(index)}>
                   <button className='buttonNotification' id={info.Company}>
                     <div className='buttonDiv'>
