@@ -89,7 +89,7 @@ export default class EventController {
         var userObj = await UserController.getById(user.id); 
         
         if (userObj != null && companyObj != null) {
-            var status = new Event(userObj, date, classificationText, description, companyObj, "", true, classification, false, date); 
+            var status = new Event(userObj, new Date(), classificationText, description, companyObj, "", true, classification, false, date); 
             this.eventRepository.insert(status);
         }
     }
