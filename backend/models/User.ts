@@ -25,7 +25,4 @@ export default class User implements googleauth.Profile {
     //boolean variable to determine if the user deactivated the account
     @Column({ nullable: true })
     accountDeactivated?: boolean;
-    //deactivation message
-    @Column({ nullable: true })
-    deactivatedMessage?: string;
 }

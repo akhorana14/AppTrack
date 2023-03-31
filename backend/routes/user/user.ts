@@ -14,7 +14,7 @@ export default router;
 //Refresh (re-scrape new emails from user inbox)
 router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any, res) {
     let user: User = req.user;
-    if (user.accountDeactivated) {res.send("Account was deactivated");}
+    if (user.accountDeactivated) {res.send("Account was deactivated"); return;}
     let messages = await getEmails(new GmailClient(user), user.lastEmailRefreshTime);
     let newEvents: Event[] = [];
     for (let message of messages) {
