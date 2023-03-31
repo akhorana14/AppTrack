@@ -18,6 +18,7 @@ function Profile(props) {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [open, setOpen] = React.useState(false);
+    const [date, setDate] = React.useState(new Date());
 
     function handleCloseDelete() {
         window.location = "/";
@@ -225,7 +226,7 @@ function Profile(props) {
                                 <p class="card-text">Allow AppTrack to check for job updates past </p>
                                 <br />
                                 <div className={style.dateWrapper}> 
-                                    <Form.Control type="date" className={style.date} />
+                                    <Form.Control onChange={(e) => setDate(e.target.value)} type="date" className={style.date} />
                                 </div>
                                 <br /> <br />
                                 <Card className={style.card2} style={{ width: '35rem' }}>
