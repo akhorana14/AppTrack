@@ -22,4 +22,10 @@ export default class User implements googleauth.Profile {
     //last time email was scraped - in seconds since epoch (1/1/1970)
     @Column({ nullable: true })
     lastEmailRefreshTime?: number;
+    //boolean variable to determine if the user deactivated the account
+    @Column({ nullable: true })
+    accountDeactivated?: boolean;
+    //deactivation message
+    @Column({ nullable: true })
+    deactivatedMessage?: string;
 }
