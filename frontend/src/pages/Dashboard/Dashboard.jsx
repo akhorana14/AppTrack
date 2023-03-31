@@ -61,22 +61,29 @@ async function reorderUpdates() {
 function Dashboard() {
 
   const [newUpdateData, setNewUpdateData] = useState([]); // previously sampleNewData in useState
+  const [actionDateData, setActionDateData] = useState([]); // added for action date table
   const [completedData, setCompletedData] = useState(sampleCompleted); // change in the future
   const [buttonText, setButtonText] = useState("Date");
 
+  async function fetchNewUpdate() {
+    const newUpdates = await getNewUpdates();
+    setNewUpdateData(newUpdates);
+  }
+  async function fetchActionDateData() {
+      const actionDateUpdates = await reorderUpdates();
+      setNewUpdateData(actionDateUpdates);
+      console.log("actionDateUpdates" + actionDateUpdates.length);
+  }
+
   useEffect(() => {
-    async function fetchNewUpdate() {
-        const newUpdates = await getNewUpdates();
-        setNewUpdateData(newUpdates);
-    }
     fetchNewUpdate();
   }, []);
 
-  const newUpdateTableRows = newUpdateData.map((info) => {
+  let newUpdateTableRows = newUpdateData.map((info) => {
     return (
       <tr>
-        <td>{info.company}</td>
-        <td>{info.date}</td>
+        <td>{info.company.name}</td>
+        <td>{(info.date).split('T')[0]}</td>
         <td>{classifications[info.classification]}</td>
       </tr>
     );
@@ -96,8 +103,23 @@ function Dashboard() {
     console.log("Clicking button");
     let newText = (buttonText==="Date") ? "Action Date" : "Date"; // change label 
     setButtonText(newText);
-  
-    // update table contents
+
+    if (buttonText==="Date") {
+      fetchActionDateData();
+    }
+    else {
+      fetchNewUpdate();
+    }
+
+    let newUpdateTableRows = newUpdateData.map((info) => {
+      return (
+        <tr>
+          <td>{info.company.name}</td>
+          <td>{(info.date).split('T')[0]}</td>
+          <td>{classifications[info.classification]}</td>
+        </tr>
+      );
+    });
 
   }
   let dateButton = <Button onClick={changeDateOrder} variant="text" style={{fontWeight: 'bold'}}>{buttonText}</Button>;

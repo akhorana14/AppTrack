@@ -28,10 +28,13 @@ export default class EventController {
         const dateRange = new Date();
         dateRange.setDate(dateRange.getDate() - 5); // set to 5 days ago
         return this.eventRepository.find({
+                relations: {
+                    company: true
+                },
             where: {user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
                     date: MoreThan(dateRange)},
             order: {
-                date: "ASC"
+                date: "DESC"
             }
             
         })
@@ -39,9 +42,12 @@ export default class EventController {
 
     // get new updates, but order by Action Item date
     static async getNewUpdatesByUser2(user: User) {
-        const dateRange = new Date();
-        dateRange.setDate(dateRange.getDate() - 5); // set to 5 days ago
+        let dateRange = new Date();
+        dateRange.setDate(dateRange.getDate() - 5); // set to 3 days ago
         return this.eventRepository.find({
+            relations: {
+                company: true
+            },
             where: {user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
                     date: MoreThan(dateRange)},
             order: {
