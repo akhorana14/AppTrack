@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Navbar from "../../components/Navbar/Navbar";
 import './Dashboard.css';
 import '../../static/globals.css';
 import MotivationModal from '../../components/MotivationPopup/MotivationModal';
-import Button from 'react-bootstrap/Button';
 
-// Sample data below
 let sampleNewUpdate = [{ "Company": "Meta", "Date": "1/1/2023", "Status": "Rejected" },
 { "Company": "Google", "Date": "10/1/2023", "Status": "Rejected" },
 { "Company": "Amazon", "Date": "1/1/2023", "Status": "Rejected" },
@@ -25,70 +23,17 @@ let sampleCompleted = [ {"Company": "Twilio", "Date":"1/10/2023", "Status":"Reje
                         {"Company": "Twitt5er", "Date":"1/1/2023", "Status":"Rejected"},
                       ]
 
-//This order was taken very carefully from backend/models/Classification.ts
-//Make sure to keep it in this order to avoid mixing up labels
-let classifications = [
-  "Applied",
-  "OA",
-  "Interview",
-  "Offer",
-  "Reject",
-  "Other"
-];
-
-// try to get new updates from backend
-async function getNewUpdates() {
-  let res = await fetch(`${process.env.REACT_APP_BACKEND}/dashboard`, {
-      credentials: "include"
-  });
-  if (res.ok) {
-      return await res.json();
-  }
-  return [];
-}
-
-// fetch alternate order
-async function reorderUpdates() {
-  let res = await fetch(`${process.env.REACT_APP_BACKEND}/dashboard/orderByActionDate`, {
-    credentials: "include"
-  });
-  if (res.ok) {
-    console.log("res.ok in reorder upadtes");
-    return await res.json(); 
-  }
-  return [];
-}
-
 function Dashboard() {
 
-  const [newUpdateData, setNewUpdateData] = useState([]); // previously sampleNewData in useState
-  const [actionDateData, setActionDateData] = useState([]); // added for action date table
-  const [upperTableData, setUpperTableData] = useState([]);
+  const [newUpdateData, setNewUpdateData] = useState(sampleNewUpdate); // change in future 
   const [completedData, setCompletedData] = useState(sampleCompleted); // change in the future
-  const [buttonText, setButtonText] = useState("Date");
 
-  async function fetchNewUpdate() {
-    const newUpdates = await getNewUpdates();
-    setNewUpdateData(newUpdates);
-  }
-  async function fetchActionDateData() {
-      const actionDateUpdates = await reorderUpdates();
-      setActionDateData(actionDateUpdates);
-      console.log("actionDateUpdates length: " + actionDateUpdates.length);
-  }
-
-  useEffect(() => {
-    fetchNewUpdate();
-    fetchActionDateData();
-    setUpperTableData(newUpdateData);
-  }, []);
-
-  let newUpdateTableRows = upperTableData.map((info) => {
+  const newUpdateTableRows = newUpdateData.map((info) => {
     return (
       <tr>
-        <td>{info.company.name}</td>
-        <td>{(info.date).split('T')[0]}</td>
-        <td>{classifications[info.classification]}</td>
+        <td>{info.Company}</td>
+        <td>{info.Date}</td>
+        <td>{info.Status}</td>
       </tr>
     );
   });
@@ -102,30 +47,6 @@ function Dashboard() {
       </tr>
     );
   });
-
-  function changeDateOrder() {
-    let newText = (buttonText==="Date") ? "Action Date" : "Date"; // change label 
-    setButtonText(newText);
-
-    if (buttonText==="Date") {
-      setUpperTableData(actionDateData);
-    }
-    else {
-      setUpperTableData(newUpdateData);
-    }
-
-    // let newUpdateTableRows = newUpdateData.map((info) => {
-    //   return (
-    //     <tr>
-    //       <td>{info.company.name}</td>
-    //       <td>{(info.date).split('T')[0]}</td>
-    //       <td>{classifications[info.classification]}</td>
-    //     </tr>
-    //   );
-    // });
-
-  }
-  let dateButton = <Button onClick={changeDateOrder} variant="text" style={{fontWeight: 'bold'}}>{buttonText}</Button>;
 
   return (
     <>
@@ -146,7 +67,7 @@ function Dashboard() {
               <thead>
                 <tr>
                   <th>Company</th>
-                  <th>{dateButton}</th>
+                  <th>Date</th>
                   <th>Status</th>
                 </tr>
               </thead>
