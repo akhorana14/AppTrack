@@ -19,7 +19,10 @@ export default class User implements googleauth.Profile {
 
     /* AppTrack Profile */
     tokens?: Auth.Credentials;
-    //last time email was scraped - in seconds since epoch (1/1/1970)
+    /**
+     * 
+     * Last time email was scraped - in seconds since epoch (1/1/1970) - use Math.round(date.getTime() / 1000) to get current time in seconds
+     **/
     @Column({ nullable: true })
     lastEmailRefreshTime?: number;
     //boolean variable to determine if the user deactivated the account

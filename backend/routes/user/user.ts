@@ -8,6 +8,9 @@ import EventController from "../../controllers/EventController";
 import CompanyController from "../../controllers/CompanyController";
 import { Classification, parseClassification } from "../../models/Classification";
 
+const bodyParser = require("body-parser");
+const jsonParser = bodyParser.json();
+
 const router = express.Router();
 export default router;
 
@@ -44,6 +47,24 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
     res.send("Successfully refreshed inbox!");
     //res.redirect()
 });
+
+router.post("/setDate", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
+    let user:User = req.user;
+    let date = new Date(req.body.date);
+    //let prevDate = user.lastEmailRefreshTime;
+    user.lastEmailRefreshTime = Math.round(date.getTime() / 1000);
+    //console.log(user.lastEmailRefreshTime)
+    // if (prevDate != undefined && prevDate < user.lastEmailRefreshTime) {
+    //     await res.send({
+    //         "status": "Set date"
+    //     });
+    //     return;
+    // }
+    await UserController.save(user);
+    await res.send({
+        "status": "Set date"
+    });
+}); 
 
 /**
  * Get emails from a Gmail Client, optionally after a certain date
@@ -133,4 +154,3 @@ async function getEmailClassification(messageBody: string):Promise<string> {
     }
     return "";
 }
-

@@ -18,10 +18,26 @@ function Profile(props) {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [open, setOpen] = React.useState(false);
+    const [date, setDate] = React.useState(new Date());
 
     function handleCloseDelete() {
         window.location = "/";
         setShow(false);
+    }
+
+    function submitDate() {
+        // send a request to the backend to update the date
+        console.log("Sending request " + date);
+        fetch(`${process.env.REACT_APP_BACKEND}/user/setDate`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                date: date
+            }),
+            credentials: "include"
+        }).then(response => response.json())
+        .then(response => {
+        }); 
     }
 
     function logOut() {
@@ -236,7 +252,7 @@ function Profile(props) {
                                 <p class="card-text">Allow AppTrack to check for job updates past </p>
                                 <br />
                                 <div className={style.dateWrapper}> 
-                                    <Form.Control type="date" className={style.date} />
+                                    <Form.Control onChange={(e) => setDate(e.target.value)} type="date" className={style.date} />
                                 </div>
                                 <br /> <br />
                                 <Card className={style.card2} style={{ width: '35rem' }}>
@@ -249,7 +265,7 @@ function Profile(props) {
                                     </Card.Body>
                                 </Card>
                                 <br />
-                                <div><a href="#" class="btn btn-primary" style={{ margin: '1rem'}}>Submit</a>
+                                <div><a href="#" class="btn btn-primary" onClick={submitDate} style={{ margin: '1rem'}}>Submit</a>
                                 <a href="#" class="btn btn-secondary" style={{ margin: '1rem'}} onClick={logOut}>Logout</a></div>
                             </div>
                         </div>

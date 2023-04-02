@@ -10,7 +10,6 @@ import gauthRouter from "./routes/gauth/gauth";
 import companyRouter from "./routes/company/company";
 import calendarRouter from "./routes/calendar/calendar"
 import createappRouter from "./routes/createapp/createapp";
-import dashboardRouter from "./routes/dashboard/dashboard";
 import userRouter from "./routes/user/user";
 
 const app = express();
@@ -40,7 +39,6 @@ app.use('/gauth', gauthRouter);
 app.use('/company', companyRouter);
 app.use('/calendar', calendarRouter);
 app.use('/createapp', createappRouter);
-app.use('/dashboard', dashboardRouter);
 app.use('/user', userRouter);
 
 app.get('/success', (req, res) => res.send("Success"));
