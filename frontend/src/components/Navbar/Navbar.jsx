@@ -7,14 +7,6 @@ import React, { useState, useEffect } from 'react';
 
 import './Navbar.css';
 
-// let sampleNewUpdate = [{ "Company": "Meta", "Date": "1/1/2023", "Status": "Rejected" },
-// { "Company": "Google", "Date": "1/1/2023", "Status": "Rejected" },
-// { "Company": "Amazon", "Date": "1/1/2023", "Status": "Rejected" },
-// { "Company": "Netflix", "Date": "1/1/2023", "Status": "Rejected" },
-// { "Company": "Apple", "Date": "1/1/2023", "Status": "Rejected" },
-// { "Company": "Walmart", "Date": "1/1/2023", "Status": "Rejected" },
-// { "Company": "Mcdonalds", "Date": "1/1/2023", "Status": "Rejected" }]
-
 async function getNewUpdates() {
   let res = await fetch(`${process.env.REACT_APP_BACKEND}/dashboard`, {
       credentials: "include"
@@ -50,11 +42,11 @@ function GetNavbar() {
     setNewUpdateData(newList);
   };
 
-  const navDropDownTitle = (<Icon.Justify href="#menu" className="menu">Menu</Icon.Justify>)
-  const navNotifications = (<Icon.BellFill href="#bell" className="bell">Notification</Icon.BellFill>)
-  const navHomeButton = (<Icon.HouseDoorFill href="#home" className="home">Home</Icon.HouseDoorFill>)
-  const navProfileButton = (<Icon.PersonFill href="#profile" className="profile">Profile</Icon.PersonFill>)
-  const navLogoutButton = (<Icon.DoorOpenFill className="logout">Logout</Icon.DoorOpenFill>)
+  const navDropDownTitle = (<Icon.Justify href="#menu" class="menu">Menu</Icon.Justify>)
+  const navNotifications = (<Icon.BellFill href="#bell" class="bell">Notification</Icon.BellFill>)
+  // const navHomeButton = (<Icon.HouseDoorFill href="#home" class="home">Home</Icon.HouseDoorFill>)
+  // const navProfileButton = (<Icon.PersonFill href="#profile" class="profile">Profile</Icon.PersonFill>)
+  const navLogoutButton = (<Icon.BoxArrowRight class="logout">Logout</Icon.BoxArrowRight>)
   return (
 
     <Navbar variant="dark" expand="lg" >
@@ -101,9 +93,9 @@ function GetNavbar() {
 
             </NavDropdown>
 
-            <button type="button" className="btn btn-link">{navProfileButton}</button>
-            <button type="button" className="btn btn-link">{navHomeButton}</button>
-            <button type="button" className="btn btn-link" onClick={logout}>{navLogoutButton}</button>
+            {/* <button type="button" class="btn btn-link">{navProfileButton}</button>
+            <button type="button" class="btn btn-link">{navHomeButton}</button> */}
+            <button type="button" class="btn btn-link" onClick={logout}>{navLogoutButton}</button>
           </Nav>
         </Navbar.Collapse>
       </Container>

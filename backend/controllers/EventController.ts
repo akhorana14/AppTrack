@@ -1,5 +1,4 @@
-import { LessThan, MoreThan } from "typeorm";
-import { EntityTarget, FindOptionsWhere } from "typeorm";
+import { EntityTarget, FindOptionsWhere, MoreThan, LessThan, Not } from "typeorm";
 import Company from "../models/Company";
 import Event from "../models/Event";
 import User from "../models/User";
@@ -29,6 +28,7 @@ export default class EventController {
     // get new updates, defined as events assigned to a User where the event date is in the last 5 days
     static async getNewUpdatesByUser(user: User) {
         const dateRange = new Date();
+        let today = new Date();
         dateRange.setDate(dateRange.getDate() - 3); // set to 3 days ago
         return this.eventRepository.find({
                 relations: {
@@ -36,7 +36,9 @@ export default class EventController {
                 },
             where: {user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
                     date: MoreThan(dateRange),
-                    isActionItem: true},
+                    isActionItem: true,
+                    actionDate: Not(LessThan(today))
+                },    
             order: {
                 date: "DESC"
             }
@@ -46,11 +48,14 @@ export default class EventController {
 
     // get new updates, but order by Action Item date
     static async getNewUpdatesByUser2(user: User) {
-        const dateRange = new Date();
-        dateRange.setDate(dateRange.getDate() - 5); // set to 5 days ago
+        let dateRange = new Date();
+        let today = new Date();
+        dateRange.setDate(dateRange.getDate() - 3); // set to 3 days ago
         return this.eventRepository.find({
             where: {user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
-                    date: MoreThan(dateRange)},
+                    date: MoreThan(dateRange),
+                    isActionItem: true,
+                    actionDate: Not(LessThan(today))},
             order: {
                 actionDate: "ASC"
             }

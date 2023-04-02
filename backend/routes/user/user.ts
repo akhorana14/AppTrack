@@ -43,9 +43,9 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
     //Save the user's new refresh time
     await UserController.save(user);
     //Save all of the events
-    await EventController.save(...newEvents);
-    res.send("Successfully refreshed inbox!");
-    //res.redirect()
+    EventController.save(...newEvents);
+    //res.send("Successfully refreshed inbox!");
+    res.redirect(`${process.env.APPTRACK_FRONTEND}/calendar`);
 });
 
 router.post("/setDate", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
