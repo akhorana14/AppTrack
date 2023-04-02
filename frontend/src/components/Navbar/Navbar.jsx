@@ -3,42 +3,50 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import * as Icon from 'react-bootstrap-icons';
-import React from 'react';
-
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import './Navbar.css';
 
-let sampleNewUpdate = [{ "Company": "Meta", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Google", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Amazon", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Netflix", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Apple", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Walmart", "Date": "1/1/2023", "Status": "Rejected" },
-{ "Company": "Mcdonalds", "Date": "1/1/2023", "Status": "Rejected" }]
+async function getNewUpdates() {
+  let res = await fetch(`${process.env.REACT_APP_BACKEND}/dashboard`, {
+      credentials: "include"
+  });
+  if (res.ok) {
+    return await res.json();
+  }
+  return [];
+}
 
 function GetNavbar() {
 
-  if (sampleNewUpdate.length > 200) {
-    sampleNewUpdate = sampleNewUpdate.slice(0, 200);
+  useEffect(() => {
+    fetchNewUpdate();
+  });
+
+  const [newUpdateData, setNewUpdateData] = useState([]);
+
+  async function fetchNewUpdate() {
+    let newUpdates = await getNewUpdates();
+    if (newUpdates.length > 200) {
+      newUpdates = newUpdates.slice(0, 200);
+    }
+    setNewUpdateData(newUpdates);
   }
 
-  const [companies, setCompanies] = useState(sampleNewUpdate);
-
   const clickNotification = (index) => {
-    window.location = "/Company/" + companies[index].Company;
+    window.location = "/Company/" + newUpdateData[index].Company;
   };
 
   const removeElements = () => {
     const newList = [];
-    setCompanies(newList);
+    setNewUpdateData(newList);
   };
 
-  const navDropDownTitle = (<Icon.Justify href="#menu" className="menu">Menu</Icon.Justify>)
-  const navNotifications = (<Icon.BellFill href="#bell" className="bell">Notification</Icon.BellFill>)
-  const navHomeButton = (<Icon.HouseDoorFill href="#home" className="home">Home</Icon.HouseDoorFill>)
-  const navProfileButton = (<Icon.PersonFill href="#profile" className="profile">Profile</Icon.PersonFill>)
-  const navLogoutButton = (<Icon.DoorOpenFill className="logout">Logout</Icon.DoorOpenFill>)
+  const navDropDownTitle = (<Icon.Justify href="#menu" class="menu">Menu</Icon.Justify>)
+  const navNotifications = (<Icon.BellFill href="#bell" class="bell">Notification</Icon.BellFill>)
+  // const navHomeButton = (<Icon.HouseDoorFill href="#home" class="home">Home</Icon.HouseDoorFill>)
+  // const navProfileButton = (<Icon.PersonFill href="#profile" class="profile">Profile</Icon.PersonFill>)
+  const navLogoutButton = (<Icon.BoxArrowRight class="logout">Logout</Icon.BoxArrowRight>)
   return (
 
     <Navbar variant="dark" expand="lg" >
@@ -54,12 +62,12 @@ function GetNavbar() {
                 <button className="buttonRead" onClick={() => removeElements()}>Clear All</button>
               </div>
               <NavDropdown.Divider />
-              <tbody className='tablebody'>{companies.map((info, index) => (
+              <tbody className='tablebody'>{newUpdateData.map((info, index) => (
                 <NavDropdown.Item key={index} onClick={() => clickNotification(index)}>
                   <button className='buttonNotification' id={info.Company}>
                     <div className='buttonDiv'>
-                      <p className='p1'>{info.Company}</p>
-                      <p className='p2'>{info.Date}</p>
+                      <p className='p1'>{info.company.name}</p>
+                      <p className='p2'>{info.date.substr(0,9)}</p>
                     </div>
                   </button>
                 </NavDropdown.Item>
@@ -85,9 +93,9 @@ function GetNavbar() {
 
             </NavDropdown>
 
-            <button type="button" className="btn btn-link">{navProfileButton}</button>
-            <button type="button" className="btn btn-link">{navHomeButton}</button>
-            <button type="button" className="btn btn-link" onClick={logout}>{navLogoutButton}</button>
+            {/* <button type="button" class="btn btn-link">{navProfileButton}</button>
+            <button type="button" class="btn btn-link">{navHomeButton}</button> */}
+            <button type="button" class="btn btn-link" onClick={logout}>{navLogoutButton}</button>
           </Nav>
         </Navbar.Collapse>
       </Container>

@@ -45,6 +45,17 @@ function Profile(props) {
     }
 
     function deactivate() {
+        fetch(`${process.env.REACT_APP_BACKEND}/settings/deactivate`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                
+            }),
+            credentials: "include"
+        }).then(response => response.json())
+        .then(response => {
+            window.location.href = "";
+        });
         window.location = "/";
         console.log(document.getElementById('reasonForDeactivation').value);
     }

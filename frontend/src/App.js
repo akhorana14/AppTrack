@@ -7,6 +7,7 @@ import CreateApplication from "./pages/CreateApplication/CreateApplication"
 import SignIn from "./pages/SignIn/SignIn"
 import Dashboard from "./pages/Dashboard/Dashboard"
 import Profile from "./pages/Profile/Profile"
+import Navbar from "./components/Navbar/Navbar"
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 

@@ -17,6 +17,7 @@ export default router;
 //Refresh (re-scrape new emails from user inbox)
 router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any, res) {
     let user: User = req.user;
+    if (user.accountDeactivated) {res.send("Account was deactivated"); return;}
     let messages = await getEmails(new GmailClient(user), user.lastEmailRefreshTime);
     let newEvents: Event[] = [];
     for (let message of messages) {
@@ -42,9 +43,9 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
     //Save the user's new refresh time
     await UserController.save(user);
     //Save all of the events
-    await EventController.save(...newEvents);
-    res.send("Successfully refreshed inbox!");
-    //res.redirect()
+    EventController.save(...newEvents);
+    //res.send("Successfully refreshed inbox!");
+    res.redirect(`${process.env.APPTRACK_FRONTEND}/calendar`);
 });
 
 router.post("/setDate", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {

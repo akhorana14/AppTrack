@@ -11,6 +11,7 @@ import companyRouter from "./routes/company/company";
 import calendarRouter from "./routes/calendar/calendar"
 import createappRouter from "./routes/createapp/createapp";
 import userRouter from "./routes/user/user";
+import dashboardRouter from "./routes/dashboard/dashboard";
 
 const app = express();
 app.use(cookieParser());
@@ -40,7 +41,7 @@ app.use('/company', companyRouter);
 app.use('/calendar', calendarRouter);
 app.use('/createapp', createappRouter);
 app.use('/user', userRouter);
-
+app.use('/dashboard', dashboardRouter);
 app.get('/success', (req, res) => res.send("Success"));
 app.get('/error', (req, res) => res.send("error logging in"));
 
