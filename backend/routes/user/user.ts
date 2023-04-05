@@ -19,7 +19,7 @@ export default router;
 router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any, res) {
     let user: User = req.user;
     if (user.accountDeactivated) {
-        res.send("Account was deactivated"); 
+        res.send("Account was deactivated");
         return;
     }
     let messages = await getEmails(new GmailClient(user), user.lastEmailRefreshTime);
@@ -30,14 +30,16 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
         let body = GmailClient.getEmailBody(message);
         let emailLink = `https://mail.google.com/mail/u/0/#search/rfc822msgid:${encodeURIComponent(GmailClient.getEmailHeader(message, "Message-ID"))}`;
         try {
-            let {company: companyName, classification} = await OpenAIClient.classifyEmail(body);
-            let company = await CompanyController.getByNameAndCreateIfNotExist(companyName, "", "");
-            let isActionItem = classification != Classification.OTHER ? true : false;
-            //TODO: Acquire this from OpenAI
-            let actionDate = date;
-            newEvents.push(new Event(user, date, subject, body, company!, emailLink, isActionItem, classification, false, actionDate));
+            if (await OpenAIClient.isJobRelated(body)) {
+                let { company: companyName, classification } = await OpenAIClient.classifyEmail(body);
+                let company = await CompanyController.getByNameAndCreateIfNotExist(companyName, "", "");
+                let isActionItem = classification != Classification.OTHER ? true : false;
+                //TODO: Acquire this from OpenAI
+                let actionDate = date;
+                newEvents.push(new Event(user, date, subject, body, company!, emailLink, isActionItem, classification, false, actionDate));
+            }
         }
-        catch(error) {
+        catch (error) {
             console.log(`Error while scanning emails: ${error}`);
             break;
         }
@@ -48,7 +50,8 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
     await UserController.save(user);
     //Save all of the events
     EventController.save(...newEvents);
-    res.redirect(`${process.env.APPTRACK_FRONTEND}/calendar`);
+    //Redirect to dashboard after successful refresh
+    res.redirect(`${process.env.APPTRACK_FRONTEND}/dashboard`);
 });
 
 router.post("/setDate", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {

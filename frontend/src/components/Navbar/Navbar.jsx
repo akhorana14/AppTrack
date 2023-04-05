@@ -80,9 +80,6 @@ function GetNavbar() {
               <NavDropdown.Item href="/calendar">
                 Calendar</NavDropdown.Item>
 
-              <NavDropdown.Item href="/company/google">
-                Companies</NavDropdown.Item>
-
               <NavDropdown.Item href="/">
                 Sign In</NavDropdown.Item>  
 

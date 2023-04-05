@@ -324,7 +324,6 @@ function EmailAccordion(props) {
                 </Accordion.Header>
                 <Accordion.Body>
                     <p>{props.body}</p>
-                    <Button variant="dark" size="sm">Reclassify</Button>
                 </Accordion.Body>
             </Accordion.Item>
         </Accordion>
