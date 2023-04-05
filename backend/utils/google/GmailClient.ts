@@ -37,7 +37,6 @@ export default class GmailClient {
             {
                 userId: 'me',
                 q: query,
-                includeSpamTrash: true,
                 maxResults: 500
             }
         );
