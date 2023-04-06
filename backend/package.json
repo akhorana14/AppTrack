@@ -6,6 +6,9 @@
     "build": "npx tsc --build --force",
     "start": "npm run build && node ./dist/app.js"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "body-parser": "^1.20.2",
     "cookie-parser": "~1.4.4",

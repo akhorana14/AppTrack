@@ -25,16 +25,6 @@ let classifications = [
     "Other"
 ];
 
-async function getEvents(companyName) {
-    let res = await fetch(`${process.env.REACT_APP_BACKEND}/company/${companyName}`, {
-        credentials: "include"
-    });
-    if (res.ok) {
-        return await res.json();
-    }
-    return [];
-}
-
 function Company() {
     const [errorMsg, setErrorMsg] = useState("* indicates required fields");
     const [actionItem, setActionItem] = useState("Manually Add a Status");
@@ -51,7 +41,7 @@ function Company() {
         console.log("Adding " + company + ", " + actionItem);
         fetch(`${process.env.REACT_APP_BACKEND}/company/${company}/addStatus`, {
             method: "POST",
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 companyName: company,
                 status: actionItem,
@@ -60,9 +50,9 @@ function Company() {
             }),
             credentials: "include"
         }).then(response => response.json())
-        .then(response => {
-            window.location.href = "";
-        }); 
+            .then(response => {
+                window.location.href = "";
+            });
     }
 
     function updateActionItem(e) {
@@ -82,19 +72,36 @@ function Company() {
         setDescription("");
         setDate("");
     }
-    
+
     let { company: companyName } = useParams();
     const [events, setEvents] = useState(null);
+    const [companyInfo, setCompanyInfo] = useState(null);
+    
     useEffect(() => {
-        async function fetchData() {
-            const apiData = await getEvents(companyName);
-            setEvents(apiData);
-        }
-        fetchData();
+        getCompanyInfo();
+        getEvents();
     }, []);
+
+    async function getEvents() {
+        let res = await fetch(`${process.env.REACT_APP_BACKEND}/company/${companyName}`, {
+            credentials: "include"
+        });
+        if (res.ok) {
+            setEvents(await res.json());
+        }
+    }
+
+    async function getCompanyInfo() {
+        let res = await fetch(`${process.env.REACT_APP_BACKEND}/company/${companyName}/info`, {
+            credentials: "include"
+        });
+        if (res.ok) {
+            setCompanyInfo(await res.json());
+        }
+    }
     companyName = capitalizeFirstLetter(companyName);
     //Conditional render based on if events variable has been populated with api response or not
-    return events === null ? null: (
+    return events === null ? null : (
         <>
             <Header title={`Your Application @ ${companyName}`} />
             <Navbar />
@@ -105,11 +112,11 @@ function Company() {
                             <h1 className="display-3 font-weight-normal mb-0">{`${companyName}`}</h1>
                             <h3>Software Engineer
                                 <br />
-                                <h6 className="text-muted my-1">Last update: {events.length === 0 ? "None":new Date(events[events.length - 1].date).toLocaleString()}</h6>
+                                <h6 className="text-muted my-1">Last update: {events.length === 0 ? "None" : new Date(events[events.length - 1].date).toLocaleString()}</h6>
                             </h3>
                             <div className="mt-1 d-flex align-items-center">
-                                <LevelsButton company={companyName}/>
-                                <LeetcodeButton company={companyName}/>
+                                <LevelsButton link={companyInfo.levelsLink} />
+                                <LeetcodeButton link={companyInfo.leetcodeLink} />
                                 <UntrackButton company={companyName} />
                             </div>
                             <StageList list={events.filter(item => item.isActionItem === true)} />
@@ -253,7 +260,7 @@ function StageList(props) {
 
 function LevelsButton(props) {
     return (
-        <Button href={`https://www.levels.fyi/companies/${props.company}/salaries`} variant="light" className={`${styles["levels-btn"]} d-flex align-items-center`}>
+        <Button href={props.link} variant="light" className={`${styles["levels-btn"]} d-flex align-items-center`}>
             <img src="https://www.levels.fyi/assets/levelsiconfilledcolored.png" height="28" width="28" alt="Levels.fyi Logo" />
             Levels.fyi
         </Button>
@@ -262,7 +269,7 @@ function LevelsButton(props) {
 
 function LeetcodeButton(props) {
     return (
-        <Button href={`https://leetcode.com/discuss/interview-question?currentPage=1&orderBy=most_relevant&query=${props.company}`} variant="dark" className={`${styles["leetcode-btn"]} d-flex align-items-center`}>
+        <Button href={props.link} variant="dark" className={`${styles["leetcode-btn"]} d-flex align-items-center`}>
             <img src="https://leetcode.com/static/images/LeetCode_logo_rvs.png" height="28" width="28" alt="Leetcode Logo" />
             Leetcode
         </Button>
@@ -272,41 +279,41 @@ function LeetcodeButton(props) {
 function handleUntrackButtonSubmit(company) {
     fetch(`${process.env.REACT_APP_BACKEND}/company/${company}/untrack`, {
         method: "POST",
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             companyName: company
         }),
         credentials: "include"
     }).then(() => {
         window.location.href = "/dashboard";
-    }); 
+    });
 }
 
 function UntrackButton(props) {
     return (
-        <Button onClick={() =>handleUntrackButtonSubmit(props.company)} variant="warning" className={`${styles["untrack-btn"]} d-flex align-items-center`}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
-            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-        </svg>            <span className={`${styles["untrack-text"]}`}>Untrack</span>
+        <Button onClick={() => handleUntrackButtonSubmit(props.company)} variant="warning" className={`${styles["untrack-btn"]} d-flex align-items-center`}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
+                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+            </svg>            <span className={`${styles["untrack-text"]}`}>Untrack</span>
         </Button>
-    ); 
+    );
 }
 
 function handleStatusButtonSubmit(company, status) {
     console.log("Adding " + company + ", " + status);
     fetch(`${process.env.REACT_APP_BACKEND}/company/${company}/addStatus`, {
         method: "POST",
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             companyName: company,
             status: status
         }),
         credentials: "include"
     }).then(response => response.json())
-    .then(response => {
-        window.location.href = "";
-    }); 
+        .then(response => {
+            window.location.href = "";
+        });
 }
 
 function EmailAccordion(props) {

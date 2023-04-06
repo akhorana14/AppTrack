@@ -10,8 +10,14 @@ export default class CompanyController {
         });
     }
     
-    static async getByNameAndCreateIfNotExist(name: string, leetcodeLink: string, levelsLink: string):Promise<Company | null> {
+    static async getByNameAndCreateIfNotExist(name: string, leetcodeLink?: string, levelsLink?: string):Promise<Company | null> {
         if(!await this.companyRepository.exist({where: {name: name}})) {
+            if(leetcodeLink === undefined) {
+                leetcodeLink = `https://leetcode.com/discuss/interview-question?currentPage=1&orderBy=most_relevant&query=${name}`;
+            }
+            if(levelsLink === undefined) {
+                levelsLink = `https://www.levels.fyi/companies/${name}/salaries`;
+            }
             await this.save(new Company(name, leetcodeLink, levelsLink, "blue"));
         }
         return this.companyRepository.findOne({

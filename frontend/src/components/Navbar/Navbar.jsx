@@ -9,7 +9,7 @@ import './Navbar.css';
 
 async function getNewUpdates() {
   let res = await fetch(`${process.env.REACT_APP_BACKEND}/dashboard`, {
-      credentials: "include"
+    credentials: "include"
   });
   if (res.ok) {
     return await res.json();
@@ -21,9 +21,11 @@ function GetNavbar() {
 
   useEffect(() => {
     fetchNewUpdate();
-  });
+    getLoginStatus();
+  }, []);
 
   const [newUpdateData, setNewUpdateData] = useState([]);
+  const [userInfo, setUserInfo] = useState({});
 
   async function fetchNewUpdate() {
     let newUpdates = await getNewUpdates();
@@ -41,6 +43,15 @@ function GetNavbar() {
     const newList = [];
     setNewUpdateData(newList);
   };
+  
+  async function getLoginStatus() {
+    let res = await fetch(`${process.env.REACT_APP_BACKEND}/user/info`, {
+      credentials: "include"
+    });
+    if (res.ok) {
+      setUserInfo(await res.json());
+    }
+  }
 
   const navDropDownTitle = (<Icon.Justify href="#menu" class="menu">Menu</Icon.Justify>)
   const navNotifications = (<Icon.BellFill href="#bell" class="bell">Notification</Icon.BellFill>)
@@ -56,6 +67,9 @@ function GetNavbar() {
         <Navbar.Collapse id="basic-navbar-nav">
 
           <Nav className="ms-auto"> {/* align below items to the right */}
+            <Navbar.Text>
+              {userInfo.name === undefined ? "Unauthenticated" : `Signed in as: ${userInfo.name}`}
+            </Navbar.Text>
             <NavDropdown title={navNotifications} id="notifications" align="end">
               <div className='notificationHeading'>
                 <p className='headingNotification'>Notifications</p>
@@ -67,12 +81,12 @@ function GetNavbar() {
                   <button className='buttonNotification' id={info.Company}>
                     <div className='buttonDiv'>
                       <p className='p1'>{info.company.name}</p>
-                      <p className='p2'>{info.date.substr(0,9)}</p>
+                      <p className='p2'>{info.date.substr(0, 9)}</p>
                     </div>
                   </button>
                 </NavDropdown.Item>
               ))}</tbody>
-              </NavDropdown>
+            </NavDropdown>
             <NavDropdown title={navDropDownTitle} id="basic-nav-dropdown" align="end">
               <NavDropdown.Item href="/dashboard">
                 Dashboard</NavDropdown.Item>
@@ -81,7 +95,7 @@ function GetNavbar() {
                 Calendar</NavDropdown.Item>
 
               <NavDropdown.Item href="/">
-                Sign In</NavDropdown.Item>  
+                Sign In</NavDropdown.Item>
 
               <NavDropdown.Divider />
               <NavDropdown.Item href="/settings">

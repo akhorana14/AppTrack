@@ -32,7 +32,7 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
         try {
             if (await OpenAIClient.isJobRelated(body)) {
                 let { company: companyName, classification } = await OpenAIClient.classifyEmail(body);
-                let company = await CompanyController.getByNameAndCreateIfNotExist(companyName, "", "");
+                let company = await CompanyController.getByNameAndCreateIfNotExist(companyName);
                 let isActionItem = classification != Classification.OTHER ? true : false;
                 //TODO: Acquire this from OpenAI
                 let actionDate = date;
@@ -52,6 +52,20 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
     EventController.save(...newEvents);
     //Redirect to dashboard after successful refresh
     res.redirect(`${process.env.APPTRACK_FRONTEND}/dashboard`);
+});
+
+router.get('/info', async function (req: any, res) { 
+    if(req.user) {
+        var obj = {
+            name: req.user.displayName,
+            photos: req.user.photos,
+            emails: req.user.emails
+        }
+        res.send(obj);
+    }
+    else {
+        res.sendStatus(401);
+    }
 });
 
 router.post("/setDate", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
