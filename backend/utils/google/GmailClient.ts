@@ -1,6 +1,7 @@
 import { google } from "googleapis";
 import { gmail_v1 } from "googleapis/build/src/apis/gmail";
 import User from "../../models/User";
+import { convert } from 'html-to-text';
 
 export default class GmailClient {
 
@@ -37,7 +38,6 @@ export default class GmailClient {
             {
                 userId: 'me',
                 q: query,
-                includeSpamTrash: true,
                 maxResults: 500
             }
         );
@@ -60,23 +60,37 @@ export default class GmailClient {
     }
 
     public static getEmailBody(message: gmail_v1.Schema$MessagePart): string {
+        let fullBody = "";
         if (message.mimeType?.startsWith('multipart')) {
-            let fullBody = message.body!.data == undefined ? "" : message.body!.data;
+            fullBody += message.body!.data == undefined ? "" : message.body!.data;
             for (let msgPart of message.parts!) {
                 if (msgPart.mimeType?.startsWith("multipart")) {
                     for (let subMsgPart of msgPart.parts!) {
-                        if (subMsgPart.mimeType?.startsWith('text/plain')) {
-                            fullBody += Buffer.from(subMsgPart.body!.data!, 'base64').toString("ascii");
+                        if (subMsgPart.mimeType?.startsWith('text/html')) {
+                            fullBody += Buffer.from(subMsgPart.body!.data!, 'base64').toString("utf-8");
                         }
                     }
                 }
-                else if(msgPart.mimeType?.startsWith("text/plain")) {
-                    fullBody += msgPart.body!.data == undefined ? "" : Buffer.from(msgPart.body!.data!, 'base64').toString("ascii");
+                else if (msgPart.mimeType?.startsWith("text/html")) {
+                    fullBody += msgPart.body!.data == undefined ? "" : Buffer.from(msgPart.body!.data!, 'base64').toString("utf-8");
                 }
             }
-            return fullBody;
         }
-        return Buffer.from(message.body!.data! ??= "", 'base64').toString("ascii");
+        else {
+            fullBody += Buffer.from(message.body!.data! ??= "", 'base64').toString("utf-8");
+        }
+        let processedText = convert(fullBody, {
+            wordwrap: false,
+            selectors: [
+                {
+                    selector: 'a',
+                    //Prevent this from exporting link hrefs
+                    options: { ignoreHref: true }
+                }
+            ]
+        });
+        //Remove blank lines and brackets
+        return processedText.replace(/(\[.+\])/g, '');
     }
 
     public async getEmailsFromMessageId(...messageIds: string[]) {

@@ -17,8 +17,19 @@ export default router;
 router.get('/:company', GoogleAuth.getAuthMiddleware(), async function (req: any, res) {
     let companyName: string = req.params["company"];
     let company = await CompanyController.getByName(companyName);
-    if(company != null) {
+    if (company != null) {
         res.send(await EventController.getEventsByUserAndCompany(req.user, company!));
+    }
+    else {
+        res.sendStatus(404);
+    }
+});
+
+router.get('/:company/info', GoogleAuth.getAuthMiddleware(), async function (req: any, res) {
+    let companyName: string = req.params["company"];
+    let company = await CompanyController.getByName(companyName);
+    if (company != null) {
+        res.send(company)
     }
     else {
         res.sendStatus(404);
@@ -27,17 +38,17 @@ router.get('/:company', GoogleAuth.getAuthMiddleware(), async function (req: any
 
 
 router.post("/:company/untrack", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
-    await EventController.removeCompany(req.user, req.body.companyName); 
+    await EventController.removeCompany(req.user, req.body.companyName);
 
     await res.send({
         "status": "Untracking company"
     });
-}); 
+});
 
 router.post("/:company/addStatus", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
-    var classification = -1; 
+    var classification = -1;
 
-    switch(req.body.status) {
+    switch (req.body.status) {
         case "Applied":
             classification = Classification.APPLIED;
             break;
@@ -53,13 +64,13 @@ router.post("/:company/addStatus", GoogleAuth.getAuthMiddleware(), jsonParser, a
         case "Reject":
             classification = Classification.REJECT;
             break;
-        default: 
+        default:
             classification = -1;
             break;
     }
 
     if (classification !== -1) {
-        await EventController.addStatus(req.user, req.body.companyName, classification, req.body.status, req.body.description, new Date(req.body.date)); 
+        await EventController.addStatus(req.user, req.body.companyName, classification, req.body.status, req.body.description, new Date(req.body.date));
         await res.send({
             "status": "Added status"
         });
