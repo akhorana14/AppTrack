@@ -28,4 +28,10 @@ export default class User implements googleauth.Profile {
     //boolean variable to determine if the user deactivated the account
     @Column({ nullable: true })
     accountDeactivated?: boolean;
+
+    /**
+     * Determines whether AppTrack should scrape this user's email or not (set upon registration / and also in settings).
+     */
+    @Column({ default: false })
+    scrape?: boolean;
 }
