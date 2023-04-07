@@ -22,6 +22,10 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
         res.send("Account was deactivated");
         return;
     }
+    else if (!req.user.scrape) {
+        res.redirect(`${process.env.APPTRACK_FRONTEND}/dashboard`);
+        return;
+    }
     let messages = await getEmails(new GmailClient(user), user.lastEmailRefreshTime);
     let newEvents: Event[] = [];
     for (let message of messages) {
@@ -54,8 +58,8 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
     res.redirect(`${process.env.APPTRACK_FRONTEND}/dashboard`);
 });
 
-router.get('/info', async function (req: any, res) { 
-    if(req.user) {
+router.get('/info', async function (req: any, res) {
+    if (req.user) {
         var obj = {
             name: req.user.displayName,
             photos: req.user.photos,
