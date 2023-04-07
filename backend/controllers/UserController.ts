@@ -16,6 +16,10 @@ export default class UserController {
         userObject.accountDeactivated = false;
     }
 
+    static async removeUser(...user: User[]) {
+        await this.userRepository.remove(user);
+    }
+
     static async save(...user: User[]) {
         await this.userRepository.save(user);
     }

@@ -45,14 +45,6 @@ router.post("/:company/untrack", GoogleAuth.getAuthMiddleware(), jsonParser, asy
     });
 });
 
-router.post("/:company/offerviewed", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
-    await EventController.readByUser(req.user, req.body.companyName);
-
-    await res.send({
-        "status": "Untracking company"
-    });
-});
-
 router.post("/:company/addStatus", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
     var classification = -1;
 

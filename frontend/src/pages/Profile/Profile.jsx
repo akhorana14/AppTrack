@@ -44,6 +44,10 @@ function Profile(props) {
         window.location = "/";
     }
 
+    function deleteAccount() {
+        handleDeleteButton();
+    }
+
     function deactivate() {
         fetch(`${process.env.REACT_APP_BACKEND}/settings/deactivate`, {
             method: "POST",
@@ -266,7 +270,8 @@ function Profile(props) {
                                 </Card>
                                 <br />
                                 <div><a href="#" class="btn btn-primary" onClick={submitDate} style={{ margin: '1rem'}}>Submit</a>
-                                <a href="#" class="btn btn-secondary" style={{ margin: '1rem'}} onClick={logOut}>Logout</a></div>
+                                <a href="#" class="btn btn-secondary" style={{ margin: '1rem'}} onClick={logOut}>Logout</a>
+                                <a href="#" class="btn btn-danger" style={{ margin: '1rem'}} onClick={deleteAccount}>Delete Account</a></div>
                             </div>
                         </div>
                     </div>
@@ -292,5 +297,17 @@ function Profile(props) {
         </div>
     );
 };
+
+function handleDeleteButton() {
+    fetch(`${process.env.REACT_APP_BACKEND}/settings/deleteuser`, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+        }),
+        credentials: "include"
+    }).then(() => {
+        window.location.href = "/";
+    });
+}
 
 export default Profile;
