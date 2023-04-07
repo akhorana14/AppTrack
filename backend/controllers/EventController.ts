@@ -46,6 +46,24 @@ export default class EventController {
         })
     }
 
+    static async readByUser(user: User, company: string) {
+        var offerEvent = await this.eventRepository.find({
+            relations: {
+                company: true,
+                user: true
+            },
+            where: {
+                company: {
+                    name: company
+                },
+                user: this.getDBObject(user, User) as FindOptionsWhere<User>
+            }
+        });
+
+        offerEvent[0].isRead = true;
+        this.eventRepository.save(offerEvent[0]);
+    }
+
     // get new updates, but order by Action Item date
     static async getNewUpdatesByUser2(user: User) {
         let dateRange = new Date();

@@ -1,6 +1,7 @@
 import Header from "../../components/Header"
 import Navbar from "../../components/Navbar/Navbar"
 import styles from './Company.module.css';
+import CongratsModal from '../../components/CongratsPopup/CongratsModal';
 
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -91,6 +92,23 @@ function Company() {
         }
     }
 
+    function showCongrats() {
+        let offer = false;
+        let offerEvent = null;
+        for (let i = 0; i < events.length; i++) {
+            let event = events[i];
+            console.log(event.classification);
+            if (event.classification == 3 && event.isRead == false) {
+                offer = true;
+                offerEvent = event;
+            }
+        }
+        if (offer) {
+            handleOfferRead(companyName);
+        }
+        return offer;
+    }
+
     async function getCompanyInfo() {
         let res = await fetch(`${process.env.REACT_APP_BACKEND}/company/${companyName}/info`, {
             credentials: "include"
@@ -105,6 +123,7 @@ function Company() {
         <>
             <Header title={`Your Application @ ${companyName}`} />
             <Navbar />
+            <CongratsModal show={showCongrats}/>
             <div className={styles["main-content"]}>
                 <Container fluid className="h-100">
                     <Row className="justify-content-center h-100">
@@ -274,6 +293,17 @@ function LeetcodeButton(props) {
             Leetcode
         </Button>
     );
+}
+
+async function handleOfferRead(company) {
+    fetch(`${process.env.REACT_APP_BACKEND}/company/${company}/offerviewed`, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            companyName: company
+        }),
+        credentials: "include"
+    });
 }
 
 function handleUntrackButtonSubmit(company) {
