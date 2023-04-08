@@ -86,6 +86,38 @@ router.post("/setDate", GoogleAuth.getAuthMiddleware(), jsonParser, async functi
     res.sendStatus(200);
 });
 
+router.post("/deleteuser", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
+    await UserController.removeUser(req.user);
+
+    await res.send({
+        "status": "Deleted user"
+    });
+});
+
+router.post("/deactivate", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
+    let user: User = req.user;
+    user.accountDeactivated = false;
+    await UserController.save();
+});
+
+router.post("/activate", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
+    let user: User = req.user;
+    user.accountDeactivated = true;
+    await UserController.save();
+});
+
+router.get('/userstatus', GoogleAuth.getAuthMiddleware(), async function (req: any, res) {
+    if (req.user) {
+        var obj = {
+            accountDeactivated: req.user.accountDeactivated
+        }
+        res.send(obj);
+    }
+    else {
+        res.sendStatus(401);
+    }
+});
+
 /**
  * Get emails from a Gmail Client, optionally after a certain date
  * @param client The GmailClient to use

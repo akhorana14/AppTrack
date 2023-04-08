@@ -4,6 +4,7 @@ import './Dashboard.css';
 import '../../static/globals.css';
 import MotivationModal from '../../components/MotivationPopup/MotivationModal';
 import Button from 'react-bootstrap/Button';
+//import ActivateModal from '../../components/ActivatePopup/ActivateModal';
 
 //This order was taken very carefully from backend/models/Classification.ts
 //Make sure to keep it in this order to avoid mixing up labels
@@ -118,6 +119,7 @@ function Dashboard() {
     <>
       <div className='text-center'>
         <Navbar />
+        {/*<ActivateModal />*/}
         <MotivationModal />
         {/* searchbar: https://bbbootstrap.com/snippets/bootstrap-5-search-bar-microphone-icon-inside-12725910*/}
         <div class="search">

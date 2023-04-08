@@ -4,36 +4,33 @@ import Button from 'react-bootstrap/Button';
 import './ActivateModal.module.css';
 
 
-function CongratsModal() {
+async function activate() {
+    fetch(`${process.env.REACT_APP_BACKEND}/user/activate`, {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+        }),
+        credentials: "include"
+    }).then(response => response.json())
+    .then(response => {
+        window.location.href = "";
+    });
+    window.location = "/dashboard";
+    console.log(document.getElementById('reasonForDeactivation').value);
+}
 
-    function activate() {
-        fetch(`${process.env.REACT_APP_BACKEND}/settings/activate`, {
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                message: document.getElementById('reasonForDeactivation').value
-            }),
-            credentials: "include"
-        }).then(response => response.json())
-        .then(response => {
-            window.location.href = "";
-        });
-        window.location = "/";
-        console.log(document.getElementById('reasonForDeactivation').value);
+async function getAccountStatus() {
+    let res = await fetch(`${process.env.REACT_APP_BACKEND}/user/userstatus`, {
+      credentials: "include"
+    });
+    if (res.ok) {
+      return await res.json();
     }
+}
 
-    let shouldshow = getAccountStatus().accountDeactivated;
-
-    async function getAccountStatus() {
-        let res = await fetch(`${process.env.REACT_APP_BACKEND}/settings/userstatus`, {
-          credentials: "include"
-        });
-        if (res.ok) {
-          return await res.json();
-        }
-      }
+function ActivateModal() {
     
-    const [show, setShow] = React.useState(shouldshow);
+    const [show, setShow] = React.useState(getAccountStatus().accountDeactivated);
 
     function handleCloseNo() {
         setShow(false);
@@ -66,4 +63,4 @@ function CongratsModal() {
         
 }
 
-export default CongratsModal;
+export default ActivateModal;

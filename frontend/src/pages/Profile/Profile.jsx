@@ -50,7 +50,7 @@ function Profile(props) {
     }
 
     function deactivate() {
-        fetch(`${process.env.REACT_APP_BACKEND}/settings/deactivate`, {
+        fetch(`${process.env.REACT_APP_BACKEND}/user/deactivate`, {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -301,7 +301,7 @@ function Profile(props) {
 };
 
 function handleDeleteButton() {
-    fetch(`${process.env.REACT_APP_BACKEND}/settings/deleteuser`, {
+    fetch(`${process.env.REACT_APP_BACKEND}/user/deleteuser`, {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
