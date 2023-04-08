@@ -15,3 +15,31 @@ router.post("/deleteuser", GoogleAuth.getAuthMiddleware(), jsonParser, async fun
         "status": "Deleted user"
     });
 });
+
+router.post("/deactivate", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
+    await UserController.deactivate(req.user, req.body.message);
+
+    await res.send({
+        "status": "Deleted user"
+    });
+});
+
+router.post("/activate", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
+    await UserController.deactivate(req.user, req.body.message);
+
+    await res.send({
+        "status": "Deleted user"
+    });
+});
+
+router.get('/userstatus', GoogleAuth.getAuthMiddleware(), async function (req: any, res) {
+    if (req.user) {
+        var obj = {
+            accountDeactivated: req.user.accountDeactivated
+        }
+        res.send(obj);
+    }
+    else {
+        res.sendStatus(401);
+    }
+});

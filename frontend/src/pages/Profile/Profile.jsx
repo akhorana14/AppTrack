@@ -10,6 +10,7 @@ import ListGroup from "react-bootstrap/esm/ListGroup";
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import GoogleAuth from "../../components/GoogleAuth/GoogleAuth";
+import ActivateModal from '../../components/ActivatePopup/ActivateModal';
 
 
 function Profile(props) {
@@ -53,7 +54,7 @@ function Profile(props) {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                
+                message: document.getElementById('reasonForDeactivation').value
             }),
             credentials: "include"
         }).then(response => response.json())
@@ -98,6 +99,7 @@ function Profile(props) {
     return (
         <div className={style["profile-body"]}>
             <Navbar />
+            <ActivateModal />
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                 <Modal.Title>Confirm Deletion</Modal.Title>
