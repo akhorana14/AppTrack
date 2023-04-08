@@ -13,10 +13,10 @@ export default class OpenAIClient {
      * @param messageBody the body of the email to determine if is job related or not
      * @returns true if email is job related; false otherwise
      */
-    public static async isJobRelated(messageBody:string):Promise<boolean> {
-        const promptBase = "Is the following email related to a job application? (Yes or No):\n";
-        let response = await this.sendMessageToGPT(promptBase+"\n"+messageBody);
-        if(response.includes("Yes")) {
+    public static async isJobRelated(messageBody: string): Promise<boolean> {
+        const promptBase = "Is the following email related to a job application? (Respond with 'Yes' or 'No'):\n";
+        let response = await this.sendMessageToGPT(promptBase + "\n" + messageBody);
+        if (response.includes("Yes")) {
             return true;
         }
         else {
@@ -30,13 +30,20 @@ export default class OpenAIClient {
      * @param messageBody a message body to classify
      * @returns an object containing information about the email
      */
-    public static async classifyEmail(messageBody: string): Promise<{ classification: Classification, company: string }> {
-        const promptBase = String.raw`Please classify the following email, as one of the following 
-            {"Offer", "Application Confirmation", "Interview", "Online Assessment", "Other", or "Rejection"} 
-            and categorize the company name (or "Unknown") in a JSON object. 
-            For example {"company":"Test", "classification": "Rejection"}:`;    
-        let response = JSON.parse(await this.sendMessageToGPT(promptBase+"\n"+messageBody));
-        let output = { classification: parseClassification(response.classification), company: response.company }
+    public static async classifyEmail(messageBody: string): Promise<{ classification: Classification, company: string, date?: Date }> {
+        const promptBase = String.raw`Please classify the following email as one of the following {'Offer', 'Application Confirmation', 
+        'Interview', 'Online Assessment', 'Other', or 'Rejection'}, categorize the company name (or 'Unknown'), 
+        and the deadline date (or 'Unknown') in a JSON object.  
+        For example {"company":"Test", "classification": "Rejection", "date": "September 9, 2021"}:`;
+        let response = JSON.parse(await this.sendMessageToGPT(promptBase + "\n" + messageBody));
+        let output: { classification: Classification, company: string, date?: Date } = { classification: parseClassification(response.classification), company: response.company }
+        if (response.date != undefined && response.date != null) {
+            let d = new Date(response.date);
+            //Add year check to prevent any invalid dates with the year 1969 (epoch doesn't begin until 1970, so 1969 is the placeholder for invalid dates)
+            if (d.toString() != "Invalid Date" && d.getFullYear() > 2000) {
+                output.date = d;
+            }
+        }
         return output;
     }
 
@@ -46,7 +53,7 @@ export default class OpenAIClient {
      * @param message the message to send
      * @returns GPT response
      */
-    private static async sendMessageToGPT(message:string):Promise<string> {
+    private static async sendMessageToGPT(message: string): Promise<string> {
         try {
             const completion = await openai.createChatCompletion(
                 {
@@ -61,12 +68,12 @@ export default class OpenAIClient {
                     ],
                 },
                 {
-                    timeout: 5000
+                    timeout: 30000
                 }
             );
             return completion.data.choices[0].message?.content!;
         }
-        catch(err) {
+        catch (err) {
             console.error(err);
             throw err;
         }

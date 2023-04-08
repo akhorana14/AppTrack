@@ -35,25 +35,24 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
         let emailLink = `https://mail.google.com/mail/u/0/#search/rfc822msgid:${encodeURIComponent(GmailClient.getEmailHeader(message, "Message-ID"))}`;
         try {
             if (await OpenAIClient.isJobRelated(body)) {
-                let { company: companyName, classification } = await OpenAIClient.classifyEmail(body);
+                let { company: companyName, classification, date: potentialDate } = await OpenAIClient.classifyEmail(body);
                 let company = await CompanyController.getByNameAndCreateIfNotExist(companyName);
                 let isActionItem = classification != Classification.OTHER ? true : false;
-                //TODO: Acquire this from OpenAI
-                let actionDate = date;
+                let actionDate = potentialDate === undefined ? date : potentialDate;
                 newEvents.push(new Event(user, date, subject, body, company!, emailLink, isActionItem, classification, false, actionDate));
             }
         }
         catch (error) {
             console.log(`Error while scanning emails: ${error}`);
-            break;
+            continue;
         }
     }
     //Convert milliseconds to seconds
     user.lastEmailRefreshTime = Math.round(new Date().getTime() / 1000);
-    //Save the user's new refresh time
+    //Save the user's new refresh time (if applicable)
     await UserController.save(user);
     //Save all of the events
-    EventController.save(...newEvents);
+    await EventController.save(...newEvents);
     //Redirect to dashboard after successful refresh
     res.redirect(`${process.env.APPTRACK_FRONTEND}/dashboard`);
 });
@@ -84,6 +83,13 @@ router.post("/setDate", GoogleAuth.getAuthMiddleware(), jsonParser, async functi
     }
     await UserController.save(user);
     res.sendStatus(200);
+});
+
+router.get("/logout", GoogleAuth.getAuthMiddleware(), async function (req: any, res: any) {
+    req.logout(function (err: any) {
+        if (err) { console.error(`Logout error for ${req.user}`) }
+        res.redirect(`${process.env.APPTRACK_FRONTEND}/`);
+    });
 });
 
 /**
