@@ -129,6 +129,35 @@
 
 .card {
     margin-left: 10px;
+    cursor: pointer;
+    border-width: 2px;
+}
+
+.card_light {
+    background-color: white;
+    color: black;
+    border-color: #0d6efd;
+}
+
+.card_dark {
+    background-color: #171717;
+    color: white;
+}
+
+.card_programmer {
+    background-color: black;
+    color: greenyellow;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.card_fun {
+    background-color: #EDffab;
+    color: purple;
+}
+
+.card_soft {
+    background-color: peachpuff;
+    color: #1D7874;
 }
 
 .card2 {

@@ -220,25 +220,47 @@ function Profile(props) {
                                 <h1>Settings</h1>
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title">Display Settings</h5>
-                                <p class="card-text">Choose a fun color scheme to use AppTrack with</p>
+                                <h5 class="card-title">Appearance Settings</h5>
+                                <p class="card-text">Choose a color scheme to use AppTrack with</p>
                                 <div className={style.cardList}>
-                                <Card className={style.card} style={{ width: '18rem' }}>
+                                <Card className={`${style.card} ${style.card_light}`} style={{ width: '20%' }}>
                                     <Card.Body>
-                                    <Card.Title>Default Light Mode</Card.Title>
+                                    <Card.Title>Light</Card.Title>
                                     <Card.Text>
-                                        The default Light Mode for AppTrack.
+                                        The default light theme.
                                     </Card.Text>
-                                        <Button variant="primary">Select</Button>
                                     </Card.Body>
                                 </Card>
-                                <Card className={style.card} style={{ width: '18rem' }}>
+                                <Card className={`${style.card} ${style.card_dark}`} style={{ width: '20%' }}>
                                     <Card.Body>
-                                    <Card.Title>Default Dark Mode</Card.Title>
+                                    <Card.Title>Dark</Card.Title>
                                     <Card.Text>
-                                        The default Dark Mode for AppTrack.
+                                        The default dark theme.
                                     </Card.Text>
-                                        <Button variant="primary">Select</Button>
+                                    </Card.Body>
+                                </Card>
+                                <Card className={`${style.card} ${style.card_programmer}`} style={{ width: '20%' }}>
+                                    <Card.Body>
+                                    <Card.Title>Coder</Card.Title>
+                                    <Card.Text>
+                                        The coder's theme.
+                                    </Card.Text>
+                                    </Card.Body>
+                                </Card>
+                                <Card className={`${style.card} ${style.card_fun}`} style={{ width: '20%' }}>
+                                    <Card.Body>
+                                    <Card.Title>Fun</Card.Title>
+                                    <Card.Text>
+                                        The fun color theme.
+                                    </Card.Text>
+                                    </Card.Body>
+                                </Card>
+                                <Card className={`${style.card} ${style.card_soft}`} style={{ width: '20%' }}>
+                                    <Card.Body>
+                                    <Card.Title>Soft</Card.Title>
+                                    <Card.Text>
+                                        The soft color theme.
+                                    </Card.Text>
                                     </Card.Body>
                                 </Card>
                                 </div>
