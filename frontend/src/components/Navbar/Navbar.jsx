@@ -3,8 +3,10 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 import * as Icon from 'react-bootstrap-icons';
 import React, { useState, useEffect } from 'react';
+
 
 import './Navbar.css';
 
@@ -53,7 +55,6 @@ function GetNavbar() {
       setUserInfo(await res.json());
     }
   }
-
   const navDropDownTitle = (<Icon.Justify href="#menu" class="menu">Menu</Icon.Justify>)
   const navNotifications = (<Icon.BellFill href="#bell" class="bell">Notification</Icon.BellFill>)
   // const navHomeButton = (<Icon.HouseDoorFill href="#home" class="home">Home</Icon.HouseDoorFill>)
@@ -105,8 +106,7 @@ function GetNavbar() {
 
             </NavDropdown>
 
-            {/* <button type="button" class="btn btn-link">{navProfileButton}</button>
-            <button type="button" class="btn btn-link">{navHomeButton}</button> */}
+            <Button variant="link" href={`${process.env.REACT_APP_BACKEND}/user/refresh`}><RefreshIcon loading={userInfo.currentlyScraping} /></Button>
             <Button variant="link" href={`${process.env.REACT_APP_BACKEND}/user/logout`}>{navLogoutButton}</Button>
           </Nav>
         </Navbar.Collapse>
@@ -115,4 +115,14 @@ function GetNavbar() {
   );
 }
 
+function RefreshIcon(props) {
+  if(props.loading === true) {
+  return (
+    <Spinner animation="border" size="sm" variant="light" />
+  );
+  }
+  else {
+    return (<Icon.ArrowClockwise className="logout" variant="light">Refresh Inbox</Icon.ArrowClockwise>)
+  }
+}
 export default GetNavbar;

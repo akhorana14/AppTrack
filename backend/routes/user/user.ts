@@ -8,9 +8,14 @@ import EventController from "../../controllers/EventController";
 import CompanyController from "../../controllers/CompanyController";
 import { Classification, parseClassification } from "../../models/Classification";
 import OpenAIClient from "../../utils/openai/OpenAIClient";
+import { gmail_v1 } from "googleapis";
 
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
+/**
+ * Tracks user ids with inboxes that are currently being scraped.
+ */
+const currentlyScrapedSet = new Set<string>();
 
 const router = express.Router();
 export default router;
@@ -22,47 +27,39 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
         res.redirect(`${process.env.APPTRACK_FRONTEND}/activate`);
         return;
     }
-    if (!req.user.scrape) {
-        res.redirect(`${process.env.APPTRACK_FRONTEND}/`);
-        return;
-    }
-    let messages = await getEmails(new GmailClient(user), user.lastEmailRefreshTime);
-    let newEvents: Event[] = [];
-    for (let message of messages) {
-        let date = new Date(GmailClient.getEmailHeader(message, "Date"));
-        let subject = GmailClient.getEmailHeader(message, "Subject");
-        let body = GmailClient.getEmailBody(message);
-        let emailLink = `https://mail.google.com/mail/u/0/#search/rfc822msgid:${encodeURIComponent(GmailClient.getEmailHeader(message, "Message-ID"))}`;
-        try {
-            if (await OpenAIClient.isJobRelated(body)) {
-                let { company: companyName, classification, date: potentialDate } = await OpenAIClient.classifyEmail(body);
-                let company = await CompanyController.getByNameAndCreateIfNotExist(companyName);
-                let isActionItem = classification != Classification.OTHER ? true : false;
-                let actionDate = potentialDate === undefined ? date : potentialDate;
-                newEvents.push(new Event(user, date, subject, body, company!, emailLink, isActionItem, classification, false, actionDate));
+    //Check if we have permission to scrape
+    if (user.scrape && !currentlyScrapedSet.has(user.id)) {
+        currentlyScrapedSet.add(user.id);
+        let messages = await getEmails(new GmailClient(user), user.lastEmailRefreshTime);
+        //Convert milliseconds to seconds
+        user.lastEmailRefreshTime = Math.round(new Date().getTime() / 1000);
+        //Save the user's new refresh time (if applicable)
+        await UserController.save(user);
+        
+        //Put this in a promise resolve so that scraping happens off the main thread
+        Promise.resolve().then(async () => {
+            try {
+                await scanEmails(user, messages);
             }
-        }
-        catch (error) {
-            console.log(`Error while scanning emails: ${error}`);
-            continue;
-        }
+            catch(err) {
+                console.error(`Error when scraping: ${err}`)
+            }
+            currentlyScrapedSet.delete(user.id);
+        });
     }
-    //Convert milliseconds to seconds
-    user.lastEmailRefreshTime = Math.round(new Date().getTime() / 1000);
-    //Save the user's new refresh time (if applicable)
-    await UserController.save(user);
-    //Save all of the events
-    await EventController.save(...newEvents);
+
     //Redirect to dashboard after successful refresh
     res.redirect(`${process.env.APPTRACK_FRONTEND}/dashboard`);
 });
 
 router.get('/info', async function (req: any, res) {
+    let user: User = req.user;
     if (req.user) {
         var obj = {
-            name: req.user.displayName,
-            photos: req.user.photos,
-            emails: req.user.emails
+            name: user.displayName,
+            photos: user.photos,
+            emails: user.emails,
+            currentlyScraping: currentlyScrapedSet.has(user.id)
         }
         res.send(obj);
     }
@@ -129,7 +126,7 @@ router.get("/logout", GoogleAuth.getAuthMiddleware(), async function (req: any, 
  * Get emails from a Gmail Client, optionally after a certain date
  * @param client The GmailClient to use
  * @param after The date to fetch emails after (in seconds since Unix epoch)
- * @returns 
+ * @returns a list of emails in descending order by date
  */
 async function getEmails(client: GmailClient, after?: number) {
     let messageIds: string[] = [];
@@ -141,4 +138,33 @@ async function getEmails(client: GmailClient, after?: number) {
         messageIds = await client.getListOfMessageIds(`after: ${after}`);
     }
     return client.getEmailsFromMessageId(...messageIds);
+}
+
+/**
+ * Scans and categorizes a list of emails using the OpenAI API
+ * @param user the user to read emails for
+ * @param messages a list of messages to scan
+ */
+async function scanEmails(user: User, messages:gmail_v1.Schema$MessagePart[]) {
+    //Iterate in reverse so we process oldest emails first
+    for (let message of messages) {
+        let date = new Date(GmailClient.getEmailHeader(message, "Date"));
+        let subject = GmailClient.getEmailHeader(message, "Subject");
+        let body = GmailClient.getEmailBody(message);
+        let emailLink = `https://mail.google.com/mail/u/0/#search/rfc822msgid:${encodeURIComponent(GmailClient.getEmailHeader(message, "Message-ID"))}`;
+        try {
+            if (await OpenAIClient.isJobRelated(body)) {
+                let { company: companyName, classification, date: potentialDate } = await OpenAIClient.classifyEmail(body);
+                let company = await CompanyController.getByNameAndCreateIfNotExist(companyName);
+                let isActionItem = classification != Classification.OTHER ? true : false;
+                let actionDate = potentialDate === undefined ? date : potentialDate;
+                let e = new Event(user, date, subject, body, company!, emailLink, isActionItem, classification, false, actionDate);
+                await EventController.save(e);
+            }
+        }
+        catch (error) {
+            //Save user last email refresh time (this will be earlier than current date so next iteration we can scan the ones we missed)
+            throw error;
+        }
+    }
 }
