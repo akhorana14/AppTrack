@@ -1,5 +1,5 @@
 import Navbar from "../../components/Navbar/Navbar"
-import React from "react";
+import React, { useEffect } from "react";
 import style from "./Profile.module.css";
 import * as Icon from 'react-bootstrap-icons';
 import Button from 'react-bootstrap/Button';
@@ -19,6 +19,12 @@ function Profile(props) {
     const handleShow = () => setShow(true);
     const [open, setOpen] = React.useState(false);
     const [date, setDate] = React.useState(new Date());
+
+    const [theme, setTheme] = React.useState(""); 
+
+    useEffect(() => {
+        setTheme(localStorage.getItem("apptrack_color_theme"));
+    });
 
     function handleCloseDelete() {
         window.location = "/";
@@ -89,6 +95,22 @@ function Profile(props) {
     function updateSelected(e) {
         let text = e.textContent;
         setSelected(text);
+    }
+
+    function setColorTheme(theme) {
+        fetch(`${process.env.REACT_APP_BACKEND}/user/setColorTheme`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                theme: theme
+            }),
+            credentials: "include"
+        })
+        .then(response => response.json())
+        .then(response => {
+            localStorage.setItem("apptrack_color_theme", response.colorTheme);
+            window.location.href = "";
+        });
     }
 
     return (
@@ -223,7 +245,7 @@ function Profile(props) {
                                 <h5 class="card-title">Appearance Settings</h5>
                                 <p class="card-text">Choose a color scheme to use AppTrack with</p>
                                 <div className={style.cardList}>
-                                <Card className={`${style.card} ${style.card_light}`} style={{ width: '20%' }}>
+                                <Card className={`${style.card} ${style.card_light}`} style={{ width: '20%' }} onClick={() => setColorTheme("light")}>
                                     <Card.Body>
                                     <Card.Title>Light</Card.Title>
                                     <Card.Text>
@@ -231,7 +253,7 @@ function Profile(props) {
                                     </Card.Text>
                                     </Card.Body>
                                 </Card>
-                                <Card className={`${style.card} ${style.card_dark}`} style={{ width: '20%' }}>
+                                <Card className={`${style.card} ${style.card_dark}`} style={{ width: '20%' }} onClick={() => setColorTheme("dark")}>
                                     <Card.Body>
                                     <Card.Title>Dark</Card.Title>
                                     <Card.Text>
@@ -239,7 +261,7 @@ function Profile(props) {
                                     </Card.Text>
                                     </Card.Body>
                                 </Card>
-                                <Card className={`${style.card} ${style.card_programmer}`} style={{ width: '20%' }}>
+                                <Card className={`${style.card} ${style.card_programmer}`} style={{ width: '20%' }} onClick={() => setColorTheme("coder")}>
                                     <Card.Body>
                                     <Card.Title>Coder</Card.Title>
                                     <Card.Text>
@@ -247,7 +269,7 @@ function Profile(props) {
                                     </Card.Text>
                                     </Card.Body>
                                 </Card>
-                                <Card className={`${style.card} ${style.card_fun}`} style={{ width: '20%' }}>
+                                <Card className={`${style.card} ${style.card_fun}`} style={{ width: '20%' }} onClick={() => setColorTheme("fun")}>
                                     <Card.Body>
                                     <Card.Title>Fun</Card.Title>
                                     <Card.Text>
@@ -255,7 +277,7 @@ function Profile(props) {
                                     </Card.Text>
                                     </Card.Body>
                                 </Card>
-                                <Card className={`${style.card} ${style.card_soft}`} style={{ width: '20%' }}>
+                                <Card className={`${style.card} ${style.card_soft}`} style={{ width: '20%' }} onClick={() => setColorTheme("soft")}>
                                     <Card.Body>
                                     <Card.Title>Soft</Card.Title>
                                     <Card.Text>
