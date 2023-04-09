@@ -7,6 +7,7 @@ import CreateApplication from "./pages/CreateApplication/CreateApplication"
 import SignIn from "./pages/SignIn/SignIn"
 import Dashboard from "./pages/Dashboard/Dashboard"
 import Profile from "./pages/Profile/Profile"
+import Activate from "./pages/Activate/Activate"
 import Navbar from "./components/Navbar/Navbar"
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
@@ -23,6 +24,7 @@ function App() {
             <Route path="/company/:company" element={<Company />} />
             <Route path="/createApplication" element={<CreateApplication />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/activate" element={<Activate />} />
         </Routes>
     </Router>
   );

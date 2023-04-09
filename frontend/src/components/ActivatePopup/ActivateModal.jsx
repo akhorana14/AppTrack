@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import './ActivateModal.module.css';
@@ -15,22 +15,12 @@ async function activate() {
     .then(response => {
         window.location.href = "";
     });
-    window.location = "/dashboard";
-    console.log(document.getElementById('reasonForDeactivation').value);
-}
-
-async function getAccountStatus() {
-    let res = await fetch(`${process.env.REACT_APP_BACKEND}/user/userstatus`, {
-      credentials: "include"
-    });
-    if (res.ok) {
-      return await res.json();
-    }
+    window.location = "/";
 }
 
 function ActivateModal() {
     
-    const [show, setShow] = React.useState(getAccountStatus().accountDeactivated);
+    const [show, setShow] = React.useState(true);
 
     function handleCloseNo() {
         setShow(false);

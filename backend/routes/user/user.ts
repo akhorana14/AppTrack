@@ -19,11 +19,11 @@ export default router;
 router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any, res) {
     let user: User = req.user;
     if (user.accountDeactivated) {
-        res.send("Account was deactivated");
+        res.redirect(`${process.env.APPTRACK_FRONTEND}/activate`);
         return;
     }
-    else if (!req.user.scrape) {
-        res.redirect(`${process.env.APPTRACK_FRONTEND}/dashboard`);
+    if (!req.user.scrape) {
+        res.redirect(`${process.env.APPTRACK_FRONTEND}/`);
         return;
     }
     let messages = await getEmails(new GmailClient(user), user.lastEmailRefreshTime);
@@ -96,13 +96,13 @@ router.post("/deleteuser", GoogleAuth.getAuthMiddleware(), jsonParser, async fun
 
 router.post("/deactivate", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
     let user: User = req.user;
-    user.accountDeactivated = false;
+    user.accountDeactivated = true;
     await UserController.save(user);
 });
 
 router.post("/activate", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
     let user: User = req.user;
-    user.accountDeactivated = true;
+    user.accountDeactivated = false;
     await UserController.save(user);
 });
 
