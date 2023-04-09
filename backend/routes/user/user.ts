@@ -86,6 +86,7 @@ router.post("/setDate", GoogleAuth.getAuthMiddleware(), jsonParser, async functi
 });
 
 router.post("/deleteuser", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
+    await EventController.removeEventsByUser(req.user);
     await UserController.removeUser(req.user);
 
     await res.send({
@@ -96,13 +97,13 @@ router.post("/deleteuser", GoogleAuth.getAuthMiddleware(), jsonParser, async fun
 router.post("/deactivate", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
     let user: User = req.user;
     user.accountDeactivated = false;
-    await UserController.save();
+    await UserController.save(user);
 });
 
 router.post("/activate", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
     let user: User = req.user;
     user.accountDeactivated = true;
-    await UserController.save();
+    await UserController.save(user);
 });
 
 router.get('/userstatus', GoogleAuth.getAuthMiddleware(), async function (req: any, res) {
