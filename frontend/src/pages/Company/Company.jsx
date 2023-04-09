@@ -94,13 +94,11 @@ function Company() {
 
     function showCongrats() {
         let offer = false;
-        let offerEvent = null;
         for (let i = 0; i < events.length; i++) {
             let event = events[i];
             console.log(event.classification);
             if (event.classification == 3 && event.isRead == false) {
                 offer = true;
-                offerEvent = event;
             }
         }
         if (offer) {

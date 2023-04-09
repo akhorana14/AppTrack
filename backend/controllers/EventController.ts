@@ -59,7 +59,6 @@ export default class EventController {
                 user: this.getDBObject(user, User) as FindOptionsWhere<User>
             }
         });
-
         offerEvent[0].isRead = true;
         this.eventRepository.save(offerEvent[0]);
     }
