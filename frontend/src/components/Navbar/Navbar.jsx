@@ -2,6 +2,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Button from 'react-bootstrap/Button';
 import * as Icon from 'react-bootstrap-icons';
 import React, { useState, useEffect } from 'react';
 
@@ -106,16 +107,12 @@ function GetNavbar() {
 
             {/* <button type="button" class="btn btn-link">{navProfileButton}</button>
             <button type="button" class="btn btn-link">{navHomeButton}</button> */}
-            <button type="button" class="btn btn-link" onClick={logout}>{navLogoutButton}</button>
+            <Button variant="link" href={`${process.env.REACT_APP_BACKEND}/user/logout`}>{navLogoutButton}</Button>
           </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
-}
-
-function logout() {
-  window.location = "/";
 }
 
 export default GetNavbar;

@@ -94,13 +94,11 @@ function Company() {
 
     function showCongrats() {
         let offer = false;
-        let offerEvent = null;
         for (let i = 0; i < events.length; i++) {
             let event = events[i];
             console.log(event.classification);
             if (event.classification == 3 && event.isRead == false) {
                 offer = true;
-                offerEvent = event;
             }
         }
         if (offer) {
@@ -279,7 +277,7 @@ function StageList(props) {
 
 function LevelsButton(props) {
     return (
-        <Button href={props.link} variant="light" className={`${styles["levels-btn"]} d-flex align-items-center`}>
+        <Button href={props.link} target="_blank" variant="light" className={`${styles["levels-btn"]} d-flex align-items-center`}>
             <img src="https://www.levels.fyi/assets/levelsiconfilledcolored.png" height="28" width="28" alt="Levels.fyi Logo" />
             Levels.fyi
         </Button>
@@ -288,7 +286,7 @@ function LevelsButton(props) {
 
 function LeetcodeButton(props) {
     return (
-        <Button href={props.link} variant="dark" className={`${styles["leetcode-btn"]} d-flex align-items-center`}>
+        <Button href={props.link} target="_blank" variant="dark" className={`${styles["leetcode-btn"]} d-flex align-items-center`}>
             <img src="https://leetcode.com/static/images/LeetCode_logo_rvs.png" height="28" width="28" alt="Leetcode Logo" />
             Leetcode
         </Button>
