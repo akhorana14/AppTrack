@@ -11,9 +11,9 @@ export default class UserController {
         });
     }
 
-    static async deactivate(user: User) {
-        var userObject = this.getDBObject(user, User) as FindOptionsWhere<User>
-        userObject.accountDeactivated = false;
+    static async removeUser(...user: User[]) {
+        
+        await this.userRepository.remove(user);
     }
 
     static async save(...user: User[]) {

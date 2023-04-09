@@ -1,5 +1,5 @@
 import Navbar from "../../components/Navbar/Navbar"
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import style from "./Profile.module.css";
 import * as Icon from 'react-bootstrap-icons';
 import Button from 'react-bootstrap/Button';
@@ -19,13 +19,30 @@ function Profile(props) {
     const handleShow = () => setShow(true);
     const [open, setOpen] = React.useState(false);
     const [date, setDate] = React.useState(new Date());
+    const [name, setName] = React.useState("");
+    const [photo, setPhoto] = React.useState("https://www.w3schools.com/howto/img_avatar.png");
 
-    function handleCloseDelete() {
+    useEffect(() => {
+        getLoginStatus();
+      }, []);
+
+    async function handleCloseDelete() {
         window.location = "/";
+        handleDeleteButton();
         setShow(false);
     }
 
-    function submitDate() {
+    async function getLoginStatus() {
+        let res = await fetch(`${process.env.REACT_APP_BACKEND}/user/info`, {
+          credentials: "include"
+        });
+        if (res.ok) {
+            setName((await res.json()).name);
+            setPhoto((await res.json()).photos[0]);
+        }
+    }
+
+    async function submitDate() {
         // send a request to the backend to update the date
         console.log("Sending request " + date);
         fetch(`${process.env.REACT_APP_BACKEND}/user/setDate`, {
@@ -44,12 +61,12 @@ function Profile(props) {
         window.location = "/";
     }
 
-    function deactivate() {
-        fetch(`${process.env.REACT_APP_BACKEND}/settings/deactivate`, {
+    async function deactivate() {
+        fetch(`${process.env.REACT_APP_BACKEND}/user/deactivate`, {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                
+                message: document.getElementById('reasonForDeactivation').value
             }),
             credentials: "include"
         }).then(response => response.json())
@@ -57,7 +74,6 @@ function Profile(props) {
             window.location.href = "";
         });
         window.location = "/";
-        console.log(document.getElementById('reasonForDeactivation').value);
     }
 
     function performSelection(e) {
@@ -111,8 +127,8 @@ function Profile(props) {
             <div class={style.main}>
             <div class={style.sidebar}>
                 <div class={style.user_panel}>
-                    <Image className={style.profile_image} src="https://www.w3schools.com/howto/img_avatar.png" roundedCircle />
-                    <p>Username</p>
+                    <Image className={style.profile_image} src={photo} roundedCircle />
+                    <p>{name}</p>
                 </div>
                 <div class={style.sidebar_item} id="Account" onClick={performSelection}>
                     <Icon.Person href="#profile" className={style.profile} />
@@ -134,10 +150,10 @@ function Profile(props) {
                     <Icon.QuestionCircle href="#profile" className={style.profile} />
                     <p>About</p>
                 </div>
-                <div class={style.logout_panel} id="Log Out" onClick={logOut}>
+                <a class={style.logout_panel} id="Log Out" href={`${process.env.REACT_APP_BACKEND}/user/logout`}>
                     <Icon.ArrowBarRight className={style.profile} />
                     <p>Log Out</p>
-                </div>
+                </a>
             </div>
             {
                 selected === "Account" ? (
@@ -147,11 +163,21 @@ function Profile(props) {
                                 <h1>Account</h1>
                             </div>
                             <div class="card-body">
-                                <Image className="accountPicture" src="https://www.w3schools.com/howto/img_avatar.png" roundedCircle width={300} />
+                                <Image className="accountPicture" src={photo} roundedCircle width={300} />
                                 <br /> <br />
-                                <h5 class="card-title">You are currently signed in as: Username</h5>
+                                <h5 class="card-title">You are currently signed in as: {name}</h5>
                                 <p class="card-text">Update your account with the options below.</p>
                                 <br />
+                                <Card className={style.card2} style={{ width: '35rem' }}>
+                                    <Card.Body>
+                                    <Card.Title>Deactivate Account</Card.Title>
+                                        <div style={{ display: 'flex' }}>
+                                            <input style={{ width: '30rem', height: '2rem' }} class="form-control" id="reasonForDeactivation" placeholder="Reason for Deactivation"></input>
+                                            <a href="#" class="btn btn-secondary" style={{ height: '2rem', marginLeft: '1rem', fontSize: '0.8rem'}} onClick={deactivate}>Deactivate</a>
+                                        </div>
+                                    </Card.Body>
+                                </Card>
+                                <br /> <br />
                                 <Button className={style.primary} variant="primary" onClick={() => setOpen(!open)}
                                     aria-controls="collapse" aria-expanded={open}>
                                     Change Email
@@ -254,19 +280,10 @@ function Profile(props) {
                                 <div className={style.dateWrapper}> 
                                     <Form.Control onChange={(e) => setDate(e.target.value)} type="date" className={style.date} />
                                 </div>
-                                <br /> <br />
-                                <Card className={style.card2} style={{ width: '35rem' }}>
-                                    <Card.Body>
-                                    <Card.Title>Deactivate Account</Card.Title>
-                                        <div style={{ display: 'flex' }}>
-                                            <input style={{ width: '30rem', height: '2rem' }} class="form-control" id="reasonForDeactivation" placeholder="Reason for Deactivation"></input>
-                                            <a href="#" class="btn btn-secondary" style={{ height: '2rem', marginLeft: '1rem', fontSize: '0.8rem'}} onClick={deactivate}>Deactivate</a>
-                                        </div>
-                                    </Card.Body>
-                                </Card>
+                                <br />
                                 <br />
                                 <div><a href="#" class="btn btn-primary" onClick={submitDate} style={{ margin: '1rem'}}>Submit</a>
-                                <a href="#" class="btn btn-secondary" style={{ margin: '1rem'}} onClick={logOut}>Logout</a></div>
+                                <a href={`${process.env.REACT_APP_BACKEND}/user/logout`} class="btn btn-secondary" style={{ margin: '1rem'}}>Logout</a></div>
                             </div>
                         </div>
                     </div>
@@ -292,5 +309,17 @@ function Profile(props) {
         </div>
     );
 };
+
+async function handleDeleteButton() {
+    fetch(`${process.env.REACT_APP_BACKEND}/user/deleteuser`, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+        }),
+        credentials: "include"
+    }).then(() => {
+        window.location.href = "/";
+    });
+}
 
 export default Profile;

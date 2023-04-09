@@ -80,6 +80,19 @@ export default class EventController {
         })
     }
 
+    static async removeEventsByUser(user: User):Promise<void> {
+        var eventsToRemove = await this.eventRepository.find({
+            relations: {
+                user: true
+            },
+            where: {
+                user: this.getDBObject(user, User) as FindOptionsWhere<User>
+            }
+        });
+
+        await this.eventRepository.remove(eventsToRemove);
+    }
+
     static async removeCompany(user: User, company: string):Promise<void> {
         var eventsToRemove = await this.eventRepository.find({
             relations: {

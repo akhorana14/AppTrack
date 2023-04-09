@@ -24,7 +24,7 @@ export default router;
 router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any, res) {
     let user: User = req.user;
     if (user.accountDeactivated) {
-        res.send("Account was deactivated");
+        res.redirect(`${process.env.APPTRACK_FRONTEND}/activate`);
         return;
     }
     //Check if we have permission to scrape
@@ -80,6 +80,39 @@ router.post("/setDate", GoogleAuth.getAuthMiddleware(), jsonParser, async functi
     }
     await UserController.save(user);
     res.sendStatus(200);
+});
+
+router.post("/deleteuser", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
+    await EventController.removeEventsByUser(req.user);
+    await UserController.removeUser(req.user);
+
+    await res.send({
+        "status": "Deleted user"
+    });
+});
+
+router.post("/deactivate", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
+    let user: User = req.user;
+    user.accountDeactivated = true;
+    await UserController.save(user);
+});
+
+router.post("/activate", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
+    let user: User = req.user;
+    user.accountDeactivated = false;
+    await UserController.save(user);
+});
+
+router.get('/userstatus', GoogleAuth.getAuthMiddleware(), async function (req: any, res) {
+    if (req.user) {
+        var obj = {
+            accountDeactivated: req.user.accountDeactivated
+        }
+        res.send(obj);
+    }
+    else {
+        res.sendStatus(401);
+    }
 });
 
 router.get("/logout", GoogleAuth.getAuthMiddleware(), async function (req: any, res: any) {
