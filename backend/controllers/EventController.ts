@@ -139,7 +139,7 @@ export default class EventController {
     }
 
     static async addStatus(user: User, company: string, classification: number, classificationText: string, description: string, date: Date):Promise<void> {
-        var companyObj = await CompanyController.getByName(company); 
+        var companyObj = await CompanyController.getByNameAndUser(company, user); 
         var userObj = await UserController.getById(user.id); 
         
         if (userObj != null && companyObj != null) {

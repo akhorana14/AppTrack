@@ -6,9 +6,9 @@ import { EntityTarget, FindOptionsWhere, MoreThan, LessThan, Not } from "typeorm
 export default class CompanyController {
     static readonly companyRepository = DBClient.getRepository(Company);
 
-    static async getByName(name: string):Promise<Company | null> {
+    static async getByNameAndUser(name: string, user: User):Promise<Company | null> {
         return this.companyRepository.findOne({
-            where: {name: name}
+            where: {name: name, user: this.getDBObject(user, User)}
         });
     }
     
@@ -25,15 +25,11 @@ export default class CompanyController {
             }
             await this.save(new Company(name, user, leetcodeLink, levelsLink, "blue", true, position));
         }
-        return this.companyRepository.findOne({
-            where: {name: name}
-        });
+        return this.getByNameAndUser(name, user);
     }
 
     static async untrackCompany(name: string, user: User):Promise<void> {
-        var company = await this.companyRepository.findOne({
-            where: {name: name, user: this.getDBObject(user, User)}
-        }); 
+        var company = await this.getByNameAndUser(name, user);
 
         if (company !== null) {
             company.track = false; 
