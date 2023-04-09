@@ -17,7 +17,7 @@ export default class EventController {
 
     static async getEventsByUserAndCompany(user: User, company: Company) {
         return this.eventRepository.find({
-            where: { company: company, user: this.getDBObject(user, User) as FindOptionsWhere<User> },
+            where: { company: this.getDBObject(company, Company) as FindOptionsWhere<Company>, user: this.getDBObject(user, User) as FindOptionsWhere<User> },
             //Sort ascending by date
             order: {
                 date: "ASC"

@@ -36,7 +36,7 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
         try {
             if (await OpenAIClient.isJobRelated(body)) {
                 let { company: companyName, classification, date: potentialDate } = await OpenAIClient.classifyEmail(body);
-                let company = await CompanyController.getByNameAndCreateIfNotExist(companyName);
+                let company = await CompanyController.getByNameAndCreateIfNotExist(companyName, req.user);
                 let isActionItem = classification != Classification.OTHER ? true : false;
                 let actionDate = potentialDate === undefined ? date : potentialDate;
                 newEvents.push(new Event(user, date, subject, body, company!, emailLink, isActionItem, classification, false, actionDate));
