@@ -150,10 +150,10 @@ function Profile(props) {
                     <Icon.QuestionCircle href="#profile" className={style.profile} />
                     <p>About</p>
                 </div>
-                <div class={style.logout_panel} id="Log Out" onClick={logOut}>
+                <a class={style.logout_panel} id="Log Out" href={`${process.env.REACT_APP_BACKEND}/user/logout`}>
                     <Icon.ArrowBarRight className={style.profile} />
                     <p>Log Out</p>
-                </div>
+                </a>
             </div>
             {
                 selected === "Account" ? (
@@ -283,7 +283,7 @@ function Profile(props) {
                                 <br />
                                 <br />
                                 <div><a href="#" class="btn btn-primary" onClick={submitDate} style={{ margin: '1rem'}}>Submit</a>
-                                <a href="#" class="btn btn-secondary" style={{ margin: '1rem'}} onClick={logOut}>Logout</a></div>
+                                <a href={`${process.env.REACT_APP_BACKEND}/user/logout`} class="btn btn-secondary" style={{ margin: '1rem'}}>Logout</a></div>
                             </div>
                         </div>
                     </div>

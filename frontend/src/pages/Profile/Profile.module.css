@@ -67,6 +67,8 @@
 }
 
 .logout_panel {
+    color: black;
+    text-decoration: none;
     display: flex;
     justify-content: left;
     align-items: center;
