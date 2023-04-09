@@ -41,9 +41,7 @@ function Profile(props) {
                 date: date
             }),
             credentials: "include"
-        }).then(response => response.json())
-        .then(response => {
-        }); 
+        }).then(response => response.json());
     }
 
     function logOut() {
