@@ -117,7 +117,9 @@ router.get('/userstatus', GoogleAuth.getAuthMiddleware(), async function (req: a
 
 router.get("/logout", GoogleAuth.getAuthMiddleware(), async function (req: any, res: any) {
     req.logout(function (err: any) {
-        if (err) { console.error(`Logout error for ${req.user}`) }
+        if (err) {
+            console.error(`Logout error for ${req.user}`)
+        }
         res.redirect(`${process.env.APPTRACK_FRONTEND}/`);
     });
 });
@@ -146,19 +148,33 @@ async function getEmails(client: GmailClient, after?: number) {
  * @param messages a list of messages to scan
  */
 async function scanEmails(user: User, messages: gmail_v1.Schema$MessagePart[]) {
-    //Iterate in reverse so we process oldest emails first
+    const promises = [];
     for (let message of messages) {
-        let date = new Date(GmailClient.getEmailHeader(message, "Date"));
-        let subject = GmailClient.getEmailHeader(message, "Subject");
-        let body = GmailClient.getEmailBody(message);
-        let emailLink = `https://mail.google.com/mail/u/0/#search/rfc822msgid:${encodeURIComponent(GmailClient.getEmailHeader(message, "Message-ID"))}`;
-        if (await OpenAIClient.isJobRelated(body)) {
-            let { company: companyName, classification, date: potentialDate } = await OpenAIClient.classifyEmail(body);
-            let company = await CompanyController.getByNameAndCreateIfNotExist(companyName);
-            let isActionItem = classification != Classification.OTHER ? true : false;
-            let actionDate = potentialDate === undefined ? date : potentialDate;
-            let e = new Event(user, date, subject, body, company!, emailLink, isActionItem, classification, false, actionDate);
-            await EventController.save(e);
+        promises.push(getEventFromEmail(user, message));
+    }
+    //Use Promise.all to resolve everything concurrently
+    let resolvedPromises = await Promise.all(promises);
+    const events = [];
+    for (let obj of resolvedPromises) {
+        if (obj != null) {
+            events.push(obj);
         }
     }
+    //Write all the events at the same time
+    await EventController.save(...events);
+}
+
+async function getEventFromEmail(user: User, message: gmail_v1.Schema$MessagePart) {
+    let date = new Date(GmailClient.getEmailHeader(message, "Date"));
+    let subject = GmailClient.getEmailHeader(message, "Subject");
+    let body = GmailClient.getEmailBody(message);
+    let emailLink = `https://mail.google.com/mail/u/0/#search/rfc822msgid:${encodeURIComponent(GmailClient.getEmailHeader(message, "Message-ID"))}`;
+    if (await OpenAIClient.isJobRelated(body)) {
+        let { company: companyName, classification, date: potentialDate } = await OpenAIClient.classifyEmail(body);
+        let company = await CompanyController.getByNameAndCreateIfNotExist(companyName);
+        let isActionItem = classification != Classification.OTHER ? true : false;
+        let actionDate = potentialDate === undefined ? date : potentialDate;
+        return new Event(user, date, subject, body, company!, emailLink, isActionItem, classification, false, actionDate);
+    }
+    return null;
 }

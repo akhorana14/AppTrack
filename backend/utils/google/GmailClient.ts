@@ -94,9 +94,15 @@ export default class GmailClient {
     }
 
     public async getEmailsFromMessageId(...messageIds: string[]) {
+        const messagePromises = []
         const messages: gmail_v1.Schema$MessagePart[] = [];
         for (let messageId of messageIds) {
-            let { data: { payload: message } } = await this.gmail.users.messages.get({ userId: 'me', id: messageId, format: "full" });
+            messagePromises.push(this.gmail.users.messages.get({ userId: 'me', id: messageId, format: "full" }));
+        }
+        //Request all messages from gmail api concurrently
+        const resolvedPromises = await Promise.all(messagePromises);
+        for (let messageObj of resolvedPromises) {
+            let { data: { payload: message } } = messageObj;
             messages.push(message!);
         }
         return messages;
