@@ -42,7 +42,7 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
                 currentlyScrapedSet.delete(user.id);
             });
         }
-        catch(err) {
+        catch (err) {
             currentlyScrapedSet.delete(user.id);
             console.error(`Error when scraping: ${err}`)
         }
@@ -145,25 +145,20 @@ async function getEmails(client: GmailClient, after?: number) {
  * @param user the user to read emails for
  * @param messages a list of messages to scan
  */
-async function scanEmails(user: User, messages:gmail_v1.Schema$MessagePart[]) {
+async function scanEmails(user: User, messages: gmail_v1.Schema$MessagePart[]) {
     //Iterate in reverse so we process oldest emails first
     for (let message of messages) {
         let date = new Date(GmailClient.getEmailHeader(message, "Date"));
         let subject = GmailClient.getEmailHeader(message, "Subject");
         let body = GmailClient.getEmailBody(message);
         let emailLink = `https://mail.google.com/mail/u/0/#search/rfc822msgid:${encodeURIComponent(GmailClient.getEmailHeader(message, "Message-ID"))}`;
-        try {
-            if (await OpenAIClient.isJobRelated(body)) {
-                let { company: companyName, classification, date: potentialDate } = await OpenAIClient.classifyEmail(body);
-                let company = await CompanyController.getByNameAndCreateIfNotExist(companyName);
-                let isActionItem = classification != Classification.OTHER ? true : false;
-                let actionDate = potentialDate === undefined ? date : potentialDate;
-                let e = new Event(user, date, subject, body, company!, emailLink, isActionItem, classification, false, actionDate);
-                await EventController.save(e);
-            }
-        }
-        catch (error) {
-            throw error;
+        if (await OpenAIClient.isJobRelated(body)) {
+            let { company: companyName, classification, date: potentialDate } = await OpenAIClient.classifyEmail(body);
+            let company = await CompanyController.getByNameAndCreateIfNotExist(companyName);
+            let isActionItem = classification != Classification.OTHER ? true : false;
+            let actionDate = potentialDate === undefined ? date : potentialDate;
+            let e = new Event(user, date, subject, body, company!, emailLink, isActionItem, classification, false, actionDate);
+            await EventController.save(e);
         }
     }
 }
