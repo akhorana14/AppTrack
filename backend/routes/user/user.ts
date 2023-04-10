@@ -29,23 +29,23 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
     }
     //Check if we have permission to scrape
     if (user.scrape && !currentlyScrapedSet.has(user.id)) {
-        currentlyScrapedSet.add(user.id);
-        let messages = await getEmails(new GmailClient(user), user.lastEmailRefreshTime);
-        //Convert milliseconds to seconds
-        user.lastEmailRefreshTime = Math.round(new Date().getTime() / 1000);
-        //Save the user's new refresh time (if applicable)
-        await UserController.save(user);
-        
-        //Put this in a promise resolve so that scraping happens off the main thread
-        Promise.resolve().then(async () => {
-            try {
+        try {
+            currentlyScrapedSet.add(user.id);
+            let messages = await getEmails(new GmailClient(user), user.lastEmailRefreshTime);
+            //Convert milliseconds to seconds
+            user.lastEmailRefreshTime = Math.round(new Date().getTime() / 1000);
+            //Save the user's new refresh time (if applicable)
+            await UserController.save(user);
+            //Put this in a promise resolve so that scraping happens off the main thread
+            Promise.resolve().then(async () => {
                 await scanEmails(user, messages);
-            }
-            catch(err) {
-                console.error(`Error when scraping: ${err}`)
-            }
+                currentlyScrapedSet.delete(user.id);
+            });
+        }
+        catch(err) {
             currentlyScrapedSet.delete(user.id);
-        });
+            console.error(`Error when scraping: ${err}`)
+        }
     }
 
     //Redirect to dashboard after successful refresh
@@ -163,7 +163,6 @@ async function scanEmails(user: User, messages:gmail_v1.Schema$MessagePart[]) {
             }
         }
         catch (error) {
-            //Save user last email refresh time (this will be earlier than current date so next iteration we can scan the ones we missed)
             throw error;
         }
     }
