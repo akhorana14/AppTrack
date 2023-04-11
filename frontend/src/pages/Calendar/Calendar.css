@@ -23,7 +23,7 @@
 
 .right {
     width: 80%;
-    background-color: #E6F0FF;
+    background-color: var(--apptrack-light);
     padding-left: 3%;
     padding-right: 3%;
     padding-top: 1%;
@@ -33,7 +33,7 @@
 .left-top {
     height: 50%;
     background-color: white;
-    color: #001D6E;
+    color: var(--apptrack-primary);
     padding-top: 4%;
     position: relative;
 }
@@ -41,7 +41,7 @@
 .left-bottom {
     height: 50%;
     background-color: white;
-    color: #001D6E;
+    color: var(--apptrack-primary);
     position: relative;
 }
 
@@ -50,7 +50,7 @@
     width: 100%;
     background-color: white;
     align-items: center;
-    color: #001D6E;
+    color: var(--apptrack-primary);
     display: flex;
 }
 

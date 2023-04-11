@@ -1,5 +1,5 @@
 .signin {
-    background-color: #E6F0FF;
+    background-color: var(--apptrack-light);
     height:100%;
 }
 

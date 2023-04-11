@@ -100,7 +100,7 @@
 }
 
 .blue-button {
-    background-color: #001D6E;
+    background-color: var(--apptrack-primary);
     border-radius: 0%;
     border: none;
 }

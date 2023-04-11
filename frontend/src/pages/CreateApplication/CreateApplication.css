@@ -18,7 +18,7 @@
 
 .create-app-right {
     width: 40%;
-    background-color: #E6F0FF;
+    background-color: var(--apptrack-light);
     padding: 5%;
 }
 
@@ -38,17 +38,17 @@
 
 .create-app-left-text {
     font-size: 5vh;
-    color: #001D6E;
+    color: var(--apptrack-primary);
 }
 
 .blue-button {
-    background-color: #001D6E;
+    background-color: var(--apptrack-primary);
     border-radius: 0%;
     border: none;
 }
 
 .blue-button:hover {
-    background-color: #00103b;
+    background-color: var(--apptrack-primary-darker);
 }
 
 .green-button {
