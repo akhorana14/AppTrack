@@ -10,8 +10,7 @@ const router = express.Router();
 export default router;
 
 router.post("/create", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
-    CompanyController.getByNameAndCreateIfNotExist(req.body.companyName, req.body.leetcodeLink, req.body.levelsLink); 
-
+    CompanyController.getByNameAndCreateIfNotExist(req.body.companyName, req.user, req.body.leetcodeLink, req.body.levelsLink, req.body.jobTitle); 
     await res.send({
         "status": "success"
     })

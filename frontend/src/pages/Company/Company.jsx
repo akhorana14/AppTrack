@@ -112,7 +112,11 @@ function Company() {
             credentials: "include"
         });
         if (res.ok) {
-            setCompanyInfo(await res.json());
+            var company = await res.json();
+            console.log(company);
+            setCompanyInfo(company);
+        } else {
+            window.location.href = "/dashboard";
         }
     }
     companyName = capitalizeFirstLetter(companyName);
@@ -127,51 +131,79 @@ function Company() {
                     <Row className="justify-content-center h-100">
                         <Col className={styles["left-half"]}>
                             <h1 className="display-3 font-weight-normal mb-0">{`${companyName}`}</h1>
-                            <h3>Software Engineer
+                            {
+                                companyInfo.track ? 
+                                <h3>{companyInfo.position}
                                 <br />
                                 <h6 className="text-muted my-1">Last update: {events.length === 0 ? "None" : new Date(events[events.length - 1].date).toLocaleString()}</h6>
-                            </h3>
-                            <div className="mt-1 d-flex align-items-center">
-                                <LevelsButton link={companyInfo.levelsLink} />
-                                <LeetcodeButton link={companyInfo.leetcodeLink} />
-                                <UntrackButton company={companyName} />
-                            </div>
-                            <StageList list={events.filter(item => item.isActionItem === true)} />
-                            <div className="mt-5">
-                                <h3>Add an action item
-                                    <br />
-                                    <h6 className="text-muted">Manually keep track of untracked updates</h6>
                                 </h3>
-                                <form>
-                                    <div className="form-group mt-2">
-                                        <select className={styles["manual-status-select"]} onChange={updateActionItem}>
-                                            <option>Manually Add a Status</option>
-                                            <option>Applied</option>
-                                            <option>Online Assessment</option>
-                                            <option>Interview</option>
-                                            <option>Offer</option>
-                                            <option>Reject</option>
-                                        </select>
-                                    </div>
-                                    <div className="form-group mt-2">
-                                        <label htmlFor="description">Description *</label>
-                                        <textarea className="form-control no-resize" rows="3" onChange={updateDescription} placeholder="Enter description" value={description}></textarea>
-                                    </div>
-                                    <div className="form-group mt-2">
-                                        <label htmlFor="description">Date *</label>
-                                        <input className="form-control" placeholder="Enter date" onChange={updateDate} value={date} />
-                                        <small className="form-text text-muted">Enter the date in MM/DD/YYYY format</small>
-                                    </div>
-
-                                    <button type="button" className="btn btn-primary blue-button mt-3" onClick={handleClear}>Clear</button>
-                                    <button type="button" className="btn btn-success green-button mt-3" onClick={() => handleActionItemSubmit(companyName)}>Submit</button>
-                                    <span className="create-app-error-msg">{errorMsg}</span>
-                                </form>
+                                : null
+                            } 
+                            <div className="mt-1 d-flex align-items-center">
+                                {
+                                    companyInfo.track 
+                                    ? <>
+                                    <LevelsButton link={companyInfo.levelsLink} />
+                                    <LeetcodeButton link={companyInfo.leetcodeLink} />
+                                    </>
+                                    : null
+                                }
+                                {
+                                    companyInfo.track 
+                                    ? <UntrackButton company={companyName} />
+                                    : <TrackButton company={companyName} />
+                                }   
                             </div>
+                            {
+                                companyInfo.track ? <StageList list={events.filter(item => item.isActionItem === true)} />
+                                : null
+                            }
+                            {
+                                companyInfo.track ? 
+                                <div className="mt-5">
+                                    <h3>Add an action item
+                                        <br />
+                                        <h6 className="text-muted">Manually keep track of untracked updates</h6>
+                                    </h3>
+                                    <form>
+                                        <div className="form-group mt-2">
+                                            <select className={styles["manual-status-select"]} onChange={updateActionItem}>
+                                                <option>Manually Add a Status</option>
+                                                <option>Applied</option>
+                                                <option>Online Assessment</option>
+                                                <option>Interview</option>
+                                                <option>Offer</option>
+                                                <option>Reject</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-group mt-2">
+                                            <label htmlFor="description">Description *</label>
+                                            <textarea className="form-control no-resize" rows="3" onChange={updateDescription} placeholder="Enter description" value={description}></textarea>
+                                        </div>
+                                        <div className="form-group mt-2">
+                                            <label htmlFor="description">Date *</label>
+                                            <input className="form-control" placeholder="Enter date" onChange={updateDate} value={date} />
+                                            <small className="form-text text-muted">Enter the date in MM/DD/YYYY format</small>
+                                        </div>
+
+                                        <button type="button" className="btn btn-primary blue-button mt-3" onClick={handleClear}>Clear</button>
+                                        <button type="button" className="btn btn-success green-button mt-3" onClick={() => handleActionItemSubmit(companyName)}>Submit</button>
+                                        <span className="create-app-error-msg">{errorMsg}</span>
+                                    </form>
+                                </div>
+                                : null
+                            }
+                            
                         </Col>
                         <Col className={styles["right-half"]}>
-                            <ActionItems items={events.filter(item => item.isActionItem === true)} />
-                            <EmailHistory emails={events} />
+                            {
+                                companyInfo.track ? <ActionItems items={events.filter(item => item.isActionItem === true)} />
+                                : null
+                            }
+                            {
+                                companyInfo.track ? <EmailHistory emails={events} />
+                                : null
+                            }
                         </Col>
                     </Row>
                 </Container>
@@ -313,7 +345,7 @@ function handleUntrackButtonSubmit(company) {
         }),
         credentials: "include"
     }).then(() => {
-        window.location.href = "/dashboard";
+        window.location.href = "";
     });
 }
 
@@ -322,26 +354,35 @@ function UntrackButton(props) {
         <Button onClick={() => handleUntrackButtonSubmit(props.company)} variant="warning" className={`${styles["untrack-btn"]} d-flex align-items-center`}>
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
-            </svg>            <span className={`${styles["untrack-text"]}`}>Untrack</span>
+                <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+            </svg>            
+            <span className={`${styles["untrack-text"]}`}>Untrack</span>
         </Button>
     );
 }
 
-function handleStatusButtonSubmit(company, status) {
-    console.log("Adding " + company + ", " + status);
-    fetch(`${process.env.REACT_APP_BACKEND}/company/${company}/addStatus`, {
+function handleTrackButtonSubmit(company) {
+    fetch(`${process.env.REACT_APP_BACKEND}/company/${company}/track`, {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            companyName: company,
-            status: status
+            companyName: company
         }),
         credentials: "include"
-    }).then(response => response.json())
-        .then(response => {
-            window.location.href = "";
-        });
+    }).then(() => {
+        window.location.href = "";
+    });
+}
+
+function TrackButton(props) {
+    return (
+        <Button onClick={() => handleTrackButtonSubmit(props.company)} variant="info" className={`${styles["untrack-btn"]} d-flex align-items-center`}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" className="bi bi-arrow-return-right" viewBox="0 0 16 16">
+                <path fillRule="evenodd" d="M1.5 1.5A.5.5 0 0 0 1 2v4.8a2.5 2.5 0 0 0 2.5 2.5h9.793l-3.347 3.346a.5.5 0 0 0 .708.708l4.2-4.2a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 8.3H3.5A1.5 1.5 0 0 1 2 6.8V2a.5.5 0 0 0-.5-.5z"/>
+            </svg>
+            <span className={`${styles["untrack-text"]}`}>Track</span>
+        </Button>
+    );
 }
 
 function EmailAccordion(props) {

@@ -13,7 +13,7 @@ export default router;
 
 router.get('/:company', GoogleAuth.getAuthMiddleware(), async function (req: any, res) {
     let companyName: string = req.params["company"];
-    let company = await CompanyController.getByName(companyName);
+    let company = await CompanyController.getByNameAndUser(companyName, req.user);
     if (company != null) {
         res.send(await EventController.getEventsByUserAndCompany(req.user, company!));
     }
@@ -24,7 +24,7 @@ router.get('/:company', GoogleAuth.getAuthMiddleware(), async function (req: any
 
 router.get('/:company/info', GoogleAuth.getAuthMiddleware(), async function (req: any, res) {
     let companyName: string = req.params["company"];
-    let company = await CompanyController.getByName(companyName);
+    let company = await CompanyController.getByNameAndUser(companyName, req.user);
     if (company != null) {
         res.send(company)
     }
@@ -35,10 +35,18 @@ router.get('/:company/info', GoogleAuth.getAuthMiddleware(), async function (req
 
 
 router.post("/:company/untrack", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
-    await EventController.removeCompany(req.user, req.body.companyName);
+    await CompanyController.trackCompany(req.user, req.body.companyName, false);
 
     await res.send({
         "status": "Untracking company"
+    });
+});
+
+router.post("/:company/track", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
+    await CompanyController.trackCompany(req.user, req.body.companyName, true);
+
+    await res.send({
+        "status": "tracking company"
     });
 });
 

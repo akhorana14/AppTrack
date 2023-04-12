@@ -171,7 +171,7 @@ async function getEventFromEmail(user: User, message: gmail_v1.Schema$MessagePar
     let emailLink = `https://mail.google.com/mail/u/0/#search/rfc822msgid:${encodeURIComponent(GmailClient.getEmailHeader(message, "Message-ID"))}`;
     if (await OpenAIClient.isJobRelated(body)) {
         let { company: companyName, classification, date: potentialDate } = await OpenAIClient.classifyEmail(body);
-        let company = await CompanyController.getByNameAndCreateIfNotExist(companyName);
+        let company = await CompanyController.getByNameAndCreateIfNotExist(companyName, user);
         let isActionItem = classification != Classification.OTHER ? true : false;
         let actionDate = potentialDate === undefined ? date : potentialDate;
         return new Event(user, date, subject, body, company!, emailLink, isActionItem, classification, false, actionDate);
