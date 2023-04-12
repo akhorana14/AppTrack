@@ -37,7 +37,10 @@ export default class EventController {
             where: {user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
                     date: MoreThan(dateRange),
                     isActionItem: true,
-                    actionDate: Not(LessThan(today))
+                    actionDate: Not(LessThan(today)),
+                    company: {
+                        track: true
+                    }
                 },    
             order: {
                 date: "DESC"
@@ -54,7 +57,8 @@ export default class EventController {
             },
             where: {
                 company: {
-                    name: company
+                    name: company,
+                    track: true
                 },
                 user: this.getDBObject(user, User) as FindOptionsWhere<User>
             }
@@ -69,32 +73,23 @@ export default class EventController {
         let today = new Date();
         dateRange.setDate(dateRange.getDate() - 3); // set to 3 days ago
         return this.eventRepository.find({
-            where: {user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
-                    date: MoreThan(dateRange),
-                    isActionItem: true,
-                    actionDate: Not(LessThan(today))},
+            relations: {
+                company: true
+            },
+            where: {
+                user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
+                date: MoreThan(dateRange),
+                isActionItem: true,
+                actionDate: Not(LessThan(today)),
+                company: {
+                    track: true
+                }
+            },
             order: {
                 actionDate: "ASC"
             }
             
         })
-    }
-
-    static async removeCompany(user: User, company: string):Promise<void> {
-        var eventsToRemove = await this.eventRepository.find({
-            relations: {
-                company: true,
-                user: true
-            },
-            where: {
-                company: {
-                    name: company
-                },
-                user: this.getDBObject(user, User) as FindOptionsWhere<User>
-            }
-        });
-
-        await this.eventRepository.remove(eventsToRemove);
     }
 
     static async getDailyEvents(user: User):Promise<Event[]> {
@@ -105,7 +100,10 @@ export default class EventController {
             },
             where: {
                 user: this.getDBObject(user, User) as FindOptionsWhere<User>,
-                isActionItem: true
+                isActionItem: true,
+                company: {
+                    track: true
+                }
             }
         });
     }
@@ -119,7 +117,10 @@ export default class EventController {
             where: {
                 user: this.getDBObject(user, User) as FindOptionsWhere<User>,
                 isActionItem: true,
-                actionDate: LessThan(new Date()) 
+                actionDate: LessThan(new Date()),
+                company: {
+                    track: true
+                }
             }
         });
     }
@@ -133,7 +134,10 @@ export default class EventController {
             where: {
                 user: this.getDBObject(user, User) as FindOptionsWhere<User>,
                 isActionItem: true,
-                actionDate: MoreThan(new Date())
+                actionDate: MoreThan(new Date()),
+                company: {
+                    track: true
+                }
             }
         });
     }

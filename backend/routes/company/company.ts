@@ -35,10 +35,18 @@ router.get('/:company/info', GoogleAuth.getAuthMiddleware(), async function (req
 
 
 router.post("/:company/untrack", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
-    await EventController.removeCompany(req.user, req.body.companyName);
+    await CompanyController.trackCompany(req.user, req.body.companyName, false);
 
     await res.send({
         "status": "Untracking company"
+    });
+});
+
+router.post("/:company/track", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
+    await CompanyController.trackCompany(req.user, req.body.companyName, true);
+
+    await res.send({
+        "status": "tracking company"
     });
 });
 

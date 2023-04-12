@@ -20,19 +20,21 @@ export default class CompanyController {
             if(levelsLink === undefined) {
                 levelsLink = `https://www.levels.fyi/companies/${name}/salaries`;
             }
-            if (position == undefined) {
+            if (position === undefined) {
                 position = "";
             }
-            await this.save(new Company(name, user, leetcodeLink, levelsLink, "blue", true, position));
+            
+            var company = new Company(name, this.getDBObject(user, User), leetcodeLink, levelsLink, "blue", true, position); 
+            await this.companyRepository.insert(company);
         }
         return this.getByNameAndUser(name, user);
     }
 
-    static async untrackCompany(name: string, user: User):Promise<void> {
-        var company = await this.getByNameAndUser(name, user);
+    static async trackCompany(user: User, name: string, track: boolean):Promise<void> {
+        var company = await this.getByNameAndUser(name, this.getDBObject(user, User));
 
         if (company !== null) {
-            company.track = false; 
+            company.track = track; 
             this.save(company);
         }
     }
