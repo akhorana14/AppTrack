@@ -71,6 +71,7 @@ function GetNavbar() {
             <Navbar.Text>
               {userInfo.name === undefined ? "Unauthenticated" : `Signed in as: ${userInfo.name}`}
             </Navbar.Text>
+            <Button variant="link" href={`${process.env.REACT_APP_BACKEND}/user/refresh`}><RefreshIcon loading={userInfo.currentlyScraping} /></Button>
             <NavDropdown title={navNotifications} id="notifications" align="end">
               <div className='notificationHeading'>
                 <p className='headingNotification'>Notifications</p>
@@ -107,8 +108,6 @@ function GetNavbar() {
               </NavDropdown.Item>
 
             </NavDropdown>
-
-            <Button variant="link" href={`${process.env.REACT_APP_BACKEND}/user/refresh`}><RefreshIcon loading={userInfo.currentlyScraping} /></Button>
           </Nav>
         </Navbar.Collapse>
       </Container>
