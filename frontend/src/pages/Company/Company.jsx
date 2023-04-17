@@ -97,7 +97,7 @@ function Company() {
         for (let i = 0; i < events.length; i++) {
             let event = events[i];
             console.log(event.classification);
-            if (event.classification == 3 && event.isRead == false) {
+            if (event.classification === 3 && event.isRead === false) {
                 offer = true;
             }
         }
@@ -412,7 +412,6 @@ function ActionItemAccordion(props) {
             <Accordion.Item eventKey="0">
                 <Accordion.Header>
                     <h6 className="m-0">{props.subject}</h6>
-                    <button type="button" className="btn-close btn-sm position-absolute end-0 me-5" aria-label="Close"></button>
                 </Accordion.Header>
                 <Accordion.Body>
                     <p className="mb-0">{props.body}</p>

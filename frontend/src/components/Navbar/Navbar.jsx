@@ -46,7 +46,7 @@ function GetNavbar() {
     const newList = [];
     setNewUpdateData(newList);
   };
-  
+
   async function getLoginStatus() {
     let res = await fetch(`${process.env.REACT_APP_BACKEND}/user/info`, {
       credentials: "include"
@@ -59,12 +59,11 @@ function GetNavbar() {
   const navNotifications = (<Icon.BellFill href="#bell" class="bell">Notification</Icon.BellFill>)
   // const navHomeButton = (<Icon.HouseDoorFill href="#home" class="home">Home</Icon.HouseDoorFill>)
   // const navProfileButton = (<Icon.PersonFill href="#profile" class="profile">Profile</Icon.PersonFill>)
-  const navLogoutButton = (<Icon.BoxArrowRight class="logout">Logout</Icon.BoxArrowRight>)
   return (
 
     <Navbar variant="dark" expand="lg" >
       <Container fluid>
-        <Navbar.Brand href="#home">AppTrack</Navbar.Brand>
+        <Navbar.Brand href="/dashboard">AppTrack</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
 
@@ -91,23 +90,25 @@ function GetNavbar() {
             </NavDropdown>
             <NavDropdown title={navDropDownTitle} id="basic-nav-dropdown" align="end">
               <NavDropdown.Item href="/dashboard">
-                Dashboard</NavDropdown.Item>
+                Dashboard
+              </NavDropdown.Item>
 
               <NavDropdown.Item href="/calendar">
-                Calendar</NavDropdown.Item>
+                Calendar
+              </NavDropdown.Item>
 
-              <NavDropdown.Item href="/">
-                Sign In</NavDropdown.Item>
-
-              <NavDropdown.Divider />
               <NavDropdown.Item href="/settings">
                 Settings
+              </NavDropdown.Item>
+
+              <NavDropdown.Divider />
+              <NavDropdown.Item href={`${process.env.REACT_APP_BACKEND}/user/logout`}>
+                Logout
               </NavDropdown.Item>
 
             </NavDropdown>
 
             <Button variant="link" href={`${process.env.REACT_APP_BACKEND}/user/refresh`}><RefreshIcon loading={userInfo.currentlyScraping} /></Button>
-            <Button variant="link" href={`${process.env.REACT_APP_BACKEND}/user/logout`}>{navLogoutButton}</Button>
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -116,10 +117,10 @@ function GetNavbar() {
 }
 
 function RefreshIcon(props) {
-  if(props.loading === true) {
-  return (
-    <Spinner animation="border" size="sm" variant="light" />
-  );
+  if (props.loading === true) {
+    return (
+      <Spinner animation="border" size="sm" variant="light" />
+    );
   }
   else {
     return (<Icon.ArrowClockwise className="logout" variant="light">Refresh Inbox</Icon.ArrowClockwise>)
