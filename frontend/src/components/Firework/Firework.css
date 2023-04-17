@@ -1,4 +1,7 @@
 
+  body {
+    overflow: hidden;
+  }
   
   @keyframes firework {
     25% { transform: translate(var(--x), var(--initialY)); width: var(--initialSize); opacity: 1; }

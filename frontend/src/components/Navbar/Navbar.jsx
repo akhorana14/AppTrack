@@ -39,7 +39,7 @@ function GetNavbar() {
   }
 
   const clickNotification = (index) => {
-    window.location = "/Company/" + newUpdateData[index].Company;
+    window.location = "/company/" + newUpdateData[index].company.name;
   };
 
   const removeElements = () => {
