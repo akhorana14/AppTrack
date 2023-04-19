@@ -152,12 +152,12 @@ async function scanEmails(user: User, messages: gmail_v1.Schema$MessagePart[]) {
     for (let message of messages) {
         promises.push(getEventFromEmail(user, message));
     }
-    //Use Promise.all to resolve everything concurrently
-    let resolvedPromises = await Promise.all(promises);
-    const events = [];
+    //Use Promise.allSettled to resolve everything concurrently
+    let resolvedPromises = await Promise.allSettled(promises);
+    const events:Event[] = [];
     for (let obj of resolvedPromises) {
-        if (obj != null) {
-            events.push(obj);
+        if (obj.status === 'fulfilled' && obj.value != null) {
+            events.push(obj.value);
         }
     }
     //Write all the events at the same time
