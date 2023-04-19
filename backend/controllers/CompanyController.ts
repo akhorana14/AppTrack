@@ -12,7 +12,7 @@ export default class CompanyController {
         });
     }
     
-    static async getByNameAndCreateIfNotExist(name: string, user: User, leetcodeLink?: string, levelsLink?: string, position?: string):Promise<Company | null> {
+    static async getByNameAndCreateIfNotExist(name: string, user: User, leetcodeLink?: string, levelsLink?: string, position?: string):Promise<Company> {
         if(!await this.companyRepository.exist({where: {name: name, user: this.getDBObject(user, User)}})) {
             if(leetcodeLink === undefined) {
                 leetcodeLink = `https://leetcode.com/discuss/interview-question?currentPage=1&orderBy=most_relevant&query=${name}`;
@@ -20,14 +20,10 @@ export default class CompanyController {
             if(levelsLink === undefined) {
                 levelsLink = `https://www.levels.fyi/companies/${name}/salaries`;
             }
-            if (position === undefined) {
-                position = "";
-            }
-            
-            var company = new Company(name, this.getDBObject(user, User), leetcodeLink, levelsLink, "blue", true, position); 
+            let company = new Company(name, this.getDBObject(user, User), leetcodeLink, levelsLink, "blue", true, position); 
             await this.companyRepository.insert(company);
         }
-        return this.getByNameAndUser(name, user);
+        return (await this.getByNameAndUser(name, user))!;
     }
 
     static async trackCompany(user: User, name: string, track: boolean):Promise<void> {

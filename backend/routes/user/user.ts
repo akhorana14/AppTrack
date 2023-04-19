@@ -159,12 +159,23 @@ async function scanEmails(user: User, messages: gmail_v1.Schema$MessagePart[]) {
         if (obj.status === 'fulfilled' && obj.value != null) {
             events.push(obj.value);
         }
+        else if(obj.status == "rejected") {
+            console.error(`Email parsing rejected promise: `);
+            console.dir(obj);
+        }
     }
     //Write all the events at the same time
     await EventController.save(...events);
 }
 
-async function getEventFromEmail(user: User, message: gmail_v1.Schema$MessagePart) {
+/**
+ * Get an event from an email body.
+ * 
+ * @param user The user to parse an email body for
+ * @param message The email message to parse
+ * @returns null if not a job related email, a new Event if it is
+ */
+async function getEventFromEmail(user: User, message: gmail_v1.Schema$MessagePart):Promise<Event | null> {
     let date = new Date(GmailClient.getEmailHeader(message, "Date"));
     let subject = GmailClient.getEmailHeader(message, "Subject");
     let body = GmailClient.getEmailBody(message);
@@ -174,6 +185,15 @@ async function getEventFromEmail(user: User, message: gmail_v1.Schema$MessagePar
         let company = await CompanyController.getByNameAndCreateIfNotExist(companyName, user);
         let isActionItem = classification != Classification.OTHER ? true : false;
         let actionDate = potentialDate === undefined ? date : potentialDate;
+        //Only check the email if the type is application confirmation
+        if(classification === Classification.APPLIED) {
+            let positionTitle = await OpenAIClient.getPositionTitle(subject+"\n"+body);
+            //If OpenAI found a positon title, save it to the company
+            if(positionTitle !== null) {
+                company.position = positionTitle;
+                await CompanyController.save(company);
+            }
+        }
         return new Event(user, date, subject, body, company!, emailLink, isActionItem, classification, false, actionDate);
     }
     return null;

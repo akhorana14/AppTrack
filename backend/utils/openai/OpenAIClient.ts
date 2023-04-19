@@ -48,6 +48,24 @@ export default class OpenAIClient {
     }
 
     /**
+     * Get position title from email message body using GPT.
+     * 
+     * @param messageBody a message body to classify
+     * @returns a string with the position title or null if no position title was found in the email
+     */
+    public static async getPositionTitle(messageBody: string): Promise<string | null> {
+        const promptBase = String.raw`Please respond with only the position title from the following email or with 'Unknown':`;
+        let response = await this.sendMessageToGPT(promptBase + "\n" + messageBody);
+        if(response.includes("Unknown")) {
+            return null;
+        }
+        else {
+            return response;
+        }
+        
+    }
+
+    /**
      * Sends a message to OpenAI GPT (specifically gpt-3.5-turbo) and returns the response.
      * 
      * @param message the message to send

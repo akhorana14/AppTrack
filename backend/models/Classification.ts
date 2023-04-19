@@ -1,4 +1,7 @@
 export enum Classification {
+    /**
+     * Application Confirmation
+     */
     APPLIED,
     ONLINE_ASSESSMENT,
     INTERVIEW,
