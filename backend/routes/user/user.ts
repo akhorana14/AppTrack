@@ -148,7 +148,8 @@ async function getEmails(client: GmailClient, after?: number) {
  * @param messages a list of messages to scan
  */
 async function scanEmails(user: User, messages: gmail_v1.Schema$MessagePart[]) {
-    const promises = [];
+    //Sync stuff (if we have legitimate OpenAI API that can concurrently fulfill requests)
+    /*const promises = [];
     for (let message of messages) {
         promises.push(getEventFromEmail(user, message));
     }
@@ -165,7 +166,21 @@ async function scanEmails(user: User, messages: gmail_v1.Schema$MessagePart[]) {
         }
     }
     //Write all the events at the same time
-    await EventController.save(...events);
+    await EventController.save(...events);*/
+
+    //Aync stuff (for unofficial ChatGPT API)
+    for (let message of messages) {
+        try {
+            let event = await getEventFromEmail(user, message);
+            if (event != null) {
+                await EventController.save(event);
+            }
+        }
+        catch (err) {
+            console.error(`Email parsing rejected promise: `);
+            console.dir(err);
+        }
+    }
 }
 
 /**
@@ -175,7 +190,7 @@ async function scanEmails(user: User, messages: gmail_v1.Schema$MessagePart[]) {
  * @param message The email message to parse
  * @returns null if not a job related email, a new Event if it is
  */
-async function getEventFromEmail(user: User, message: gmail_v1.Schema$MessagePart):Promise<Event | null> {
+async function getEventFromEmail(user: User, message: gmail_v1.Schema$MessagePart): Promise<Event | null> {
     let date = new Date(GmailClient.getEmailHeader(message, "Date"));
     let subject = GmailClient.getEmailHeader(message, "Subject");
     let body = GmailClient.getEmailBody(message);
@@ -185,11 +200,11 @@ async function getEventFromEmail(user: User, message: gmail_v1.Schema$MessagePar
         let company = await CompanyController.getByNameAndCreateIfNotExist(companyName, user);
         let isActionItem = classification != Classification.OTHER ? true : false;
         let actionDate = potentialDate === undefined ? date : potentialDate;
-        //Only check the email if the type is application confirmation
-        if(classification === Classification.APPLIED) {
-            let positionTitle = await OpenAIClient.getPositionTitle(subject+"\n"+body);
+        //If we haven't found the company position yet, then we check if this email contains any details for it
+        if (company.position === undefined || company.position === null) {
+            let positionTitle = await OpenAIClient.getPositionTitle(subject + "\n" + body);
             //If OpenAI found a positon title, save it to the company
-            if(positionTitle !== null) {
+            if (positionTitle !== null) {
                 company.position = positionTitle;
                 await CompanyController.save(company);
             }

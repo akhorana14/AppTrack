@@ -106,6 +106,10 @@ export default class GmailClient {
                 let { data: { payload: message } } = messageObj.value;
                 messages.push(message!);
             }
+            else if(messageObj.status == "rejected") {
+                console.error(`GmailApi rejected promise: `);
+                console.dir(messageObj);
+            }
         }
         return messages;
     }
