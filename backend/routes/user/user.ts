@@ -148,23 +148,49 @@ async function getEmails(client: GmailClient, after?: number) {
  * @param messages a list of messages to scan
  */
 async function scanEmails(user: User, messages: gmail_v1.Schema$MessagePart[]) {
-    const promises = [];
+    //Sync stuff (if we have legitimate OpenAI API that can concurrently fulfill requests)
+    /*const promises = [];
     for (let message of messages) {
         promises.push(getEventFromEmail(user, message));
     }
-    //Use Promise.all to resolve everything concurrently
-    let resolvedPromises = await Promise.all(promises);
-    const events = [];
+    //Use Promise.allSettled to resolve everything concurrently
+    let resolvedPromises = await Promise.allSettled(promises);
+    const events:Event[] = [];
     for (let obj of resolvedPromises) {
-        if (obj != null) {
-            events.push(obj);
+        if (obj.status === 'fulfilled' && obj.value != null) {
+            events.push(obj.value);
+        }
+        else if(obj.status == "rejected") {
+            console.error(`Email parsing rejected promise: `);
+            console.dir(obj);
         }
     }
     //Write all the events at the same time
-    await EventController.save(...events);
+    await EventController.save(...events);*/
+
+    //Aync stuff (for unofficial ChatGPT API)
+    for (let message of messages) {
+        try {
+            let event = await getEventFromEmail(user, message);
+            if (event != null) {
+                await EventController.save(event);
+            }
+        }
+        catch (err) {
+            console.error(`Email parsing rejected promise: `);
+            console.dir(err);
+        }
+    }
 }
 
-async function getEventFromEmail(user: User, message: gmail_v1.Schema$MessagePart) {
+/**
+ * Get an event from an email body.
+ * 
+ * @param user The user to parse an email body for
+ * @param message The email message to parse
+ * @returns null if not a job related email, a new Event if it is
+ */
+async function getEventFromEmail(user: User, message: gmail_v1.Schema$MessagePart): Promise<Event | null> {
     let date = new Date(GmailClient.getEmailHeader(message, "Date"));
     let subject = GmailClient.getEmailHeader(message, "Subject");
     let body = GmailClient.getEmailBody(message);
@@ -174,6 +200,15 @@ async function getEventFromEmail(user: User, message: gmail_v1.Schema$MessagePar
         let company = await CompanyController.getByNameAndCreateIfNotExist(companyName, user);
         let isActionItem = classification != Classification.OTHER ? true : false;
         let actionDate = potentialDate === undefined ? date : potentialDate;
+        //If we haven't found the company position yet, then we check if this email contains any details for it
+        if (company.position === undefined || company.position === null) {
+            let positionTitle = await OpenAIClient.getPositionTitle(subject + "\n" + body);
+            //If OpenAI found a positon title, save it to the company
+            if (positionTitle !== null) {
+                company.position = positionTitle;
+                await CompanyController.save(company);
+            }
+        }
         return new Event(user, date, subject, body, company!, emailLink, isActionItem, classification, false, actionDate);
     }
     return null;

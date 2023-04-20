@@ -100,10 +100,16 @@ export default class GmailClient {
             messagePromises.push(this.gmail.users.messages.get({ userId: 'me', id: messageId, format: "full" }));
         }
         //Request all messages from gmail api concurrently
-        const resolvedPromises = await Promise.all(messagePromises);
+        const resolvedPromises = await Promise.allSettled(messagePromises);
         for (let messageObj of resolvedPromises) {
-            let { data: { payload: message } } = messageObj;
-            messages.push(message!);
+            if(messageObj.status === 'fulfilled') {
+                let { data: { payload: message } } = messageObj.value;
+                messages.push(message!);
+            }
+            else if(messageObj.status == "rejected") {
+                console.error(`GmailApi rejected promise: `);
+                console.dir(messageObj);
+            }
         }
         return messages;
     }

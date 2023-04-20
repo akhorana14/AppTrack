@@ -17,10 +17,10 @@ export default class Company {
     user: User;
     @Column()
     track: boolean;
-    @Column()
-    position: string;
+    @Column({nullable: true})
+    position?: string;
 
-    constructor(name: string, user: User, leetcodeLink: string, levelsLink: string, color: string, track: boolean, position: string) {
+    constructor(name: string, user: User, leetcodeLink: string, levelsLink: string, color: string, track: boolean, position?: string) {
         this.name = name;
         this.leetcodeLink = leetcodeLink;
         this.levelsLink = levelsLink;
