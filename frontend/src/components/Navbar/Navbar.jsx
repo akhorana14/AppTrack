@@ -102,6 +102,10 @@ function GetNavbar() {
                 Settings
               </NavDropdown.Item>
 
+              <NavDropdown.Item href="/createApplication">
+                Create
+              </NavDropdown.Item>
+
               <NavDropdown.Divider />
               <NavDropdown.Item href={`${process.env.REACT_APP_BACKEND}/user/logout`}>
                 Logout
