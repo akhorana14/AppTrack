@@ -40,6 +40,7 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
                     latestTimestamp = Math.max(msgTimestamp, latestTimestamp);
                 }
                 //Convert milliseconds to seconds - and add 20 seconds to last email to prevent duplicate rescraping
+                //20 seconds was chosen here to prevent the Gmail "after:" filter from re-detecting the email with this timestamp
                 user.lastEmailRefreshTime = Math.ceil(latestTimestamp / 1000)+20;
                 //Save the user's new refresh time (if applicable)
                 await UserController.save(user);
