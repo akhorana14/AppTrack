@@ -39,8 +39,8 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
                     let msgTimestamp = new Date(GmailClient.getEmailHeader(message, "Date")).getTime();
                     latestTimestamp = Math.max(msgTimestamp, latestTimestamp);
                 }
-                //Convert milliseconds to seconds
-                user.lastEmailRefreshTime = Math.ceil(latestTimestamp / 1000)+1000;
+                //Convert milliseconds to seconds - and add 20 seconds to last email to prevent duplicate rescraping
+                user.lastEmailRefreshTime = Math.ceil(latestTimestamp / 1000)+20;
                 //Save the user's new refresh time (if applicable)
                 await UserController.save(user);
                 //Put this in a promise resolve so that scraping happens off the main thread
