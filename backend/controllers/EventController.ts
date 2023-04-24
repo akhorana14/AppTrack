@@ -63,8 +63,10 @@ export default class EventController {
                 user: this.getDBObject(user, User) as FindOptionsWhere<User>
             }
         });
-        offerEvent[0].isRead = true;
-        this.eventRepository.save(offerEvent[0]);
+        for (var i = 0; i < offerEvent.length; i++) {
+            offerEvent[i].isRead = true;
+        }
+        this.eventRepository.save(offerEvent);
     }
 
     // get new updates, but order by Action Item date
