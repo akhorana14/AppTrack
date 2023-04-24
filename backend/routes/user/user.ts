@@ -30,23 +30,25 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
     //Check if we have permission to scrape
     if (user.scrape && !currentlyScrapedSet.has(user.id)) {
         try {
-            currentlyScrapedSet.add(user.id);
             let messages = await getEmails(new GmailClient(user), user.lastEmailRefreshTime);
-            //Find the latest message timestamp here -> that becomes the last email refresh time of the user
-            let latestTimestamp = new Date(GmailClient.getEmailHeader(messages[0], "Date")).getTime();
-            for (let message of messages) {
-                let msgTimestamp = new Date(GmailClient.getEmailHeader(message, "Date")).getTime();
-                latestTimestamp = Math.max(msgTimestamp, latestTimestamp);
+            if(messages.length > 0) {
+                currentlyScrapedSet.add(user.id);
+                //Find the latest message timestamp here -> that becomes the last email refresh time of the user
+                let latestTimestamp = new Date(GmailClient.getEmailHeader(messages[0], "Date")).getTime();
+                for (let message of messages) {
+                    let msgTimestamp = new Date(GmailClient.getEmailHeader(message, "Date")).getTime();
+                    latestTimestamp = Math.max(msgTimestamp, latestTimestamp);
+                }
+                //Convert milliseconds to seconds
+                user.lastEmailRefreshTime = Math.ceil(latestTimestamp / 1000)+1000;
+                //Save the user's new refresh time (if applicable)
+                await UserController.save(user);
+                //Put this in a promise resolve so that scraping happens off the main thread
+                Promise.resolve().then(async () => {
+                    await scanEmails(user, messages);
+                    currentlyScrapedSet.delete(user.id);
+                });
             }
-            //Convert milliseconds to seconds
-            user.lastEmailRefreshTime = Math.round(latestTimestamp / 1000);
-            //Save the user's new refresh time (if applicable)
-            await UserController.save(user);
-            //Put this in a promise resolve so that scraping happens off the main thread
-            Promise.resolve().then(async () => {
-                await scanEmails(user, messages);
-                currentlyScrapedSet.delete(user.id);
-            });
         }
         catch (err) {
             currentlyScrapedSet.delete(user.id);
