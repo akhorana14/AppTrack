@@ -23,7 +23,7 @@ html, body, #root {
     height:40vh;
     width:100%;
     margin:auto;
-    padding-top: 35vh;
+    padding-top: 0vh;
     overflow-y: scroll;
 }
 
@@ -31,7 +31,7 @@ html, body, #root {
     height:40vh;
     width:100%;
     margin:auto;
-    padding-top: 30vh;
+    padding-top: 0vh;
     overflow-y: scroll;
 }
 
