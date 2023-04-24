@@ -68,7 +68,7 @@ export default class OpenAIClient {
      * @returns GPT response
      */
     private static async sendMessageToGPT(message: string): Promise<string> {
-        return this.useUnofficialGPTAPI(message);
+        return this.useOfficialGPTAPI(message);
     }
 
     /**

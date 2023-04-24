@@ -149,7 +149,7 @@ async function getEmails(client: GmailClient, after?: number) {
  */
 async function scanEmails(user: User, messages: gmail_v1.Schema$MessagePart[]) {
     //Sync stuff (if we have legitimate OpenAI API that can concurrently fulfill requests)
-    /*const promises = [];
+    const promises = [];
     for (let message of messages) {
         promises.push(getEventFromEmail(user, message));
     }
@@ -166,21 +166,21 @@ async function scanEmails(user: User, messages: gmail_v1.Schema$MessagePart[]) {
         }
     }
     //Write all the events at the same time
-    await EventController.save(...events);*/
+    await EventController.save(...events);
 
     //Aync stuff (for unofficial ChatGPT API)
-    for (let message of messages) {
-        try {
-            let event = await getEventFromEmail(user, message);
-            if (event != null) {
-                await EventController.save(event);
-            }
-        }
-        catch (err) {
-            console.error(`Email parsing rejected promise: `);
-            console.dir(err);
-        }
-    }
+    // for (let message of messages) {
+    //     try {
+    //         let event = await getEventFromEmail(user, message);
+    //         if (event != null) {
+    //             await EventController.save(event);
+    //         }
+    //     }
+    //     catch (err) {
+    //         console.error(`Email parsing rejected promise: `);
+    //         console.dir(err);
+    //     }
+    // }
 }
 
 /**
