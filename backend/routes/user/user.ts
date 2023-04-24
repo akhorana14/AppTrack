@@ -32,8 +32,14 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
         try {
             currentlyScrapedSet.add(user.id);
             let messages = await getEmails(new GmailClient(user), user.lastEmailRefreshTime);
+            //Find the latest message timestamp here -> that becomes the last email refresh time of the user
+            let latestTimestamp = new Date(GmailClient.getEmailHeader(messages[0], "Date")).getTime();
+            for (let message of messages) {
+                let msgTimestamp = new Date(GmailClient.getEmailHeader(message, "Date")).getTime();
+                latestTimestamp = Math.max(msgTimestamp, latestTimestamp);
+            }
             //Convert milliseconds to seconds
-            user.lastEmailRefreshTime = Math.round(new Date().getTime() / 1000);
+            user.lastEmailRefreshTime = Math.round(latestTimestamp / 1000);
             //Save the user's new refresh time (if applicable)
             await UserController.save(user);
             //Put this in a promise resolve so that scraping happens off the main thread
@@ -155,32 +161,18 @@ async function scanEmails(user: User, messages: gmail_v1.Schema$MessagePart[]) {
     }
     //Use Promise.allSettled to resolve everything concurrently
     let resolvedPromises = await Promise.allSettled(promises);
-    const events:Event[] = [];
+    const events: Event[] = [];
     for (let obj of resolvedPromises) {
         if (obj.status === 'fulfilled' && obj.value != null) {
             events.push(obj.value);
         }
-        else if(obj.status == "rejected") {
+        else if (obj.status == "rejected") {
             console.error(`Email parsing rejected promise: `);
             console.dir(obj);
         }
     }
     //Write all the events at the same time
     await EventController.save(...events);
-
-    //Aync stuff (for unofficial ChatGPT API)
-    // for (let message of messages) {
-    //     try {
-    //         let event = await getEventFromEmail(user, message);
-    //         if (event != null) {
-    //             await EventController.save(event);
-    //         }
-    //     }
-    //     catch (err) {
-    //         console.error(`Email parsing rejected promise: `);
-    //         console.dir(err);
-    //     }
-    // }
 }
 
 /**

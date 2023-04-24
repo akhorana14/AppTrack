@@ -121,7 +121,7 @@ function Company() {
     }
     companyName = capitalizeFirstLetter(companyName);
     //Conditional render based on if events variable has been populated with api response or not
-    return events === null ? null : (
+    return (!events || !companyInfo) ? null : (
         <>
             <Header title={`Your Application @ ${companyName}`} />
             <Navbar />
