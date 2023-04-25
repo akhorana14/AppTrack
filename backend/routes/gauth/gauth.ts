@@ -36,7 +36,12 @@ router.get('/gauthcallback', passport.authenticate('google', { failureRedirect: 
       req.user.scrape = false;
     }
     //Save this user into the database
-    await UserController.save(req.user);
-    // Redirect to the endpoint that checks the user's inbox for new emails
-    res.redirect('/user/refresh');
+    let dbUser = await UserController.getById(req.user.id);
+    if (dbUser == null) { // if this is a new user
+      res.redirect(`${process.env.APPTRACK_FRONTEND}/register`);
+    } else {
+      await UserController.save(req.user);
+      // Redirect to the endpoint that checks the user's inbox for new emails
+      res.redirect('/user/refresh');
+    } 
   });
