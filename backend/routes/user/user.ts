@@ -52,42 +52,6 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
     res.redirect(`${process.env.APPTRACK_FRONTEND}/dashboard`);
 });
 
-router.post('/register', GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res) {
-    let user: User = req.user;
-    var date = req.body.date;
-    // Set all the user's settings
-    user.scrape = req.body.scrape;
-    user.lastEmailRefreshTime = Math.round(new Date(date).getTime() / 1000);
-    user.staleTime = req.body.stale;
-    // Save the user
-    await UserController.save(req.user);
-    //Check if we have permission to scrape
-    if (user.scrape && !currentlyScrapedSet.has(user.id)) {
-        try {
-            currentlyScrapedSet.add(req.user.id);
-            let messages = await getEmails(new GmailClient(user), user.lastEmailRefreshTime);
-            //Convert milliseconds to seconds
-            user.lastEmailRefreshTime = Math.round(new Date().getTime() / 1000);
-            //Save the user's new refresh time (if applicable)
-            await UserController.save(user);
-            //Put this in a promise resolve so that scraping happens off the main thread
-            Promise.resolve().then(async () => {
-                await scanEmails(user, messages);
-                currentlyScrapedSet.delete(user.id);
-            });
-        }
-        catch (err) {
-            currentlyScrapedSet.delete(user.id);
-            console.error(`Error when scraping: ${err}`)
-        }
-    }
-
-    // Successful registration
-    await res.send({
-        "status": "success"
-    });
-});
-
 router.get('/info', async function (req: any, res) {
     let user: User = req.user;
     if (req.user) {
