@@ -4,6 +4,9 @@ import passport from 'passport';
 import User from '../../models/User';
 import UserController from '../../controllers/UserController';
 
+const bodyParser = require("body-parser");
+const jsonParser = bodyParser.json();
+
 const router = express.Router();
 export default router;
 
@@ -45,3 +48,18 @@ router.get('/gauthcallback', passport.authenticate('google', { failureRedirect: 
       res.redirect('/user/refresh');
     } 
   });
+
+router.post('/register', passport.authenticate('google', { failureRedirect: '/error' }), jsonParser, async function (req: any, res) {
+    let user: User = req.user;
+    var date = req.body.date;
+    // Set all the user's settings
+    user.scrape = req.body.scrape;
+    user.lastEmailRefreshTime = Math.round(new Date(date).getTime() / 1000);
+    user.staleTime = req.body.stale;
+    // Save the user
+    await UserController.save(req.user);
+    // Successful registration
+    res.send({
+        "status": "success"
+    });
+});

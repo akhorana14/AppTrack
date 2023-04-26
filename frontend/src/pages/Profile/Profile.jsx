@@ -35,11 +35,13 @@ function Profile(props) {
     async function getLoginStatus() {
         let res = await fetch(`${process.env.REACT_APP_BACKEND}/user/info`, {
           credentials: "include"
-        });
+        })
         if (res.ok) {
-            setName((await res.json()).name);
-            setPhoto((await res.json()).photos[0]);
+            let resJson = (await res.json());
+            setName(resJson.name);
+            setPhoto(resJson.photos[0].value);
         }
+        
     }
 
     async function submitDate() {
@@ -134,14 +136,6 @@ function Profile(props) {
                     <Icon.Person href="#profile" className={style.profile} />
                     <p>Account</p>
                 </div>
-                <div class={style.sidebar_item} id="Notifications" onClick={performSelection}>
-                    <Icon.Bell href="#profile" className={style.profile} />
-                    <p>Notifications</p>
-                </div>
-                <div class={style.sidebar_item} id="Privacy" onClick={performSelection}>
-                    <Icon.ShieldLock href="#profile" className={style.profile} />
-                    <p>Privacy</p>
-                </div>
                 <div class={style.sidebar_item} id="Settings" onClick={performSelection}>
                     <Icon.Gear href="#profile" className={style.profile} />
                     <p>Settings</p>
@@ -192,50 +186,6 @@ function Profile(props) {
                                 <Button className={style.delete} variant="danger" onClick={handleShow}>
                                     Delete Account
                                 </Button>
-                            </div>
-                        </div>
-                    </div>
-                ) : selected === "Notifications" ? (
-                    <div class={style.content}>
-                        <div class="card">
-                            <div class="card-header">
-                                <h1>Notifications</h1>
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">Notifications you recieve</h5>
-                                <p class="card-text">Change when you recieve notifications from AppTrack</p>
-                                <ListGroup id="notificationList" className={style.listGroup}>
-                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Notification Option 1"/></ListGroup.Item>
-                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Notification Option 2" /></ListGroup.Item>
-                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Notification Option 3"/></ListGroup.Item>
-                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Notification Option 4"/></ListGroup.Item>
-                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Notification Option 5" /></ListGroup.Item>
-                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Notification Option 6" /></ListGroup.Item>
-                                </ListGroup>
-                                <br />
-                                <a href="#" class="btn btn-primary">Submit</a>
-                            </div>
-                        </div>
-                    </div>
-                ) : selected === "Privacy" ? (
-                    <div class={style.content}>
-                        <div class="card">
-                            <div class="card-header">
-                                <h1>Privacy</h1>
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">How AppTrack uses your data</h5>
-                                <p class="card-text">Change how AppTrack can give you personalized feedback</p>
-                                <ListGroup id="privacyList" className={style.listGroup}>
-                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Privacy Option 1" /></ListGroup.Item>
-                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Privacy Option 2"/></ListGroup.Item>
-                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Privacy Option 3" /></ListGroup.Item>
-                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Privacy Option 4" /></ListGroup.Item>
-                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Privacy Option 5"/></ListGroup.Item>
-                                    <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} label="Privacy Option 6"/></ListGroup.Item>
-                                </ListGroup>
-                                <br />
-                                <a href="#" class="btn btn-primary">Submit</a>
                             </div>
                         </div>
                     </div>

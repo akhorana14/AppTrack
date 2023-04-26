@@ -35,3 +35,23 @@
 .form {
     animation: hideItem 3s, fadeIn 3s ease 2s;
 }
+
+.staleWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.number {
+    width: 15%;
+    margin-left: 23%;
+    margin-right: 30px;
+}
+
+.time {
+    width: 30%;
+}
+
+.submit {
+    display: flex;
+    justify-content: center;
+}
