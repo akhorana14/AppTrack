@@ -30,17 +30,26 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
     //Check if we have permission to scrape
     if (user.scrape && !currentlyScrapedSet.has(user.id)) {
         try {
-            currentlyScrapedSet.add(user.id);
             let messages = await getEmails(new GmailClient(user), user.lastEmailRefreshTime);
-            //Convert milliseconds to seconds
-            user.lastEmailRefreshTime = Math.round(new Date().getTime() / 1000);
-            //Save the user's new refresh time (if applicable)
-            await UserController.save(user);
-            //Put this in a promise resolve so that scraping happens off the main thread
-            Promise.resolve().then(async () => {
-                await scanEmails(user, messages);
-                currentlyScrapedSet.delete(user.id);
-            });
+            if(messages.length > 0) {
+                currentlyScrapedSet.add(user.id);
+                //Find the latest message timestamp here -> that becomes the last email refresh time of the user
+                let latestTimestamp = new Date(GmailClient.getEmailHeader(messages[0], "Date")).getTime();
+                for (let message of messages) {
+                    let msgTimestamp = new Date(GmailClient.getEmailHeader(message, "Date")).getTime();
+                    latestTimestamp = Math.max(msgTimestamp, latestTimestamp);
+                }
+                //Convert milliseconds to seconds - and add 20 seconds to last email to prevent duplicate rescraping
+                //20 seconds was chosen here to prevent the Gmail "after:" filter from re-detecting the email with this timestamp
+                user.lastEmailRefreshTime = Math.ceil(latestTimestamp / 1000)+20;
+                //Save the user's new refresh time (if applicable)
+                await UserController.save(user);
+                //Put this in a promise resolve so that scraping happens off the main thread
+                Promise.resolve().then(async () => {
+                    await scanEmails(user, messages);
+                    currentlyScrapedSet.delete(user.id);
+                });
+            }
         }
         catch (err) {
             currentlyScrapedSet.delete(user.id);
@@ -149,38 +158,24 @@ async function getEmails(client: GmailClient, after?: number) {
  */
 async function scanEmails(user: User, messages: gmail_v1.Schema$MessagePart[]) {
     //Sync stuff (if we have legitimate OpenAI API that can concurrently fulfill requests)
-    /*const promises = [];
+    const promises = [];
     for (let message of messages) {
         promises.push(getEventFromEmail(user, message));
     }
     //Use Promise.allSettled to resolve everything concurrently
     let resolvedPromises = await Promise.allSettled(promises);
-    const events:Event[] = [];
+    const events: Event[] = [];
     for (let obj of resolvedPromises) {
         if (obj.status === 'fulfilled' && obj.value != null) {
             events.push(obj.value);
         }
-        else if(obj.status == "rejected") {
+        else if (obj.status == "rejected") {
             console.error(`Email parsing rejected promise: `);
             console.dir(obj);
         }
     }
     //Write all the events at the same time
-    await EventController.save(...events);*/
-
-    //Aync stuff (for unofficial ChatGPT API)
-    for (let message of messages) {
-        try {
-            let event = await getEventFromEmail(user, message);
-            if (event != null) {
-                await EventController.save(event);
-            }
-        }
-        catch (err) {
-            console.error(`Email parsing rejected promise: `);
-            console.dir(err);
-        }
-    }
+    await EventController.save(...events);
 }
 
 /**

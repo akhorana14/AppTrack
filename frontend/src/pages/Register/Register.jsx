@@ -64,7 +64,7 @@ function Register() {
                 <div className={style.form}>
                     <p class="card-text">Choose how AppTrack handles your job updates automatically </p>
                     <ListGroup className={style.listGroup}>
-                        <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} onChange={(e) => setScrape(!scrape)} isValid={scrape} isInvalid={!scrape}  label="Allow AppTrack to automatically handle job updates."/></ListGroup.Item>
+                        <ListGroup.Item className={style.listItem}><Form.Switch className={style.switch} onChange={(e) => setScrape(!scrape)} isValid={scrape} isInvalid={!scrape}  label="Allow AppTrack to automatically scan inbox."/></ListGroup.Item>
                     </ListGroup>
                     <br />
                     <p class="card-text">Allow AppTrack to check for job updates past: </p>

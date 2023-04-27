@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "body-parser": "^1.20.2",
-    "chatgpt": "^5.2.2",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",

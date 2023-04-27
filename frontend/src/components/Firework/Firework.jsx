@@ -1,12 +1,12 @@
-import './Firework.css';
+import style from './Firework.module.css';
 
 function Firework()  {
     return (
-        <>
-            <div class="firework"></div>
-            <div class="firework"></div>
-            <div class="firework"></div>
-        </>
+        <div className={style.body}>
+            <div className={style.firework}></div>
+            <div className={style.firework}></div>
+            <div className={style.firework}></div>
+        </div>
         );
 }
 

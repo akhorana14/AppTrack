@@ -68,7 +68,7 @@ export default class OpenAIClient {
      * @returns GPT response
      */
     private static async sendMessageToGPT(message: string): Promise<string> {
-        return this.useUnofficialGPTAPI(message);
+        return this.useOfficialGPTAPI(message);
     }
 
     /**
@@ -100,34 +100,6 @@ export default class OpenAIClient {
                 }
             );
             return completion.data.choices[0].message?.content!;
-        }
-        catch (err) {
-            console.error(err);
-            throw err;
-        }
-    }
-
-    /**
-     * Uses the unoffical ChatGPT API with reverse proxy and returns the response.
-     * Requires .env to contain OPENAI_API_UNOFFICIAL_KEY 
-     * 
-     * @param message the message to send
-     * @returns GPT response
-     */
-    private static async useUnofficialGPTAPI(message: string): Promise<string> {
-        const importDynamic = new Function('modulePath', 'return import(modulePath)')
-        const { ChatGPTUnofficialProxyAPI } = await importDynamic('chatgpt')
-        const openai = new ChatGPTUnofficialProxyAPI({
-            accessToken: process.env.OPENAI_API_UNOFFICIAL_KEY!,
-            apiReverseProxyUrl: "https://api.pawan.krd/backend-api/conversation",
-        })
-        try {
-            console.log("Sending request...");
-            const res = await openai.sendMessage(message, {
-                timeoutMs: 30000
-            });
-            console.log(res);
-            return res.text;
         }
         catch (err) {
             console.error(err);

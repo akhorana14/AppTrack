@@ -3,6 +3,10 @@ import googleauth from 'passport-google-oauth';
 import passport from 'passport';
 import User from '../../models/User';
 import UserController from '../../controllers/UserController';
+import GoogleAuth from '../../utils/google/GoogleAuth';
+
+const bodyParser = require("body-parser");
+const jsonParser = bodyParser.json();
 
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
@@ -49,7 +53,7 @@ router.get('/gauthcallback', passport.authenticate('google', { failureRedirect: 
     } 
   });
 
-router.post('/register', passport.authenticate('google', { failureRedirect: '/error' }), jsonParser, async function (req: any, res) {
+router.post('/register', GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res) {
     let user: User = req.user;
     var date = req.body.date;
     // Set all the user's settings

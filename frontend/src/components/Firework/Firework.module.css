@@ -1,5 +1,5 @@
 
-  body {
+  .body {
     overflow: hidden;
   }
   
@@ -130,4 +130,8 @@
     left: 90%;
     top: 100%;
     animation-delay: -0.4s;
+  }
+
+  .firework {
+    overflow: hidden;
   }
