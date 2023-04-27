@@ -5,6 +5,7 @@ import User from "../models/User";
 import DBClient from "../utils/db/DBClient";
 import CompanyController from "./CompanyController";
 import UserController from "./UserController";
+import { Classification } from "../models/Classification";
 
 export default class EventController {
     static readonly eventRepository = DBClient.getRepository(Event);
@@ -182,5 +183,17 @@ export default class EventController {
             }
         }
         return newObj;
+    }
+
+    static async setEventsAsStale(user: User, Events: Event[]) {
+        for (let i = 0; i < Events.length; i++) {
+            let today = new Date();
+            let eventDate = new Date(Events[i].date);
+            let diff = Math.abs(today.getTime() - eventDate.getTime());
+            if (user.staleTime != null && diff > user.staleTime) {
+                Events[i].classification = Classification.STALE;
+            }
+        }
+        return Events;
     }
 }

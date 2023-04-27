@@ -88,13 +88,13 @@ function Register() {
                             <option value="9">9</option>
                             </Form.Select>
                             <Form.Select className={style.time} onChange={(e) => setTime(e.target.value)}>
-                            <option value="1">second(s)</option>
-                            <option value="60">minute(s)</option>
-                            <option value="3600">hour(s)</option>
-                            <option value="86400">day(s)</option>
-                            <option value="604800">week(s)</option>
-                            <option value="2592000">month(s)</option>
-                            <option value="31104000">year(s)</option>
+                            <option value="1000">second(s)</option>
+                            <option value="60000">minute(s)</option>
+                            <option value="3600000">hour(s)</option>
+                            <option value="86400000">day(s)</option>
+                            <option value="604800000">week(s)</option>
+                            <option value="2592000000">month(s)</option>
+                            <option value="31104000000">year(s)</option>
                             </Form.Select>
                         </div>
                     <br /><br />

@@ -80,15 +80,25 @@ router.get('/info', async function (req: any, res) {
 router.post("/setDate", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {
     let user: User = req.user;
     let date = new Date(req.body.date);
+    let stale = req.body.stale;
     let prevDate = user.lastEmailRefreshTime;
-    user.lastEmailRefreshTime = Math.round(date.getTime() / 1000);
-    //console.log(user.lastEmailRefreshTime)
-    if (prevDate != undefined && prevDate < user.lastEmailRefreshTime) {
+    if (date == null && stale == null) {
         res.sendStatus(409);
         return;
     }
+    if (date != null) {
+        if (prevDate != undefined && prevDate < Math.round(date.getTime() / 1000)) {
+        } else {
+            user.lastEmailRefreshTime = Math.round(date.getTime() / 1000);
+        }
+    }
+    if (stale != null) {
+        user.staleTime = stale;
+    }
     await UserController.save(user);
-    res.sendStatus(200);
+    res.send({
+        "status": "success"
+    });
 });
 
 router.post("/deleteuser", GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res: any) {

@@ -14,6 +14,7 @@ let classifications = [
   "Interview",
   "Offer",
   "Reject",
+  "Stale",
   "Other"
 ];
 

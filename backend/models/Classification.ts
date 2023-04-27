@@ -7,6 +7,7 @@ export enum Classification {
     INTERVIEW,
     OFFER,
     REJECT,
+    STALE,
     OTHER
 }
 

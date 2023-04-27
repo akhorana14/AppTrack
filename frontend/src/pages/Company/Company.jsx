@@ -23,8 +23,9 @@ let classifications = [
     "Interview",
     "Offer",
     "Reject",
+    "Stale",
     "Other"
-];
+  ];
 
 function Company() {
     const [errorMsg, setErrorMsg] = useState("* indicates required fields");
