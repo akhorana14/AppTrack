@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.3'
 services:
   backend:
     build: 
@@ -6,10 +6,7 @@ services:
       dockerfile: Dockerfile
     container_name: backend-container
     ports:
-      - '4000:4000'
-    volumes:
-      - ./node:/app
-      - ./app/node_modules
+      - '9000:9000'
   frontend:
     build: 
       context: ./frontend
@@ -17,7 +14,4 @@ services:
     container_name: frontend-container
     ports:
       - '3000:3000'
-    volumes:
-      - ./node:/app
-      - ./app/node_modules
     stdin_open: true
