@@ -4,7 +4,7 @@ import './Dashboard.css';
 import '../../static/globals.css';
 import MotivationModal from '../../components/MotivationPopup/MotivationModal';
 import Button from 'react-bootstrap/Button';
-//import ActivateModal from '../../components/ActivatePopup/ActivateModal';
+import { Fonts, TypeUnderline } from 'react-bootstrap-icons';
 
 //This order was taken very carefully from backend/models/Classification.ts
 //Make sure to keep it in this order to avoid mixing up labels
@@ -23,6 +23,7 @@ async function getNewUpdates() {
       credentials: "include"
   });
   if (res.ok) {
+    console.log("Got new updates successful\n");
     return await res.json();
   }
   return [];
@@ -34,6 +35,7 @@ async function reorderUpdates() {
     credentials: "include"
   });
   if (res.ok) {
+    console.log("Got action dates successful\n");
     return await res.json(); 
   }
   return [];
@@ -45,6 +47,7 @@ async function getCompletedEvents() {
     credentials: "include"
   });
   if (res.ok) {
+    console.log("Got completed events successful\n");
     return await res.json(); 
   }
   return [];
@@ -82,19 +85,32 @@ function Dashboard() {
 
   let newUpdateTableRows = upperTableData.map((info) => {
     console.log(info);
-    return (
+    let link = `/company/${info.company.name}`;
+    if(buttonText === "Action Date") {
+      return (
       <tr>
-        <td>{info.company.name}</td>
-        <td>{(info.date).split('T')[0]}</td>
+        <td><a href={link} style={{color:"black", textDecoration: "none"}}>{info.company.name}</a></td>
+        <td>{(info.actionDate).split('T')[0]}</td>
         <td>{classifications[info.classification]}</td>
       </tr>
-    );
+      )
+    }
+    else {
+      return (
+        <tr>
+          <td><a href={link} style={{color:"black", textDecoration: "none"}}>{info.company.name}</a></td>
+          <td>{(info.date).split('T')[0]}</td>
+          <td>{classifications[info.classification]}</td>
+        </tr>
+      );
+    }
   });
 
   const completedDataTableRows = completedData.map((info) => {
+    let link = `/company/${info.company.name}`;
     return (
       <tr>
-        <td>{info.company.name}</td>
+        <td><a href={link} style={{color:"black", textDecoration: "none"}}>{info.company.name}</a></td>
         <td>{(info.date).split('T')[0]}</td>
         <td>{classifications[info.classification]}</td>
       </tr>
@@ -102,15 +118,29 @@ function Dashboard() {
   });
 
   function changeDateOrder() {
-    let newText = (buttonText==="Date") ? "Action Date" : "Date"; // change label 
+    // let newText = (buttonText==="Date") ? "Action Date" : "Date"; // change label 
+    let newText = "";
+    if(buttonText === "Completed Events") {
+      newText = "Date";
+    }
+    if(buttonText === "Action Date") {
+      newText = "Completed Events";
+    }
+    else if(buttonText === "Date") {
+      newText = "Action Date";
+    }
     setButtonText(newText);
 
     if (buttonText==="Date") {
       setUpperTableData(actionDateData);
     }
-    else {
+    else if (buttonText==="Action Date") {
       setUpperTableData(newUpdateData);
     }
+    else if (buttonText==="Completed Events") {
+      setUpperTableData(completedData);
+    }
+    
   }
 
   let dateButton = <Button onClick={changeDateOrder} variant="text" style={{fontWeight: 'bold'}}>{buttonText}</Button>;
@@ -119,19 +149,12 @@ function Dashboard() {
     <>
       <div className='text-center'>
         <Navbar />
-        {/*<ActivateModal />*/}
         <MotivationModal />
-        {/* searchbar: https://bbbootstrap.com/snippets/bootstrap-5-search-bar-microphone-icon-inside-12725910*/}
-        <div class="search">
-          <i class="fa fa-search"></i>
-          <input type="text" class="form-control form-input" placeholder="Search your notifications"></input>
-        </div>
-        {/* fix this later */}
 
         <div id="table-container">
           <div id="new-updates-div" class="d-flex align-items-center">
-            <div id="left-side-label-container">New Updates</div>
-            <table class="table table-striped table-hover" id="new-update-table">
+            <div id="left-side-label-container">Dashboard</div>
+            <table class="table table-striped table-hover" id="new-update-table" style={{verticalAlign: "top"}}>
               <thead>
                 <tr>
                   <th>Company</th>
@@ -140,20 +163,6 @@ function Dashboard() {
                 </tr>
               </thead>
               <tbody>{newUpdateTableRows}</tbody>
-            </table>
-          </div>
-
-          <div id="completed-updates-div" class="d-flex align-items-center">
-            <div id="left-side-label-container"><p>Completed</p></div>
-            <table class="table table-striped table-hover" id="completed-table">
-              <thead>
-                <tr>
-                  <th>Company</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>{completedDataTableRows}</tbody>
             </table>
           </div>
         </div>
