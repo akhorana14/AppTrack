@@ -20,10 +20,10 @@ html, body, #root {
 }
 
 #new-updates-div {
-    height:85vh;
+    height:90vh;
     width:100%;
     margin:auto;
-    padding-top: 20vh;
+    padding-top: 10vh;
     overflow-y: scroll;
 }
 
@@ -38,19 +38,7 @@ html, body, #root {
 #new-update-table {
     width:95%;
     float:right;
-}
-
-#completed-table {
-    width:95%;
-    float:right;
-}
-
-.search {
-    padding-top: 1%;
-    padding-bottom: 1%;
-    padding-right: 2%;
-    padding-left: 2%;
-    height: 7%;
+    vertical-align: top;
 }
 
 #new-update-table.table-striped>tbody>tr:nth-child(odd)>td, 

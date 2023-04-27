@@ -153,8 +153,8 @@ function Dashboard() {
 
         <div id="table-container">
           <div id="new-updates-div" class="d-flex align-items-center">
-            <div id="left-side-label-container">New Updates</div>
-            <table class="table table-striped table-hover" id="new-update-table">
+            <div id="left-side-label-container">Dashboard</div>
+            <table class="table table-striped table-hover" id="new-update-table" style={{verticalAlign: "top"}}>
               <thead>
                 <tr>
                   <th>Company</th>
