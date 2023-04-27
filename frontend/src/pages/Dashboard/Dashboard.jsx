@@ -85,10 +85,11 @@ function Dashboard() {
 
   let newUpdateTableRows = upperTableData.map((info) => {
     console.log(info);
+    let link = `/company/${info.company.name}`;
     if(buttonText === "Action Date") {
       return (
       <tr>
-        <td>{info.company.name}</td>
+        <td><a href={link} style={{color:"black", textDecoration: "none"}}>{info.company.name}</a></td>
         <td>{(info.actionDate).split('T')[0]}</td>
         <td>{classifications[info.classification]}</td>
       </tr>
@@ -97,7 +98,7 @@ function Dashboard() {
     else {
       return (
         <tr>
-          <td>{info.company.name}</td>
+          <td><a href={link} style={{color:"black", textDecoration: "none"}}>{info.company.name}</a></td>
           <td>{(info.date).split('T')[0]}</td>
           <td>{classifications[info.classification]}</td>
         </tr>
@@ -152,8 +153,8 @@ function Dashboard() {
 
         <div id="table-container">
           <div id="new-updates-div" class="d-flex align-items-center">
-            <div id="left-side-label-container">New Updates</div>
-            <table class="table table-striped table-hover" id="new-update-table">
+            <div id="left-side-label-container">Dashboard</div>
+            <table class="table table-striped table-hover" id="new-update-table" style={{verticalAlign: "top"}}>
               <thead>
                 <tr>
                   <th>Company</th>
