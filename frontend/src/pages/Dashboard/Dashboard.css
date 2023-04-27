@@ -23,15 +23,7 @@ html, body, #root {
     height:90vh;
     width:100%;
     margin:auto;
-    padding-top: 10vh;
-    overflow-y: scroll;
-}
-
-#completed-updates-div {
-    height:40vh;
-    width:100%;
-    margin:auto;
-    padding-top: 0vh;
+    padding-top: 30vh;
     overflow-y: scroll;
 }
 
