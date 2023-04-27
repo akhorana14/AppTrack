@@ -129,7 +129,7 @@ function Profile(props) {
             <div class={style.main}>
             <div class={style.sidebar}>
                 <div class={style.user_panel}>
-                    <Image className={style.profile_image} src={photo} roundedCircle />
+                    <Image className={style.profile_image} src={photo} referrerpolicy="no-referrer" roundedCircle />
                     <p>{name}</p>
                 </div>
                 <div class={style.sidebar_item} id="Account" onClick={performSelection}>
