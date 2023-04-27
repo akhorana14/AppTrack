@@ -20,10 +20,10 @@ html, body, #root {
 }
 
 #new-updates-div {
-    height:40vh;
+    height:80vh;
     width:100%;
     margin:auto;
-    padding-top: 5vh;
+    padding-top: 0vh;
     overflow-y: scroll;
 }
 

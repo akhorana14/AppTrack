@@ -27,26 +27,63 @@ export default class EventController {
 
     // get new updates, defined as events assigned to a User where the event date is in the last 5 days
     static async getNewUpdatesByUser(user: User) {
-        const dateRange = new Date();
-        let today = new Date();
-        dateRange.setDate(dateRange.getDate() - 3); // set to 3 days ago
         return this.eventRepository.find({
-                relations: {
-                    company: true
-                },
-            where: {user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
-                    date: MoreThan(dateRange),
-                    isActionItem: true,
-                    actionDate: Not(LessThan(today)),
-                    company: {
-                        track: true
-                    }
-                },    
+            relations: {
+                user: true,
+                company: true
+            },
+            where: {
+                user: this.getDBObject(user, User) as FindOptionsWhere<User>,
+                isActionItem: true,
+                company: {
+                    track: true
+                }
+            },
             order: {
                 date: "DESC"
             }
-            
-        })
+        });
+    }
+
+    // get new updates, but order by Action Item date
+    static async getNewUpdatesByUser2(user: User) {
+        return this.eventRepository.find({
+            relations: {
+                user: true,
+                company: true
+            },
+            where: {
+                user: this.getDBObject(user, User) as FindOptionsWhere<User>,
+                isActionItem: true,
+                actionDate: MoreThan(new Date()),
+                company: {
+                    track: true
+                }
+            },
+            order: {
+                actionDate: "DESC"
+            }
+        });
+    }
+
+    static async getCompletedEvents(user: User):Promise<Event[]> {
+        return this.eventRepository.find({
+            relations: {
+                user: true,
+                company: true
+            },
+            where: {
+                user: this.getDBObject(user, User) as FindOptionsWhere<User>,
+                isActionItem: true,
+                actionDate: LessThan(new Date()),
+                company: {
+                    track: true
+                }
+            },
+            order: {
+                actionDate: "DESC"
+            }
+        });
     }
 
     static async readByUser(user: User, company: string) {
@@ -65,31 +102,6 @@ export default class EventController {
         });
         offerEvent[0].isRead = true;
         this.eventRepository.save(offerEvent[0]);
-    }
-
-    // get new updates, but order by Action Item date
-    static async getNewUpdatesByUser2(user: User) {
-        let dateRange = new Date();
-        let today = new Date();
-        dateRange.setDate(dateRange.getDate() - 3); // set to 3 days ago
-        return this.eventRepository.find({
-            relations: {
-                company: true
-            },
-            where: {
-                user: this.getDBObject(user, User) as FindOptionsWhere<User>, 
-                date: MoreThan(dateRange),
-                isActionItem: true,
-                actionDate: Not(LessThan(today)),
-                company: {
-                    track: true
-                }
-            },
-            order: {
-                actionDate: "ASC"
-            }
-            
-        })
     }
 
     static async removeEventsByUser(user: User):Promise<void> {
@@ -114,23 +126,6 @@ export default class EventController {
             where: {
                 user: this.getDBObject(user, User) as FindOptionsWhere<User>,
                 isActionItem: true,
-                company: {
-                    track: true
-                }
-            }
-        });
-    }
-
-    static async getCompletedEvents(user: User):Promise<Event[]> {
-        return this.eventRepository.find({
-            relations: {
-                user: true,
-                company: true
-            },
-            where: {
-                user: this.getDBObject(user, User) as FindOptionsWhere<User>,
-                isActionItem: true,
-                actionDate: LessThan(new Date()),
                 company: {
                     track: true
                 }
