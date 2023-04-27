@@ -1,5 +1,7 @@
 import cors from 'cors';
 import express from 'express';
+import https from 'node:https';
+import fs from "fs";
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
@@ -31,9 +33,14 @@ app.use(passport.session());
 
 const port = process.env.PORT;
 
-app.listen(port, () => {
-    console.log(`The application is listening on port ${port}!`);
-})
+https
+    .createServer({
+        key: fs.readFileSync("cert/privkey.pem"),
+        cert: fs.readFileSync("cert/fullchain.pem")
+    }, app)
+    .listen(port, () => {
+        console.log(`The application is listening on port ${port}!`);
+    })
 
 app.use('/gauth', gauthRouter);
 
@@ -49,7 +56,7 @@ passport.serializeUser(function (user, cb) {
     cb(null, user);
 });
 
-passport.deserializeUser(function (obj:any, cb) {
+passport.deserializeUser(function (obj: any, cb) {
     cb(null, obj);
 });
 
