@@ -100,8 +100,10 @@ export default class EventController {
                 user: this.getDBObject(user, User) as FindOptionsWhere<User>
             }
         });
-        offerEvent[0].isRead = true;
-        this.eventRepository.save(offerEvent[0]);
+        for (var i = 0; i < offerEvent.length; i++) {
+            offerEvent[i].isRead = true;
+        }
+        this.eventRepository.save(offerEvent);
     }
 
     static async removeEventsByUser(user: User):Promise<void> {
