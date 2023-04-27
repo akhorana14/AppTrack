@@ -8,9 +8,6 @@ import GoogleAuth from '../../utils/google/GoogleAuth';
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 
-const bodyParser = require("body-parser");
-const jsonParser = bodyParser.json();
-
 const router = express.Router();
 export default router;
 
