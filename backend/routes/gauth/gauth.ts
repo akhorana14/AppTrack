@@ -3,6 +3,10 @@ import googleauth from 'passport-google-oauth';
 import passport from 'passport';
 import User from '../../models/User';
 import UserController from '../../controllers/UserController';
+import GoogleAuth from '../../utils/google/GoogleAuth';
+
+const bodyParser = require("body-parser");
+const jsonParser = bodyParser.json();
 
 const router = express.Router();
 export default router;
@@ -36,7 +40,27 @@ router.get('/gauthcallback', passport.authenticate('google', { failureRedirect: 
       req.user.scrape = false;
     }
     //Save this user into the database
-    await UserController.save(req.user);
-    // Redirect to the endpoint that checks the user's inbox for new emails
-    res.redirect('/user/refresh');
+    let dbUser = await UserController.getById(req.user.id);
+    if (dbUser == null) { // if this is a new user
+      res.redirect(`${process.env.APPTRACK_FRONTEND}/register`);
+    } else {
+      await UserController.save(req.user);
+      // Redirect to the endpoint that checks the user's inbox for new emails
+      res.redirect('/user/refresh');
+    } 
   });
+
+router.post('/register', GoogleAuth.getAuthMiddleware(), jsonParser, async function (req: any, res) {
+    let user: User = req.user;
+    var date = req.body.date;
+    // Set all the user's settings
+    user.scrape = req.body.scrape;
+    user.lastEmailRefreshTime = Math.round(new Date(date).getTime() / 1000);
+    user.staleTime = req.body.stale;
+    // Save the user
+    await UserController.save(req.user);
+    // Successful registration
+    res.send({
+        "status": "success"
+    });
+});

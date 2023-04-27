@@ -57,7 +57,7 @@ router.get('/refresh', GoogleAuth.getAuthMiddleware(), async function (req: any,
         }
     }
 
-    //Redirect to dashboard after successful refresh
+    // Redirect to dashboard after successful refresh
     res.redirect(`${process.env.APPTRACK_FRONTEND}/dashboard`);
 });
 
