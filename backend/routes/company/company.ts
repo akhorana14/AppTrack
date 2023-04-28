@@ -15,7 +15,19 @@ router.get('/:company', GoogleAuth.getAuthMiddleware(), async function (req: any
     let companyName: string = req.params["company"];
     let company = await CompanyController.getByNameAndUser(companyName, req.user);
     if (company != null) {
-        res.send(await EventController.getEventsByUserAndCompany(req.user, company!));
+        let events = await EventController.getEventsByUserAndCompany(req.user, company!);
+        let today = new Date();
+        let latestEvent = events.reduce((a, b) => a.date > b.date ? a : b);
+        let userStaleTime = req.user.staleTime;
+        let stale = false;
+        if (latestEvent != null) {
+            let timeDiff = today.getTime() - latestEvent.date.getTime();
+            stale = timeDiff > userStaleTime;
+        }
+        await res.send({
+            "events": events,
+            "stale": stale
+        });
     }
     else {
         res.sendStatus(404);

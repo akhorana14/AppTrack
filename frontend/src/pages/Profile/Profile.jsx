@@ -21,6 +21,8 @@ function Profile(props) {
     const [date, setDate] = React.useState(new Date());
     const [name, setName] = React.useState("");
     const [photo, setPhoto] = React.useState("https://www.w3schools.com/howto/img_avatar.png");
+    const [number, setNumber] = React.useState(0);
+    const [time, setTime] = React.useState(0);
 
     useEffect(() => {
         getLoginStatus();
@@ -51,11 +53,13 @@ function Profile(props) {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                date: date
+                date: date,
+                stale: number * time
             }),
             credentials: "include"
         }).then(response => response.json())
         .then(response => {
+            window.location = `${process.env.REACT_APP_BACKEND}/user/refresh`;
         }); 
     }
 
@@ -231,6 +235,32 @@ function Profile(props) {
                                     <Form.Control onChange={(e) => setDate(e.target.value)} type="date" className={style.date} />
                                 </div>
                                 <br />
+                                <br />
+                                <p class="card-text">Applications are marked stale after: </p>
+                        <br />
+                        <div className={style.staleWrapper}> 
+                            <Form.Select className={style.number} onChange={(e) => setNumber(e.target.value)}>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            </Form.Select>
+                            <Form.Select className={style.time} onChange={(e) => setTime(e.target.value)}>
+                            <option value="1000">second(s)</option>
+                            <option value="60000">minute(s)</option>
+                            <option value="3600000">hour(s)</option>
+                            <option value="86400000">day(s)</option>
+                            <option value="604800000">week(s)</option>
+                            <option value="2592000000">month(s)</option>
+                            <option value="31104000000">year(s)</option>
+                            </Form.Select>
+                        </div> <br />
                                 <br />
                                 <div><a href="#" class="btn btn-primary" onClick={submitDate} style={{ margin: '1rem'}}>Submit</a>
                                 <a href={`${process.env.REACT_APP_BACKEND}/user/logout`} class="btn btn-secondary" style={{ margin: '1rem'}}>Logout</a></div>

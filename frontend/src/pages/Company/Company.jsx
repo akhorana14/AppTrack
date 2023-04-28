@@ -12,6 +12,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Accordion from 'react-bootstrap/Accordion';
 import Badge from 'react-bootstrap/Badge';
+import Modal from 'react-bootstrap/Modal';
 
 import { BellFill, CheckCircleFill, EnvelopeFill, ExclamationCircleFill } from 'react-bootstrap-icons';
 
@@ -77,6 +78,7 @@ function Company() {
     let { company: companyName } = useParams();
     const [events, setEvents] = useState(null);
     const [companyInfo, setCompanyInfo] = useState(null);
+    const [stale, setStale] = useState(false);
     
     useEffect(() => {
         getCompanyInfo();
@@ -88,7 +90,10 @@ function Company() {
             credentials: "include"
         });
         if (res.ok) {
-            setEvents(await res.json());
+            let resJson = await res.json();
+            setEvents(resJson.events);
+            setStale(resJson.stale);
+            showStale(resJson.stale);
         }
     }
 
@@ -113,10 +118,18 @@ function Company() {
         });
         if (res.ok) {
             var company = await res.json();
-            console.log(company);
             setCompanyInfo(company);
         } else {
             window.location.href = "/dashboard";
+        }
+    }
+
+    function showStale() {
+        if (stale) {
+            console.log("doing the thing");
+            return (
+                <h6 id="staleText" className={"text-danger my-1"}>This application hasn't had an update in a while. </h6>
+            );
         }
     }
     companyName = capitalizeFirstLetter(companyName);
@@ -136,6 +149,7 @@ function Company() {
                                 <h3>{companyInfo.position !== undefined && companyInfo.position ? companyInfo.position:"Unknown Position Title"}
                                 <br />
                                 <h6 className="text-muted my-1">Last update: {events.length === 0 ? "None" : new Date(events[events.length - 1].date).toLocaleString()}</h6>
+                                {showStale()}
                                 </h3>
                                 : null
                             } 
