@@ -118,3 +118,7 @@
 .manual-status-select {
     margin-right: 5px;
 }
+
+.staleText {
+    display: none;
+}
